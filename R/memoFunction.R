@@ -16,16 +16,16 @@
 #' }
 #'
 #' # memoise function
-#' memoExaple <- memo(example)
+#' memoExample <- memo(example)
 #'
 #' # call first time
 #' memoExample(10)  # sleeps for 10 seconds and returns 10
 #'
 #' # call second time
 #' memoExample(10)  # immediately returns 10
-#' @export memo
+#' @export
 ##
-memo <- function (f, cache = "default") {
+memo <- function (f, cache = NULL) {
 
   # grab the information about the function
   f.formals <- formals(f)
@@ -37,8 +37,11 @@ memo <- function (f, cache = "default") {
       bquote(
         function () {
 
-          # get the cache
-          cache = getCache(.(cache))
+          # get default cache if non specified
+          if (is.null(.(cache))) {
+            if (!hasCache()) initCache()
+            cache = getCache()
+          }
 
           # get args hash
           args <- as.list(match.call())

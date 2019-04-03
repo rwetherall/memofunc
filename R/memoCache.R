@@ -6,9 +6,27 @@ cacheTypeRegistry <- list()
 # initialised cache registry
 cacheRegistry <- list()
 
-#
-#
-#
+##
+#' @title
+#' Adds a cache type to those available
+#' @description
+#' Adds a cache type to the registry of those available for initialisation.
+#'
+#' A cache type is defined as a function that retuns a list of functions bound to a specific cache name as follows:
+#' * set(key, value) - sets a value for a key, overwrites any existing values at that key
+#' * get(key) - gets the value of a key, NULL otherwise
+#' * unset(key) - unsets value of a key
+#' * has(key) - true if the key has a value, false otherwise
+#' * clear() - clears all values
+#' @param
+#' type name of the cache type
+#' f function that returns a list of functions bound to a cache name
+#' @return
+#' list of functions that can be used to manipulate the named cache
+#' @examples
+#'
+#' @export
+##
 addCacheType <- function (type, f) {
 
   # todo .. some validation of the function provided
@@ -16,11 +34,38 @@ addCacheType <- function (type, f) {
   cacheTypeRegistry[[type]] <<- f
 }
 
+##
+#' @title
+#' Has the named cache been initialised
+#' @description
+#' Indicates whether the named cache has been initialised or not.
+#' @param
+#' name name of the cache
+#' @return
+#' True if the named cache has been initialised, false otherwise
+#' @examples
+#'
+#' @export
+##
 hasCache <- function(name = "default") {
 
   name %in% names(cacheRegistry)
 }
 
+##
+#' @title
+#' Get initialised cache by name
+#' @description
+#' Memoises a given function such that the result of the function is cached to improve
+#' function performance
+#' @param
+#' name name of the cache
+#' @return
+#' Named cache if initialised, otherwise error
+#' @examples
+#'
+#' @export
+##
 getCache <- function(name = "default") {
 
   if (hasCache(name))
@@ -48,16 +93,14 @@ getCache <- function(name = "default") {
 #'
 #' @examples
 #'
-#' @export memoCache
+#' @export
 ##
-# TODO .. make all the paramters mandatory (no don't so this .. see final)
-# TODO .. add a memoCacheLookup method that takes just the name and fails if the cache isn't in the cache
-# TODO .. this fails if you are trying to create a cache that is already in memory?!
-# TODO .. rename to initialiseMemoCache??
 initCache <- function (name = "default", type = "memory", algo="sha1") {
 
   # make sure the cache hasn't already been initialised
   if (hasCache(name)) {
+
+    # TODO do we really want to fail here .. or just find the init'ed cache?
 
     # already initialised a cache with this name
     stop(paste("Already initialised cache with name", name))
@@ -67,10 +110,9 @@ initCache <- function (name = "default", type = "memory", algo="sha1") {
     #
     # Hash function
     #
-    # TODO .. need to dquote this?
-    hash <- function(value) {
-      digest(value, algo=algo)
-    }
+    hash <- eval(bquote(
+              function(value) {
+                digest::digest(value, algo=.(algo))}))
 
     #
     # Helper to create hash from function and args details.
@@ -122,44 +164,31 @@ initCache <- function (name = "default", type = "memory", algo="sha1") {
 #
 addCacheType("memory", function(name) {
 
-  # determine the name of the cache
-  cacheName <- paste("memocache", name, sep="")
-  cache <- as.symbol(cacheName)
-
-  # create the cache storage if it doesn't already exist
-  if (!exists(cacheName, sys.frame(0))) assign(cacheName, list(), envir = sys.frame(0))
+  cache <- list()
 
   #
   # Set value for given key
   #
-  set <- eval(bquote(function(key, value) {
+  set <- function(key, value) {
 
     # if key already set remove so readded at the end of the list
-    if (key %in% names(.(cache))) .(cache)[[key]] <<- NULL
+    if (key %in% cache) cache[[key]] <<- NULL
 
     # set value
-    .(cache)[[key]] <<- value
-
-  }))
+    cache[[key]] <<- value
+  }
 
   # get value with key
-  get <- eval(bquote(function(key) .(cache)[[key]]))
+  get <- function(key) cache[[key]]
 
   # unset value with key
-  unset <- eval(bquote(function(key) .(cache)[[key]] <<- NULL))
+  unset <- function(key) cache[[key]] <<- NULL
 
   # has value with key
-  has <- eval(bquote(function(key) key %in% names(.(cache))))
+  has <- function(key) key %in% names(cache)
 
   # clear all
-  clear <- eval(bquote(function() {
-
-    .(cache) <<- list()
-
-  }))
+  clear <- function() cache <<- list()
 
   list (set = set, get = get, unset = unset, has = has, clear = clear)
 })
-
-# initialise default cache
-if (!hasCache()) initCache()

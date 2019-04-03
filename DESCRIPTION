@@ -1,12 +1,15 @@
 Package: memofunc
-Title: Provides function memoisation and simple caching.
+Title: Provides function memoisation and simple caching
 Version: 0.0.0.9000
 Author: Roy Wetherall
+Maintainer: Roy Wetherall <rwetherall@gmail.com>
 Description: Provides function memoisation and simple caching.
 Depends: R (>= 3.5.0)
-License: What license is it under?
+License: GPL-2 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Suggests: 
-    testthat
+Imports:
+  digest
+Suggests:
+  testthat

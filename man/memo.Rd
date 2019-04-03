@@ -4,7 +4,7 @@
 \alias{memo}
 \title{Memoises a given function}
 \usage{
-memo(f, cache = memoCache())
+memo(f, cache = NULL)
 }
 \arguments{
 \item{f}{function to memoise}
@@ -24,7 +24,7 @@ example <- function (someValue) {
 }
 
 # memoise function
-memoExaple <- memo(example)
+memoExample <- memo(example)
 
 # call first time
 memoExample(10)  # sleeps for 10 seconds and returns 10

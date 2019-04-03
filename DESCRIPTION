@@ -13,3 +13,7 @@ Imports:
   digest
 Suggests:
   testthat
+Collate:
+  memoCache.R
+  memoFunction.R
+  memoMemoryCache.R

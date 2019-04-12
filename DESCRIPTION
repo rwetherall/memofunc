@@ -1,6 +1,6 @@
 Package: memofunc
 Title: Provides function memoisation and simple caching
-Version: 0.0.0.9000
+Version: 1.0.0
 Author: Roy Wetherall
 Maintainer: Roy Wetherall <rwetherall@gmail.com>
 Description: Provides function memoisation and simple caching.

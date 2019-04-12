@@ -4,10 +4,11 @@
 \alias{memo}
 \title{Memoises a given function}
 \usage{
-memo(f, cache = NULL)
+memo(f, cache)
 }
 \arguments{
-\item{f}{function to memoise}
+\item{f}{function to memoise
+cache cache to store functions memoised results in, if not specified creates a new in memory cache}
 }
 \value{
 Memoised function
@@ -19,16 +20,16 @@ function performance
 \examples{
 # example function
 example <- function (someValue) {
-   Sys.sleep(someValue)
-   somevalue
+  print("Getting some value")
+  someValue
 }
 
 # memoise function
-memoExample <- memo(example)
+memoExample <- memo(example, cache())
 
 # call first time
-memoExample(10)  # sleeps for 10 seconds and returns 10
+memoExample(10)  # prints "Getting some value" and returns 10
 
 # call second time
-memoExample(10)  # immediately returns 10
+memoExample(10)  # immediately returns
 }

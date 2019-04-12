@@ -6,28 +6,27 @@
 #' function performance
 #' @param
 #' f function to memoise
+#' cache cache to store functions memoised results in, if not specified creates a new in memory cache
 #' @return
 #' Memoised function
 #' @examples
 #' # example function
 #' example <- function (someValue) {
-#'    Sys.sleep(someValue)
-#'    somevalue
+#'   print("Getting some value")
+#'   someValue
 #' }
 #'
 #' # memoise function
-#' memoExample <- memo(example)
+#' memoExample <- memo(example, cache())
 #'
 #' # call first time
-#' memoExample(10)  # sleeps for 10 seconds and returns 10
+#' memoExample(10)  # prints "Getting some value" and returns 10
 #'
 #' # call second time
-#' memoExample(10)  # immediately returns 10
+#' memoExample(10)  # immediately returns
 #' @export
 ##
 memo <- function (f, cache) {
-
-  if (is.null(cache)) error("A cache is required when memoising a function.")
 
   # grab the information about the function
   f.formals <- formals(f)

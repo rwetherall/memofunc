@@ -1,33 +1,28 @@
 #
 # Default in-memory cache
 #
-addCacheType("memory", function(name) {
+addCacheType("memory", function() {
 
-  cache <- list()
+  # Environment used as in memory cache storage
+  cache.storage <- new.env(parent=emptyenv())
 
-  #
   # Set value for given key
-  #
-  set <- function(key, value) {
-
-    # if key already set remove so readded at the end of the list
-    if (key %in% cache) cache[[key]] <<- NULL
-
-    # set value
-    cache[[key]] <<- value
-  }
+  set <- function(key, value) assign(key, value, envir=cache.storage)
 
   # get value with key
-  get <- function(key) cache[[key]]
+  get <- function(key) if (exists(key, envir=cache.storage)) base::get(key, envir=cache.storage) else NULL
 
   # unset value with key
-  unset <- function(key) cache[[key]] <<- NULL
+  unset <- function(key) if (exists(key, envir=cache.storage)) rm(list=c(key), envir=cache.storage)
 
   # has value with key
-  has <- function(key) key %in% names(cache)
+  has <- function(key) exists(key, envir=cache.storage)
 
   # clear all
-  clear <- function() cache <<- list()
+  clear <- function() rm(list=base::ls(cache.storage), envir=cache.storage)
 
-  list (set = set, get = get, unset = unset, has = has, clear = clear)
+  # list cache contents
+  ls <- function() base::ls(cache.storage)
+
+  list (set = set, get = get, unset = unset, has = has, clear = clear, ls=ls)
 })

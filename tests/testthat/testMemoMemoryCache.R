@@ -1,104 +1,108 @@
 context("memoryMemoCache")
 
-library(testthat)
+test_that("Given the default cache settings, When I access the cache for the first time, Then expected cache functions are available", {
 
-setup(cacheRegistry <<- list())
-
-#
-# Custome test method to initialise and clean up cache.
-#
-test_that_cache <- function(desc, code) {
-
-  initCache()
-  test_that(desc, code)
-  cacheRegistry <<- list()
-}
-
-test_that_cache("Given the default cache settings, When I access the cache for the first time, Then expected cache functions are available", {
-
-  # assess the default memory cache
-  result <- getCache()
+  # create memory cache
+  cache <- cache()
 
   # check that the expected 'methods' are avilable on the cache
-  expect_true(is.function(result$set))
-  expect_true(is.function(result$get))
-  expect_true(is.function(result$unset))
-  expect_true(is.function(result$has))
-  expect_true(is.function(result$clear))
+  expect_true(is.function(cache$set))
+  expect_true(is.function(cache$get))
+  expect_true(is.function(cache$unset))
+  expect_true(is.function(cache$has))
+  expect_true(is.function(cache$clear))
 })
 
+test_that("Given the default cache settings, When a value is set, Then it can be retrieved", {
 
-test_that_cache("Given the default cache settings, When a value is set, Then it can be retrieved", {
+  # create memory cache
+  cache <- cache()
 
-  expect_equal(getCache()$set("string", "one"), "one")
-  expect_equal(getCache()$get("string"), "one")
+  expect_equal(cache$set("string", "one"), "one")
+  expect_equal(cache$get("string"), "one")
 
-  expect_equal(getCache()$set("number", 100), 100)
-  expect_equal(getCache()$get("number"), 100)
+  expect_equal(cache$set("number", 100), 100)
+  expect_equal(cache$get("number"), 100)
 
-  myMemoCache <- getCache()
-  expect_equal(myMemoCache$set("logical", TRUE), TRUE)
-  expect_equal(myMemoCache$get("logical"), TRUE)
+  expect_equal(cache$set("logical", TRUE), TRUE)
+  expect_equal(cache$get("logical"), TRUE)
 
   myTestFn <- function() print("Hello")
-  expect_equal(getCache()$set("function", myTestFn), myTestFn)
-  expect_equal(myMemoCache$get("function"), myTestFn)
+  expect_equal(cache$set("function", myTestFn), myTestFn)
+  expect_equal(cache$get("function"), myTestFn)
 })
 
-test_that_cache("Given the default cache settings, When retieving a value that hasn't been set, Then NULL is retrieved", {
+test_that("Given the default cache settings, When retieving a value that hasn't been set, Then NULL is retrieved", {
 
-  expect_null(getCache()$get("value"))
+  expect_null(cache()$get("value"))
 })
 
-test_that_cache("Given the default cache settings, When a value is unset, Then it is no longer in the cache", {
+test_that("Given the default cache settings, When a value is unset, Then it is no longer in the cache", {
 
-  expect_equal(getCache()$set("value", "one"), "one")
-  expect_equal(getCache()$get("value"), "one")
-  getCache()$unset("value")
-  expect_null(getCache()$get("value"))
+  # create memory cache
+  cache <- cache()
+
+  expect_equal(cache$set("value", "one"), "one")
+  expect_equal(cache$get("value"), "one")
+  cache$unset("value")
+  expect_null(cache$get("value"))
+
+  # shouldn't issue warning
+  cache$unset("value")
 })
 
-test_that_cache("Given the default cache settings, when the cache is clear, Then it no longer exists", {
+test_that("Given the default cache settings, when the cache is clear, Then it no longer exists", {
 
-  getCache()$set("value","one")
-  getCache()$set("valuetoo", "two")
-  expect_equal(getCache()$get("value"), "one")
-  expect_equal(getCache()$get("valuetoo"), "two")
+  # create memory cache
+  cache <- cache()
 
-  getCache()$clear()
-  expect_null(getCache()$get("value"))
-  expect_null(getCache()$get("valuetoo"))
+  cache$set("value","one")
+  cache$set("valuetoo", "two")
+  expect_equal(cache$get("value"), "one")
+  expect_equal(cache$get("valuetoo"), "two")
+
+  cache$clear()
+  expect_null(cache$get("value"))
+  expect_null(cache$get("valuetoo"))
 })
 
-test_that_cache("Given the default cache settings, When the a cache value is reset, Then the new value is taken into the cache", {
+test_that("Given the default cache settings, When the a cache value is reset, Then the new value is taken into the cache", {
 
-  getCache()$set("value", "one")
-  expect_equal(getCache()$get("value"), "one")
-  getCache()$set("value", "two")
-  expect_equal(getCache()$get("value"), "two")
+  # create memory cache
+  cache <- cache()
 
-})
-
-test_that_cache("Given the default cache settings, When I ask, Then I can determine whether the cache contains a key value or not", {
-
-  expect_false(getCache()$has("value"))
-  getCache()$set("value", "one")
-  expect_true(getCache()$has("value"))
+  cache$set("value", "one")
+  expect_equal(cache$get("value"), "one")
+  cache$set("value", "two")
+  expect_equal(cache$get("value"), "two")
 
 })
 
-test_that_cache("Given I have two caches with different names, When I work with the caches, Then values are stored separately", {
+test_that("Given the default cache settings, When I ask, Then I can determine whether the cache contains a key value or not", {
 
-  initCache("another")
+  # create memory cache
+  cache <- cache()
 
-  getCache()$set("default", "one")
-  getCache("another")$set("another", "one")
+  expect_false(cache$has("value"))
+  cache$set("value", "one")
+  expect_true(cache$has("value"))
 
-  expect_true(getCache()$has("default"))
-  expect_false(getCache()$has("another"))
+})
 
-  expect_false(getCache("another")$has("default"))
-  expect_true(getCache("another")$has("another"))
+test_that("Given I have two caches with different names, When I work with the caches, Then values are stored separately", {
+
+  # create memory cache
+  cache <- cache()
+  cache2 <- cache()
+
+  cache$set("default", "one")
+  cache2$set("another", "one")
+
+  expect_true(cache$has("default"))
+  expect_false(cache$has("another"))
+
+  expect_false(cache2$has("default"))
+  expect_true(cache2$has("another"))
 })
 
 # TODO try to init cache already init'ed

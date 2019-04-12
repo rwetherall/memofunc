@@ -25,38 +25,43 @@
 #' memoExample(10)  # immediately returns 10
 #' @export
 ##
-memo <- function (f, cache = NULL) {
+memo <- function (f, cache) {
+
+  if (is.null(cache)) error("A cache is required when memoising a function.")
 
   # grab the information about the function
   f.formals <- formals(f)
-  f.env <- environment(f)
 
   # create the memo function
-  f.memo <-
-    eval(
-      bquote(
-        function () {
+  f.memo <- function (force=FALSE) {
 
-          # get default cache if non specified
-          if (is.null(.(cache))) {
-            if (!hasCache()) initCache()
-            cache = getCache()
-          }
+    # grab the call
+    call <- match.call()
 
-          # get args hash
-          args <- as.list(match.call())
-          hash <- cache$hashFunctionCall(args[1], formals(), args[-1])
+    # remove force from call if present
+    if (!is.null(call[["force"]])) call[["force"]] <- NULL
 
-          # get value from cache or execute
-          if (!force && cache$has(hash)) cache$get(hash) else cache$set(hash, .(body(f)))
-  }))
+    # generate hash from function name and arguments
+    hash <- cache$hashFunctionCall(call[[1]], formals(), as.list(call[-1]))
 
-  # additional memo related properties to add to memoed function
-  memo.formals <- list(force=FALSE)
+    # if force or cached
+    if (!force && cache$has(hash)) {
+
+      # returned cached value
+      cache$get(hash)
+
+    } else {
+
+      # tweak call to call f and remove force
+      call[[1]] <- quote(f)
+
+      # evaluate call and cache results
+      cache$set(hash, eval(call))
+    }
+  }
 
   # set the parameters and environment of the memo function
-  formals(f.memo) <- c(f.formals, memo.formals)
-  environment(f.memo) <- f.env
+  formals(f.memo) <- c(f.formals, formals(f.memo))
 
   # return the memo function
   f.memo

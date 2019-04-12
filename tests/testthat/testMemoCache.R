@@ -2,19 +2,9 @@ context("memoCache")
 
 library(testthat)
 
-#TODO check that name is retrievable
-
-test_that("Given an invalid cache type, When I try to create the cache, Then an error is raised", {
-
-  expect_false("error" %in% names(cacheTypeRegistry))
-  expect_error(initCache(type="error"))
-
-})
-
 test_that("Given a valid cache type, When I try to create the cache, Then the correct type of cache is created" , {
 
-  expect_false("error" %in% names(cacheTypeRegistry))
-  cache <- initCache(name="one", type="memory")
+  cache <- cache(type="memory")
   expect_equal(cache$type, "memory")
 })
 
@@ -33,8 +23,7 @@ test_that("Given I have created a valid custom cache type, When I try to create 
     list (set = set, get = get, unset = unset, has = has, clear = clear)
   })
 
-  expect_true("myCacheType" %in% names(cacheTypeRegistry))
-  cache <- initCache(name="two", type="myCacheType")
+  cache <- cache(type="myCacheType")
   expect_equal(cache$set("key", "value"), "set")
   expect_equal(cache$get("key"), "get")
   expect_equal(cache$unset("key"), "unset")

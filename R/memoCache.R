@@ -1,10 +1,7 @@
 library(digest)
 
-# cache type registry
-cacheTypeRegistry <- list()
-
-# initialised cache registry
-cacheRegistry <- list()
+cache.env <- new.env(parent=emptyenv())
+cacheTypeKey <- function (type) paste("type", type, sep=".")
 
 ##
 #' @title
@@ -27,64 +24,17 @@ cacheRegistry <- list()
 #'
 #' @export
 ##
-addCacheType <- function (type, f) {
+addCacheType <- function(type, f) {
 
-  # todo .. some validation of the function provided
-
-  cacheTypeRegistry[[type]] <<- f
+  # register the cache type
+  assign(cacheTypeKey(type), f, envir=cache.env)
 }
 
 ##
 #' @title
-#' Has the named cache been initialised
+#' Get a cache
 #' @description
-#' Indicates whether the named cache has been initialised or not.
-#' @param
-#' name name of the cache
-#' @return
-#' True if the named cache has been initialised, false otherwise
-#' @examples
-#'
-#' @export
-##
-hasCache <- function(name = "default") {
-
-  name %in% names(cacheRegistry)
-}
-
-##
-#' @title
-#' Get initialised cache by name
-#' @description
-#' Memoises a given function such that the result of the function is cached to improve
-#' function performance
-#' @param
-#' name name of the cache
-#' @return
-#' Named cache if initialised, otherwise error
-#' @examples
-#'
-#' @export
-##
-getCache <- function(name = "default") {
-
-  if (hasCache(name))
-
-    # return cache
-    cacheRegistry[[name]]
-
-  else
-
-    # error since named cache hasn't been initialised
-    stop(paste("Cache with name", name, "has not been initialised.  Please use 'initCache' method to initialise cache."))
-}
-
-##
-#' @title
-#' Get a reference to a named cache.
-#' @description
-#' Gets a reference to the named cache, creating if one if it doesn't exist.
-#'
+#' Gets a cache of the type specified taking into account any context provided
 #' @param
 #' name Cache name
 #' type Type of cache
@@ -95,17 +45,7 @@ getCache <- function(name = "default") {
 #'
 #' @export
 ##
-initCache <- function (name = "default", type = "memory", algo="sha1") {
-
-  # make sure the cache hasn't already been initialised
-  if (hasCache(name)) {
-
-    # TODO do we really want to fail here .. or just find the init'ed cache?
-
-    # already initialised a cache with this name
-    stop(paste("Already initialised cache with name", name))
-
-  } else {
+cache <- function (type = "memory", algo="sha1") {
 
     #
     # Hash function
@@ -143,18 +83,19 @@ initCache <- function (name = "default", type = "memory", algo="sha1") {
     # TODO maybe the name prefix should be managed here!
 
     # verify the cache type
-    if (!type %in% names(cacheTypeRegistry)) stop(paste("Undefined memo cache type:", type))
+    if (!exists(cacheTypeKey(type), envir=cache.env)) stop(paste("Undefined memo cache type:", type))
 
     # verify the cache name
     # TODO
 
     # store the created cache in memory for next time
-    cacheRegistry[[name]] <<- c(
-
+    #cacheRegistry[[name]] <<-
+    c(
       # create memo cache from type register
-      cacheTypeRegistry[[type]](name),
+      #cacheTypeRegistry[[type]](name),
+      get(cacheTypeKey(type), envir=cache.env)(),
 
       # append base cache methods and details
-      list(name = name, type = type, algo = algo, hash = hash, hashFunctionCall = hashFunctionCall))
-  }
+      list(type = type, algo = algo, hash = hash, hashFunctionCall = hashFunctionCall))
+  # }
 }

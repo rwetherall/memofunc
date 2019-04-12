@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/rwetherall/memofunc.svg?token=x2QLvsytRz6d82hRES7c&branch=master)](https://travis-ci.com/rwetherall/memofunc)
 
-##MemoFunc - A Function Memoization Package for R
+## MemoFunc - A Function Memoization Package for R
 
 MemoFunc is a function memoization package for R.  
 

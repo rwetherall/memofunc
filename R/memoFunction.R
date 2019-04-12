@@ -4,9 +4,8 @@
 #' @description
 #' Memoises a given function such that the result of the function is cached to improve
 #' function performance
-#' @param
-#' f function to memoise
-#' cache cache to store functions memoised results in, if not specified creates a new in memory cache
+#' @param f function to memoise
+#' @param cache cache to store functions memoised results in, if not specified creates a new in memory cache
 #' @return
 #' Memoised function
 #' @examples

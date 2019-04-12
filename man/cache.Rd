@@ -7,12 +7,12 @@
 cache(type = "memory", algo = "sha1")
 }
 \arguments{
-\item{name}{Cache name
-type Type of cache
-algo Hasing algorithm which defaults to sha1}
+\item{type}{Type of cache}
+
+\item{algo}{Hasing algorithm which defaults to sha1}
 }
 \value{
-
+A cache that can be used to store values
 }
 \description{
 Gets a cache of the type specified taking into account any context provided

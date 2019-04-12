@@ -7,8 +7,9 @@
 addCacheType(type, f)
 }
 \arguments{
-\item{type}{name of the cache type
-f function that returns a list of functions bound to a cache name}
+\item{type}{name of the cache type}
+
+\item{f}{function that returns a list of functions bound to a cache name}
 }
 \value{
 list of functions that can be used to manipulate the named cache

@@ -15,9 +15,8 @@ cacheTypeKey <- function (type) paste("type", type, sep=".")
 #' * unset(key) - unsets value of a key
 #' * has(key) - true if the key has a value, false otherwise
 #' * clear() - clears all values
-#' @param
-#' type name of the cache type
-#' f function that returns a list of functions bound to a cache name
+#' @param type name of the cache type
+#' @param f function that returns a list of functions bound to a cache name
 #' @return
 #' list of functions that can be used to manipulate the named cache
 #' @examples
@@ -35,12 +34,10 @@ addCacheType <- function(type, f) {
 #' Get a cache
 #' @description
 #' Gets a cache of the type specified taking into account any context provided
-#' @param
-#' name Cache name
-#' type Type of cache
-#' algo Hasing algorithm which defaults to sha1
+#' @param type Type of cache
+#' @param algo Hasing algorithm which defaults to sha1
 #' @return
-#'
+#' A cache that can be used to store values
 #' @examples
 #'
 #' @export

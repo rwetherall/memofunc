@@ -9,7 +9,6 @@
 #' \itemize{
 #'   \item \code{\link{memo}} - memoize a function
 #'   \item \code{\link{cache}} - create a cache
-#'   \item \code{\link{addCacheType}} - add a custom cache implementation
 #' }
 #' @docType package
 #' @name memofunc

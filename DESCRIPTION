@@ -17,6 +17,6 @@ Suggests:
   roxygen2
 Collate:
   memofunc.R
-  memoCache.R
-  memoMemoryCache.R
-  memoFunction.R
+  memoryStorage.R
+  cache.R
+  memo.R

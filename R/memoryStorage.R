@@ -1,7 +1,7 @@
 #
 # Default in-memory cache
 #
-addCacheType("memory", function() {
+memoryStorage <- function() {
 
   # Environment used as in memory cache storage
   cache.storage <- new.env(parent=emptyenv())
@@ -25,4 +25,4 @@ addCacheType("memory", function() {
   ls <- function() base::ls(cache.storage)
 
   list (set = set, get = get, unset = unset, has = has, clear = clear, ls=ls)
-})
+}

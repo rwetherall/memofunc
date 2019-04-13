@@ -1,6 +1,11 @@
 library(digest)
 
+# Envirnoment used to store the different cache types
 cache.env <- new.env(parent=emptyenv())
+
+##
+# Create cache type key from cache type
+#
 cacheTypeKey <- function (type) paste("type", type, sep=".")
 
 ##
@@ -47,9 +52,7 @@ cache <- function (type = "memory", algo="sha1") {
     #
     # Hash function
     #
-    hash <- eval(bquote(
-              function(value) {
-                digest::digest(value, algo=.(algo))}))
+    hash <- function(value) digest::digest(value, algo=algo)
 
     #
     # Helper to create hash from function and args details.
@@ -70,26 +73,16 @@ cache <- function (type = "memory", algo="sha1") {
             lapply(names(args.default),
                    function(name) {!name %in% names(args)}))])
 
-      # remove memo args
-      args.set[["force"]] <- NULL
-
       # get args hash
       hash(c(name, unlist(args.set, use.names = FALSE)))
     }
 
-    # TODO maybe the name prefix should be managed here!
-
     # verify the cache type
     if (!exists(cacheTypeKey(type), envir=cache.env)) stop(paste("Undefined memo cache type:", type))
 
-    # verify the cache name
-    # TODO
-
     # store the created cache in memory for next time
-    #cacheRegistry[[name]] <<-
     c(
       # create memo cache from type register
-      #cacheTypeRegistry[[type]](name),
       get(cacheTypeKey(type), envir=cache.env)(),
 
       # append base cache methods and details

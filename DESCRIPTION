@@ -1,7 +1,7 @@
 Package: memofunc
 Title: Provides function memoisation and simple caching
 Version: 1.0.0
-Author: Roy Wetherall
+Author: Roy Wetherall <rwetherall@gmail.com>
 Maintainer: Roy Wetherall <rwetherall@gmail.com>
 Description: Provides function memoisation and simple caching.
 Depends: R (>= 3.5.0)
@@ -12,8 +12,11 @@ RoxygenNote: 6.1.1
 Imports:
   digest
 Suggests:
-  testthat
+  testthat,
+  devtools,
+  roxygen2
 Collate:
+  memofunc.R
   memoCache.R
   memoMemoryCache.R
   memoFunction.R

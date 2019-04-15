@@ -4,11 +4,9 @@
 \alias{cache}
 \title{Create a cache.}
 \usage{
-cache(algo = "sha1", storage = NULL)
+cache(storage = NULL)
 }
 \arguments{
-\item{algo}{Hasing algorithm. Defaults to \code{sha1}.}
-
 \item{storage}{Persistant cache storage. If none provided cache is transient and held in memory.  NULL by default.}
 }
 \value{

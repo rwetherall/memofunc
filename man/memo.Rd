@@ -7,9 +7,9 @@
 memo(f, cache)
 }
 \arguments{
-\item{f}{function to memoise}
+\item{f}{Function to memoise.}
 
-\item{cache}{cache to store functions memoised results in, if not specified creates a new in memory cache}
+\item{cache}{Cache to store functions memoised results in. If not specified create a new non-persistant memory cache.}
 }
 \value{
 Memoised function

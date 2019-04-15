@@ -4,8 +4,8 @@
 #' @description
 #' Memoises a given function such that the result of the function is cached to improve
 #' function performance
-#' @param f function to memoise
-#' @param cache cache to store functions memoised results in, if not specified creates a new in memory cache
+#' @param f Function to memoise.
+#' @param cache Cache to store functions memoised results in. If not specified create a new non-persistant memory cache.
 #' @return
 #' Memoised function
 #' @examples
@@ -27,6 +27,30 @@
 ##
 memo <- function (f, cache) {
 
+  # Hash function
+  hash <- function(value) digest::digest(value)
+
+  # Helper to create hash from function and args details.
+  hashFunctionCall <- function(name, formals, args) {
+
+    # get default args
+    args.default <- formals[
+      unlist(
+        lapply(formals,
+               function(arg) {arg != ""}))]
+
+    # get unset default args
+    args.set <- c(
+      args,
+      args.default[
+        unlist(
+          lapply(names(args.default),
+                 function(name) {!name %in% names(args)}))])
+
+    # get args hash
+    hash(c(name, unlist(args.set, use.names = FALSE)))
+  }
+
   # grab the information about the function
   f.formals <- formals(f)
 
@@ -40,7 +64,7 @@ memo <- function (f, cache) {
     if (!is.null(call[["force"]])) call[["force"]] <- NULL
 
     # generate hash from function name and arguments
-    hash <- cache$hashFunctionCall(call[[1]], formals(), as.list(call[-1]))
+    hash <- hashFunctionCall(call[[1]], formals(), as.list(call[-1]))
 
     # if force or cached
     if (!force && cache$has(hash)) {
@@ -64,3 +88,5 @@ memo <- function (f, cache) {
   # return the memo function
   f.memo
 }
+
+#TODO dememo - removes all values from the cache and rm's the assigned function to prevent it being called again!

@@ -13,6 +13,7 @@ test_that("Given the default cache settings, When I access the cache for the fir
   expect_true(is.function(cache$unset))
   expect_true(is.function(cache$has))
   expect_true(is.function(cache$clear))
+  expect_true(is.function(cache$ls))
 })
 
 test_that("Given the default cache settings, When a value is set, Then it can be retrieved", {

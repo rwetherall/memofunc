@@ -1,4 +1,4 @@
-context("memoCache")
+context("cache")
 
 library(testthat)
 
@@ -107,10 +107,6 @@ test_that("Given I have two caches with different names, When I work with the ca
   expect_true(cache2$has("another"))
 })
 
-# TODO try to init cache already init'ed
-# TODO try to get cache that hasn't been inited
-
-# TODO init and get with different name!
 
 # TODO check that by default a cache with memory storage is created
 
@@ -118,8 +114,3 @@ test_that("Given I have two caches with different names, When I work with the ca
 
 # TODO check invalid algo
 
-# TODO check that I can create a custom storage and use it
-
-# TODO check that I can't use a custom storage if it is invalid
-
-# TODO check force parameter

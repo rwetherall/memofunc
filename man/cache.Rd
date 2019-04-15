@@ -2,16 +2,18 @@
 % Please edit documentation in R/cache.R
 \name{cache}
 \alias{cache}
-\title{Get a cache}
+\title{Create a cache.}
 \usage{
-cache(algo = "sha1")
+cache(algo = "sha1", storage = NULL)
 }
 \arguments{
-\item{algo}{hasing algorithm which defaults to sha1}
+\item{algo}{Hasing algorithm. Defaults to \code{sha1}.}
+
+\item{storage}{Persistant cache storage. If none provided cache is transient and held in memory.  NULL by default.}
 }
 \value{
-A cache that can be used to store values
+A cache that stores values for later retieval.
 }
 \description{
-Gets a cache of the type specified taking into account any context provided
+TODO
 }

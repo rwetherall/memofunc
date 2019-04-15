@@ -47,7 +47,7 @@ library(digest)
 ##
 cache <- function (storage = NULL, algo="sha1") {
 
-
+  # check passed storage
   if (is.null(storage)) {
     # Use memory storage if none specified
     storage <- memoryStorage()

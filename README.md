@@ -23,15 +23,13 @@ cache$get("remember")
 
 ```
 
-## Getting started
-
-Install the memofunc package
+## Installation
 
 ``` r
-devtools::install_github("r-lib/memofunc")
+devtools::install_github("rwetherall/memofunc")
 ```
 
-Include the library in your code
+## Usage
 
 ``` r
 library(memofunc)

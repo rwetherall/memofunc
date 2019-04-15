@@ -4,11 +4,9 @@
 \alias{cache}
 \title{Get a cache}
 \usage{
-cache(storage = NULL, algo = "sha1")
+cache(algo = "sha1")
 }
 \arguments{
-\item{storage}{cache storage, defaults to memory storage if not specified}
-
 \item{algo}{hasing algorithm which defaults to sha1}
 }
 \value{
@@ -16,39 +14,4 @@ A cache that can be used to store values
 }
 \description{
 Gets a cache of the type specified taking into account any context provided
-}
-\details{
-# Envirnoment used to store the different cache types
-cache.env <- new.env(parent=emptyenv())
-
-##
-# Create cache type key from cache type
-#
-cacheTypeKey <- function (type) paste("type", type, sep=".")
-
-##
-#' @title
-#' Adds a cache type to those available
-#' @description
-#' Adds a cache type to the registry of those available for initialisation.
-#'
-#' A cache type is defined as a function that retuns a list of functions bound to a specific cache name as follows:
-#' * set(key, value) - sets a value for a key, overwrites any existing values at that key
-#' * get(key) - gets the value of a key, NULL otherwise
-#' * unset(key) - unsets value of a key
-#' * has(key) - true if the key has a value, false otherwise
-#' * clear() - clears all values
-#' @param type name of the cache type
-#' @param f function that returns a list of functions bound to a cache name
-#' @return
-#' list of functions that can be used to manipulate the named cache
-#' @examples
-#'
-#' @export
-##
-addCacheType <- function(type, f) {
-
-# register the cache type
-  assign(cacheTypeKey(type), f, envir=cache.env)
-}
 }

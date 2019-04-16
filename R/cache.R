@@ -1,4 +1,5 @@
 library(digest)
+library(uuid)
 
 ##
 #' @title
@@ -11,6 +12,9 @@ library(digest)
 ##
 cache <- function (storage = NULL) {
 
+  # generate uuid to indentify this cache
+  id <- UUIDgenerate()
+
   # environment used as memory storage
   memoryStorage <- new.env(parent=emptyenv())
 
@@ -18,7 +22,8 @@ cache <- function (storage = NULL) {
   set <- function(key, value) {
 
     if (!is.null(storage)) {
-      # TODO store value
+      # store value
+      storage.write(id, key, value)
     }
 
     # store value in memory

@@ -1,6 +1,7 @@
 
 context("memoFunction")
 
+library(magrittr)
 library(testthat)
 
 test.env <- new.env(parent=emptyenv())
@@ -13,7 +14,7 @@ test1 <- function(value) {
 test_that("Given a simple function, When I memoise the function, Then the results are cached",{
 
   # test function
-  test1.memo <- memo(test1, cache=cache())
+  test1.memo <- memo(test1)
 
   # initial call executes method
   expect_equal(test1.memo(10), 10)
@@ -40,6 +41,26 @@ test_that("Given a simple function, When I memoise the function, Then the result
   expect_equal(get("test1.executed",envir=test.env), TRUE)
   rm(list=ls(test.env), envir=test.env)
 
+})
+
+test_that("Given a simple function, When I memoise the function in different environments, Then the caches share the same id", {
+
+  evalq({
+    memo1 <- memo(test1)
+  },
+  envir=new.env())
+
+  evalq({
+    expect_error(test)
+  },
+  envir=new.env())
+
+})
+
+test_that("Given a simple function, When I ask, Then I am told whether it is a memoised fn or not ", {
+
+  memo(test1) %>% is.memo() %>% expect_true()
+  test1 %>% is.memo() %>% expect_false()
 })
 
 # TODO Given a memo'ed function make sure it can still access the hierarchy of environments correctly ..

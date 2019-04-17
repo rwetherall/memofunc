@@ -10,8 +10,10 @@ filestore <- function (dir=".") {
     saveRDS(value, file = file.path(dir, cacheId, key))
   }
 
-  read <- function (key) {
-    before(cacheId)
+  read <- function (cacheId, key) {
+
+    # todo handle things not being there!
+
     readRDS(key, file=file.path(dir, cacheId, key))
   }
 

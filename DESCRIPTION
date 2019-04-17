@@ -11,13 +11,16 @@ LazyData: true
 RoxygenNote: 6.1.1
 Imports:
   digest,
-  uuid
+  uuid,
+  magrittr
 Suggests:
   testthat,
   devtools,
   roxygen2
 Collate:
   memofunc.R
-  filestore.R
-  cache.R
   memo.R
+  cache.R
+  filestore.R
+  
+

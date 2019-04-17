@@ -1,5 +1,6 @@
 context("filestore")
 
+library(digest)
 library(uuid)
 library(testthat)
 

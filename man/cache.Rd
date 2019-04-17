@@ -4,14 +4,16 @@
 \alias{cache}
 \title{Create a cache.}
 \usage{
-cache(storage = NULL)
+cache(id = NULL, storage = NULL)
 }
 \arguments{
+\item{id}{Cache identifier, used to re-create reference to exisiting persistent cache.  If none provided then assumed transient.}
+
 \item{storage}{Persistant cache storage. If none provided cache is transient and held in memory.  NULL by default.}
 }
 \value{
 A cache that stores values for later retieval.
 }
 \description{
-TODO
+Create a general purpose cache that can be used to store both transient and persistent values.
 }

@@ -1,5 +1,6 @@
 context("cache")
 
+library(uuid)
 library(testthat)
 
 test_that("Given the default cache settings, When I access the cache for the first time, Then expected cache functions are available", {

@@ -2,18 +2,17 @@ library(digest)
 library(uuid)
 
 ##
-#' @title
-#' Create a cache.
-#' @description
-#' TODO
+#' @title Create a cache.
+#' @description Create a general purpose cache that can be used to store both transient and persistent values.
+#' @param id Cache identifier, used to re-create reference to exisiting persistent cache.  If none provided then assumed transient.
 #' @param storage Persistant cache storage. If none provided cache is transient and held in memory.  NULL by default.
 #' @return A cache that stores values for later retieval.
 #' @export
 ##
-cache <- function (storage = NULL) {
+cache <- function (id = NULL, storage = NULL) {
 
   # generate uuid to indentify this cache
-  id <- UUIDgenerate()
+  if (is.null(id)) id <- UUIDgenerate()
 
   # environment used as memory storage
   memoryStorage <- new.env(parent=emptyenv())
@@ -21,10 +20,10 @@ cache <- function (storage = NULL) {
   # Set value for given key
   set <- function(key, value) {
 
-    if (!is.null(storage)) {
-      # store value
-      storage.write(id, key, value)
-    }
+    # if (!is.null(storage)) {
+    #   # store value
+    #   storage$write(id, key, value)
+    # }
 
     # store value in memory
     assign(key, value, envir=memoryStorage)
@@ -86,5 +85,5 @@ cache <- function (storage = NULL) {
   }
 
   # combine cache and storage features
-  list(set = set, get = get, unset = unset, has = has, clear = clear, ls=ls)
+  list(id=id, set = set, get = get, unset = unset, has = has, clear = clear, ls=ls)
 }

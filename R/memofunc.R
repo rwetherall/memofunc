@@ -12,4 +12,8 @@
 #' }
 #' @docType package
 #' @name memofunc
+#'
+#' @import magrittr
+#' @import uuid
+#' @import digest
 NULL

@@ -4,12 +4,10 @@
 \alias{memo}
 \title{Memoises a given function}
 \usage{
-memo(f, cache)
+memo(f)
 }
 \arguments{
 \item{f}{Function to memoise.}
-
-\item{cache}{Cache to store functions memoised results in. If not specified create a new non-persistant memory cache.}
 }
 \value{
 Memoised function
@@ -19,18 +17,21 @@ Memoises a given function such that the result of the function is cached to impr
 function performance
 }
 \examples{
-# example function
-example <- function (someValue) {
+# create a simple memo function
+memo <- memo(function (someValue) {
   print("Getting some value")
   someValue
-}
-
-# memoise function
-memoExample <- memo(example, cache())
+})
 
 # call first time
-memoExample(10)  # prints "Getting some value" and returns 10
+memo(10)               # prints "Getting some value" and returns 10
 
 # call second time
-memoExample(10)  # immediately returns
+memo(10)               # immediately returns 10
+
+# can use 'force' parameter to ensure method is executed despite
+# being value being previously cached.
+memo(10, force=TRUE)   # prints "Getting some value" and returns 10
+memo(10)               # immediately returns 10
+memo(10, force=FALSE)  # immediately returns 10
 }

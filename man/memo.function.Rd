@@ -7,7 +7,7 @@
 memo.function(f)
 }
 \arguments{
-\item{f}{Memo function}
+\item{f}{memo function}
 }
 \value{
 Original unmemoised function.

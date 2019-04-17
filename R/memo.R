@@ -32,7 +32,7 @@ hashFunctionCall <- function(name, formals, args) {
 #' @description
 #' Memoises a given function such that the result of the function is cached to improve
 #' function performance
-#' @param f Function to memoise.
+#' @param f function to memoise
 #' @return
 #' Memoised function
 #' @examples
@@ -101,7 +101,7 @@ memo <- function (f) {
 ##
 #' @title Is this a memo function
 #' @description Checks whether the passed function is a memo function.
-#' @param f Function, memo or otherwise
+#' @param f function, memo or otherwise
 #' @return \code{TRUE} if memo function, \code{FALSE} otherwise
 #' @examples
 #' # create a simple memo function
@@ -123,7 +123,7 @@ is.memo <- function(f) "f.memo" %>% exists(envir=environment(f))
 #' being stored.
 #'
 #' Execution is stopped if function passed is not a valid memoed function.
-#' @param f Memo function
+#' @param f memo function
 #' @return Cache storing values for memoed function.
 #' @examples
 #' # create a simple memo function
@@ -161,7 +161,7 @@ memo.cache <- function(f) {
 #' @description Gets the original function that was memoised.
 #'
 #' Execution is stopped if function passed is not a valid memoed function.
-#' @param f Memo function
+#' @param f memo function
 #' @return Original unmemoised function.
 #' @examples
 #' # create a simple memo function

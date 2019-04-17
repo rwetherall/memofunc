@@ -7,7 +7,7 @@
 memo(f)
 }
 \arguments{
-\item{f}{Function to memoise.}
+\item{f}{function to memoise}
 }
 \value{
 Memoised function

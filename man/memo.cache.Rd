@@ -7,7 +7,7 @@
 memo.cache(f)
 }
 \arguments{
-\item{f}{Memo function}
+\item{f}{memo function}
 }
 \value{
 Cache storing values for memoed function.

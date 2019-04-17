@@ -7,7 +7,7 @@
 is.memo(f)
 }
 \arguments{
-\item{f}{Function, memo or otherwise}
+\item{f}{function, memo or otherwise}
 }
 \value{
 \code{TRUE} if memo function, \code{FALSE} otherwise

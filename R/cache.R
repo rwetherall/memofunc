@@ -5,11 +5,14 @@ library(uuid)
 #' @title Create a cache.
 #' @description Create a general purpose cache that can be used to store both transient and persistent values.
 #' @param id Cache identifier, used to re-create reference to exisiting persistent cache.  If none provided then assumed transient.
-#' @param storage Persistant cache storage. If none provided cache is transient and held in memory.  NULL by default.
+#' @param storetype Persistant cache storage type.  File store by default.
 #' @return A cache that stores values for later retieval.
 #' @export
 ##
-cache <- function (id = NULL, storage = NULL) {
+cache <- function (id = NULL, storetype = "filestore") {
+
+  # if id is specified then get the store
+  store <- if (!is.null(id)) eval(as.name(storetype))() else NULL
 
   # generate uuid to indentify this cache
   if (is.null(id)) id <- UUIDgenerate()
@@ -20,13 +23,13 @@ cache <- function (id = NULL, storage = NULL) {
   # Set value for given key
   set <- function(key, value) {
 
-    # if (!is.null(storage)) {
-    #   # store value
-    #   storage$write(id, key, value)
-    # }
+    if (!is.null(store)) store$write(id, key, value)
 
     # store value in memory
     assign(key, value, envir=memoryStorage)
+
+    # return value since assign return is invisible
+    value
   }
 
   # get value with key
@@ -37,15 +40,11 @@ cache <- function (id = NULL, storage = NULL) {
 
       # get value from memory
       base::get(key, envir=memoryStorage)
+    }
+    else if (!is.null(store)) {
 
-    } else {
-
-      if (!is.null(storage)) {
-
-        # TODO try to get the value from storage
-
-        # TODO store in memory
-      }
+      # read and set cache value
+      set(key, store$read(id, key))
     }
   }
 
@@ -55,11 +54,8 @@ cache <- function (id = NULL, storage = NULL) {
     # remove for memory
     if (exists(key, envir=memoryStorage)) rm(list=c(key), envir=memoryStorage)
 
-    if (!is.null(storage)) {
-
-      # TODO remove from storage
-
-    }
+    # remove from storage
+    if (!is.null(store)) store$delete(id, key)
   }
 
   # has value with key
@@ -71,11 +67,8 @@ cache <- function (id = NULL, storage = NULL) {
     # clear memory
     rm(list=base::ls(memoryStorage), envir=memoryStorage)
 
-    if (!is.null(storage)) {
-
-      # TODO clear storage
-
-    }
+    # clear store
+    if (!is.null(store)) store$clear(id)
   }
 
   # list cache contents

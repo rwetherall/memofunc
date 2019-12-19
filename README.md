@@ -48,7 +48,7 @@ Execution of a memoed function can be forced in situations where it is known tha
 ```
 Note that useing force=TRUE will not only force the function implementation to be executed even if a cached value is available, but it will also overwirte any exisiting cache values with the new one so it is available for future calls to the memoed function.
 
-## Identifing a Memoed Function
+### Identifing a Memoed Function
 
 Memoed functions can be identified using the is.memo function.
 
@@ -62,7 +62,7 @@ Memoed functions can be identified using the is.memo function.
 
 ```
 
-## Accessing the Original Function
+### Accessing the Original Function
 
 Sometimes it might be desirable to access and call the original function.  This can be achieved using the memo.function function.
 

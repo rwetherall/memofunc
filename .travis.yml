@@ -1,7 +1,8 @@
-language: r
-
-r_packages:
-  - covr
-
+language: R
+cache: packages
+r:
+  - oldrel
+  - release
+  - devel
 after_success:
-  - Rscript -e 'library(covr); codecov()'
+    - Rscript -e 'covr::coveralls()'

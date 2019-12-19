@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/rwetherall/memofunc.svg?token=x2QLvsytRz6d82hRES7c&branch=master)](https://travis-ci.com/rwetherall/memofunc)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/rwetherall/memofunc?branch=master&svg=true)](https://ci.appveyor.com/project/rwetherall/memofunc)
-[![codecov](https://codecov.io/gh/rwetherall/memofunc/branch/master/graph/badge.svg?token=zPeCig27vf)](https://codecov.io/gh/rwetherall/memofunc)
+[![Coveralls test coverage](https://coveralls.io/repos/github/rwetherall/memofunc/badge.svg)](https://coveralls.io/r/rwetherall/memofunc?branch=master)
 
 ## MemoFunc - A Function Memoization Package for R
 

@@ -74,3 +74,43 @@ Sometimes it might be desirable to access and call the original function.  This 
 [1] 40
 
 ```
+
+### Managing the Cache of a Memoed Function
+
+Behind every memoed function is a simple cache.  You can access this cache using the memo.cache function.
+
+``` r
+
+> cache <- memo.cache(memoedDouble)
+
+```
+
+This allows the cache to be managed directly.  In perticular the contents of the cache can be inspected, retrieved, updated and cleared.
+
+``` r
+
+> cache$ls()
+[1] "47c584c88970ee81c783da03093871ea"
+
+> cache$get("47c584c88970ee81c783da03093871ea")
+[1] 20
+
+> memoedDouble(10)
+[1] 20
+
+> cache$set("47c584c88970ee81c783da03093871ea", 100)
+[1] 100
+
+> memoedDouble(10)
+[1] 100
+
+> cache$clear()
+
+> cache$ls()
+character(0)
+
+> memoedDouble(10)
+[1] 20
+
+```
+

@@ -2,18 +2,21 @@
 % Please edit documentation in R/cache.R
 \name{cache}
 \alias{cache}
-\title{Create a cache.}
+\title{Simple cache used to store the values of memoised functions}
 \usage{
-cache(id = NULL, storetype = "filestore")
-}
-\arguments{
-\item{id}{Cache identifier, used to re-create reference to exisiting persistent cache.  If none provided then assumed transient.}
-
-\item{storetype}{Persistant cache storage type.  File store by default.}
+cache()
 }
 \value{
-A cache that stores values for later retieval.
+A cache which can be accessed using:
+\itemize{
+  \item cache()#set - set the value of a given key
+  \item cache()#get - get the value of a given key
+  \item cache()#unset - clear the value for a given key
+  \item cache()#has - true if given key has value, false otherwise
+  \item cache()clear - clears all values and keys
+  \item cache()#ls - lists all the values and keys 
+  }
 }
 \description{
-Create a general purpose cache that can be used to store both transient and persistent values.
+A simple in memory cache used to store the value of memoised functions.
 }

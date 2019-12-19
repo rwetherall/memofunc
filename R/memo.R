@@ -58,7 +58,7 @@ hashFunctionCall <- function(name, formals, args) {
 memo <- function (f) {
 
   # get cache
-  f.cache <- f %>% hash() %>% cache()
+  f.cache <- cache()
 
   # grab the information about the function
   f.formals <- formals(f)

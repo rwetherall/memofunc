@@ -3,7 +3,6 @@
 \docType{package}
 \name{memofunc}
 \alias{memofunc}
-\alias{memofunc-package}
 \title{memofunc: A package for memoizing functions and caching data}
 \description{
 The \code{memofunc} package provides a simple way to memoize a function to optimise execution for process or data

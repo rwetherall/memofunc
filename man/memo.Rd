@@ -4,10 +4,12 @@
 \alias{memo}
 \title{Memoises a given function}
 \usage{
-memo(f)
+memo(f, allow.null = FALSE)
 }
 \arguments{
 \item{f}{function to memoise}
+
+\item{allow.null}{indicates whether results are cached when a function returns NULL, default value FALSE}
 }
 \value{
 Memoised function

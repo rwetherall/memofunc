@@ -45,7 +45,7 @@ cache <- function () {
   }
 
   # has value with key
-  has <- function(key) !is.null(get(key))
+  has <- function(key) exists(key, envir=memoryStorage)
 
   # clear all
   clear <- function() {

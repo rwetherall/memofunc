@@ -46,7 +46,7 @@ Execution of a memoed function can be forced in situations where it is known tha
 [1] 20
 
 ```
-Note that useing force=TRUE will not only force the function implementation to be executed even if a cached value is available, but it will also overwirte any exisiting cache values with the new one so it is available for future calls to the memoed function.
+Note that using force=TRUE will not only force the function implementation to be executed, even if a cached value is available, but it will also overwirte any exisiting cache value with the new one so it is available for future calls to the memoed function.
 
 ### Identifing a Memoed Function
 

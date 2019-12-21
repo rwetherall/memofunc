@@ -33,6 +33,7 @@ hashFunctionCall <- function(name, formals, args) {
 #' Memoises a given function such that the result of the function is cached to improve
 #' function performance
 #' @param f function to memoise
+#' @param allow.null indicates whether results are cached when a function returns NULL, default value FALSE
 #' @return
 #' Memoised function
 #' @examples
@@ -55,7 +56,7 @@ hashFunctionCall <- function(name, formals, args) {
 #' memo(10, force=FALSE)  # immediately returns 10
 #' @export
 ##
-memo <- function (f) {
+memo <- function (f, allow.null=FALSE) {
 
   # get cache
   f.cache <- cache()
@@ -85,9 +86,17 @@ memo <- function (f) {
 
       # tweak call to call f and remove force
       call[[1]] <- quote(f)
+      
+      # get the result
+      result <- eval(call)
 
-      # evaluate call and cache results
-      f.cache$set(hash, eval(call))
+      if (!is.null(result) || allow.null) {
+        
+        # cache the result
+        f.cache$set(hash, result)
+      }
+      
+      result
     }
   }
 

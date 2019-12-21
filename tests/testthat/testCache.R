@@ -109,8 +109,16 @@ test_that("Given I have two caches with different names, When I work with the ca
   expect_true(cache2$has("another"))
 })
 
-
-# TODO check that by default a cache with memory storage is created
+test_that("Given that I have a cache, When I store a key with a NULL value, Then I can retrive and check for existance successfully", {
+  
+  cache <- cache()
+  
+  cache$set("nullvalue", NULL);
+  
+  expect_true(cache$has("nullvalue"))
+  expect_null(cache$get("nullvalue"))
+  
+})
 
 # TODO check valid algo
 

@@ -5,6 +5,14 @@ library(magrittr)
 library(testthat)
 
 test.env <- NULL
+key.executed <- "executed"
+
+test_fn <- function (fn) {
+  function (...) {
+    assign(key.executed, TRUE, envir=test.env)
+    fn(...)
+  }
+}
 
 test_that_eval <- function(execute) {
   
@@ -13,27 +21,34 @@ test_that_eval <- function(execute) {
   
   list(
     value = eval(execute),
-    executed = mget("executed", envir=test.env, inherits=FALSE, ifnotfound=FALSE)[[1]])
+    executed = mget(key.executed, envir=test.env, inherits=FALSE, ifnotfound=FALSE)[[1]])
 }
 
-test_that("Given a simple function, When I memoise the function, Then the results are cached",{
+test_that("Given a simple function, When I memoise the function, Then the results are cached", {
+  
+  test1 <- function(value){value}
 
-  # simple function
-  test1.memo <- memo(
-    function(value) {
-      assign("executed", TRUE, envir=test.env)
-      value
-    })
+  test1.memo <- memo(test_fn(test1))
  
- with(test_that_eval({test1.memo(30)}), {
-  expect_equal(value, 30)
-  expect_true(executed)
- })
+  with(test_that_eval({test1.memo(30)}), {
+    expect_equal(value, 30)
+    expect_true(executed)
+  })
  
- with (test_that_eval({test1.memo(30)}), {
-  expect_equal(value, 30)
-  expect_false(executed)
- })
+  with (test_that_eval({test1.memo(30)}), {
+    expect_equal(value, 30)
+    expect_false(executed)
+  })
+  
+  with(test_that_eval({test1.memo(300)}), {
+    expect_equal(value, 300)
+    expect_true(executed)
+  })
+  
+  with (test_that_eval({test1.memo(300)}), {
+    expect_equal(value, 300)
+    expect_false(executed)
+  })
 
   # a call with force false doesn't execute
  #test_that_memo_executed(test1.memo(10, force=FALSE), 10, FALSE)

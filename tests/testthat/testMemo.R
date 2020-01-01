@@ -4,60 +4,69 @@ context("memoFunction")
 library(magrittr)
 library(testthat)
 
-test.env <- new.env(parent=emptyenv())
+test.env <- NULL
 
-test1 <- function(value) {
-  assign("test1.executed", TRUE, envir=test.env)
-  value
+test_that_eval <- function(execute) {
+  
+  # create new test env
+  test.env <<- test_env()
+  
+  list(
+    value = eval(execute),
+    executed = mget("executed", envir=test.env, inherits=FALSE, ifnotfound=FALSE)[[1]])
 }
 
 test_that("Given a simple function, When I memoise the function, Then the results are cached",{
 
-  # test function
-  test1.memo <- memo(test1)
-
-  # initial call executes method
-  expect_equal(test1.memo(10), 10)
-  expect_equal(get("test1.executed",envir=test.env), TRUE)
-  rm(list=ls(test.env), envir=test.env)
-
-  # second call with same params returns cached value
-  expect_equal(test1.memo(10), 10)
-  expect_error(get("test1.executed",envir=test.env))
-  rm(list=ls(test.env), envir=test.env)
+  # simple function
+  test1.memo <- memo(
+    function(value) {
+      assign("executed", TRUE, envir=test.env)
+      value
+    })
+ 
+ with(test_that_eval({test1.memo(30)}), {
+  expect_equal(value, 30)
+  expect_true(executed)
+ })
+ 
+ with (test_that_eval({test1.memo(30)}), {
+  expect_equal(value, 30)
+  expect_false(executed)
+ })
 
   # a call with force false doesn't execute
-  expect_equal(test1.memo(10, force=FALSE), 10)
-  expect_error(get("test1.executed",envir=test.env))
-  rm(list=ls(test.env), envir=test.env)
-
+ #test_that_memo_executed(test1.memo(10, force=FALSE), 10, FALSE)
+  
   # force call executes method
-  expect_equal(test1.memo(10, force=TRUE), 10)
-  expect_equal(get("test1.executed",envir=test.env), TRUE)
-  rm(list=ls(test.env), envir=test.env)
-
-  # call with different params executes method
-  expect_equal(test1.memo(20), 20)
-  expect_equal(get("test1.executed",envir=test.env), TRUE)
-  rm(list=ls(test.env), envir=test.env)
+#  test_that_memo_executed(test1.memo(10, force=TRUE), 10, TRUE)
+  
+ # test_that_memo_cached(test1.memo, 20, 20, TRUE)
 
 })
 
-test_that("Given a simple function, When I memoise the function in different environments, Then the caches share the same id", {
-
-  evalq({
-    memo1 <- memo(test1)
-  },
-  envir=new.env())
-
-  evalq({
-    expect_error(test)
-  },
-  envir=new.env())
-
-})
+# test_that("Given a simple function, When I memoise the function in different environments, Then the caches share the same id", {
+# 
+#   evalq({
+#     memo1 <- memo(test1)
+#   },
+#   envir=new.env())
+# 
+#   evalq({
+#     expect_error(test)
+#   },
+#   envir=new.env())
+# 
+# })
 
 test_that("Given a simple function, When I ask, Then I am told whether it is a memoised fn or not ", {
+  
+  # simple function
+  test1 <- 
+    function(value) {
+      assign("executed", TRUE, envir=test.env)
+      value
+    }
 
   memo(test1) %>% is.memo() %>% expect_true()
   test1 %>% is.memo() %>% expect_false()

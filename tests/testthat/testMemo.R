@@ -19,10 +19,21 @@ test_that_eval <- function(execute) {
   # create new test env
   test.env <<- test_env()
   
+  # TODO record time taken
+  
   list(
     value = eval(execute),
     executed = mget(key.executed, envir=test.env, inherits=FALSE, ifnotfound=FALSE)[[1]])
 }
+
+# Note: use do.call(fn, list(10, force=TRUE)) 
+#
+# return-value <- function (value) {value}
+# 
+# test_fn-calls <- list (
+#   call("return-value", 10),
+#   call("return-value", 10, force=TRUE)
+# )
 
 test_that("Given a simple function, When I memoise the function, Then the results are cached", {
   

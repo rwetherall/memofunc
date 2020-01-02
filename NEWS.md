@@ -8,3 +8,5 @@
 * Added simple cache management functions including clearing and listing the items in the cache.
 * Added a `NEWS.md` file to track changes to the package.
 * Added support for NULL return values and methods with no return value with allow.null parameter
+* Improved memo tests
+* Move hash functions to separate file adding tests

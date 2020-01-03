@@ -48,7 +48,7 @@ memo <- function (f, allow.null=FALSE) {
     if (!is.null(call[["force"]])) call[["force"]] <- NULL
 
     # generate hash from function name and arguments
-    hash <- hashFunctionCall(call[[1]], formals(), as.list(call[-1]))
+    hash <- hashFunctionCall(call[[1]], f.formals, call[[-1]])
 
     # if force or cached
     if (!force && f.cache$has(hash)) {

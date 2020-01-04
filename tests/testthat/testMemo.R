@@ -1,5 +1,5 @@
 
-context("memoFunction")
+context("memo")
 
 library(magrittr)
 library(testthat)

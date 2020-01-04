@@ -1,4 +1,25 @@
-# Helper to create hash from function and args details.
+require(digest)
+
+##
+# Hash function.
+#
+# TODO make configurable
+#
+hash <- function(value) digest::digest(value)
+
+##
+# is the value an empty name.
+#
+is.emptyName <- function (value) (value == "" && class(value) == "name")
+
+##
+# Gets the default values of a given set of function formals.
+#
+defaultArgs <- function(formals) formals[!sapply(formals, is.emptyName)]
+
+##
+# Hashes a function call based on the provided argument values and unspecified 
+# defaults.
 hashFunctionCall <- function(name, formals, args) {
   
   # get default args
@@ -9,7 +30,7 @@ hashFunctionCall <- function(name, formals, args) {
     args.default[
       unlist(
         lapply(names(args.default),
-               function(name) {!name %in% names(args.force)}))]
+               function(name) {!name %in% names(args)}))]
   
   # evaluated set arguments
   args.set <- lapply(c(args, args.default.unset), force)
@@ -20,25 +41,3 @@ hashFunctionCall <- function(name, formals, args) {
     hash()
 }
 
-defaultArgs <- function(formals) {
-  
-  # return the arguments that have defaults
-  formals[
-    sapply(
-      formals, 
-      function(arg) {
-        tryCatch( { 
-          
-          # try and evaluate the argument
-          eval(arg)
-          TRUE 
-          
-        }, 
-        
-        # an error indicates that the argument doesn't have a default 
-        error = function (err) return(FALSE))
-      })]
-}
-
-# Hash function
-hash <- function(value) digest::digest(value)

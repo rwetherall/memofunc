@@ -3,19 +3,28 @@ context("hash")
 library(magrittr)
 library(testthat)
 
-test_that_defaultArgs_expected <- function (fn.test, result.expected) {
+expect_list_equal <- function (given, expected) {
   
-  # get functions default arguments
-  result <- fn.test %>% formals() %>% defaultArgs()
-  
-  # check we get the expected results
-  result %>% length() %>% expect_equal(length(result.expected))
-  names(result.expected) %in% names(result) %>% all() %>% expect_true()
-  result.expected %in% result %>% all() %>% expect_true()
+  given %>% length() %>% expect_equal(length(expected))
+  names(expected) %in% names(expected) %>% all() %>% expect_true()
+  expected %in% given %>% all() %>% expect_true()
   
 }
 
-test_that("Given a function, When I ask for the default values, Then I get them", {
+test_that_defaultArgs_expected <- function (fn.test, result.expected) {
+  
+  # get functions default arguments
+  fn.test %>% formals() %>% defaultArgs() %>%
+  
+  # check we get the expected results
+  expect_list_equal(result.expected)
+  
+}
+
+test_that(
+  "Given a function, 
+   When I ask for the default values, 
+   Then I get them", {
   
   # no default values
   test_that_defaultArgs_expected(
@@ -54,4 +63,14 @@ test_that("Given a function, When I ask for the default values, Then I get them"
     alist(def.value1 = myValue)
   )
   
+})
+
+test_that(
+  "Given a list of default arguments, 
+   When I inspect them against the provided arguments, 
+   Then I will get the unset default values", {
+  
+  alist(y=20, z=20) %>% 
+    unset.defaultArgs(alist(10, x=10, y=10)) %>%
+    expect_list_equal(list(z=20))
 })

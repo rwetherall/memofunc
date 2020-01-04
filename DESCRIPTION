@@ -14,7 +14,7 @@ Imports:
   uuid,
   magrittr
 Suggests:
-    testthat,
-    devtools,
-    roxygen2,
-    covr
+  testthat,
+  devtools,
+  roxygen2,
+  covr

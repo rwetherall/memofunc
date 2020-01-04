@@ -8,36 +8,43 @@ require(digest)
 hash <- function(value) digest::digest(value)
 
 ##
-# is the value an empty name.
+# Is the value an empty name.
 #
 is.emptyName <- function (value) (value == "" && class(value) == "name")
 
 ##
 # Gets the default values of a given set of function formals.
 #
-defaultArgs <- function(formals) formals[!sapply(formals, is.emptyName)]
+defaultArgs <- function (formals) formals[!sapply(formals, is.emptyName)]
 
 ##
-# Hashes a function call based on the provided argument values and unspecified 
-# defaults.
-hashFunctionCall <- function(name, formals, args) {
-  
-  # get default args
-  args.default <- defaultArgs(formals)
-  
-  # get the unset default args
-  args.default.unset <- 
-    args.default[
-      unlist(
-        lapply(names(args.default),
-               function(name) {!name %in% names(args)}))]
-  
-  # evaluated set arguments
-  args.set <- lapply(c(args, args.default.unset), force)
-  
-  # get args hash
-  name %>%
-    c(unlist(args.set, use.names = FALSE)) %>%
-    hash()
-}
+# Gets the unset default arguments. 
+#
+unset.defaultArgs <- function (defaultArgs, args)
+  defaultArgs[
+    unlist(lapply(
+        names(defaultArgs),
+        function (name) {!name %in% names(args)}))]
 
+##
+# Hashes a function call based on the provided argument values and unspecified.
+# 
+hashFunctionCall <- function (name, formals, args)
+  
+  # get the default arguments
+  formals %>% defaultArgs() %>% 
+    
+  # get the unset default arguments  
+  unset.defaultArgs(args) %>%
+  
+  # combine the arguments with the unset default arguments  
+  c(args) %>%
+  
+  # force the evaluation of the arguments  
+  lapply(force) %>%
+  
+  # combine the argument values and the function name  
+  unlist(use.names = FALSE) %>% c(name) %>% 
+  
+  # return hash  
+  hash()

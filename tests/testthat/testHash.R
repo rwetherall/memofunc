@@ -74,3 +74,25 @@ test_that(
     unset.defaultArgs(alist(10, x=10, y=10)) %>%
     expect_list_equal(list(z=20))
 })
+
+test_that("", {
+  
+  test.fn <- function (a, b=10, c=10) NULL
+  
+  test.call1 <- call("test.fn", 20, b=30)
+  test.call2 <- call("test.fn", 20, b=30, c=10)
+  test.call3 <- call("test.fn", b=30, a=20)
+  test.call4 <- call("test.fn", 20, 30)
+  
+  hash1 <- functionCall(test.fn, test.call1) %>% hash()
+  hash2 <- functionCall(test.fn, test.call1) %>% hash()
+  hash3 <- functionCall(test.fn, test.call2) %>% hash()
+  hash4 <- functionCall(test.fn, test.call3) %>% hash()
+  hash5 <- functionCall(test.fn, test.call4) %>% hash()
+  
+  expect_equal(hash1, hash2)
+  expect_equal(hash1, hash3)
+  expect_equal(hash1, hash4)
+  expect_equal(hash1, hash5)
+  
+})

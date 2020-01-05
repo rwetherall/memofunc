@@ -1,11 +1,70 @@
 require(digest)
 
 ##
-# Hash function.
 #
-# TODO make configurable
 #
-hash <- function(value) digest::digest(value)
+unused.formals <- function (formals, args) {
+  
+  names(formals[
+    unlist(lapply(
+      names(formals),
+      function (name) {!name %in% names(args)}))])
+}
+
+##
+#
+#
+name.args <- function (formals, args) {
+  
+  unused.formals <- unused.formals(formals, args)
+  names.args <- names(args)
+  
+  if (is.null(names.args)) {
+    unused.formals[c(1:length(args))]
+  } else {
+    
+    index <- 1
+    unlist(lapply(names.args, function(name) {
+      
+      if (name == "") {
+        result <- unused.formals[[1]]
+        index <<- index + 1
+        result
+      } else {
+        name
+      }
+    }))
+  }
+}
+
+##
+#
+#
+functionCall <- function (f = sys.function(sys.parent()), call = sys.call(sys.parent())) {
+  
+  name <- call[[1]]
+  args <- as.list(call)
+  args[[1]] <- NULL
+  
+  # make sure all the passed args are named
+  args.all.names <- name.args(formals(f), args)
+  names(args) <- args.all.names
+  
+  result <- list(f=f, name=name, args=args)
+  class(result) <- "functionCall"
+  
+  result
+}
+
+##
+# Generic hash function
+#
+hash <- function (value) UseMethod("hash", value)
+
+##
+# Default hash function
+#
+hash.default <- function (value) digest::digest(value)
 
 ##
 # Is the value an empty name.
@@ -27,24 +86,19 @@ unset.defaultArgs <- function (defaultArgs, args)
         function (name) {!name %in% names(args)}))]
 
 ##
-# Hashes a function call based on the provided argument values and unspecified.
+# Hash a function call
 # 
-hashFunctionCall <- function (name, formals, args)
+hash.functionCall <- function (fc) {
   
-  # get the default arguments
-  formals %>% defaultArgs() %>% 
-    
-  # get the unset default arguments  
-  unset.defaultArgs(args) %>%
+  all.args <- 
+    formals(fc$f) %>%
+    defaultArgs() %>% 
+    unset.defaultArgs(fc$args) %>% 
+    c(fc$args)
   
-  # combine the arguments with the unset default arguments  
-  c(args) %>%
+  all.args <- all.args[order(names(all.args))]
   
-  # force the evaluation of the arguments  
-  lapply(force) %>%
+  all.args.forced <- unlist(all.args, use.names = FALSE) %>% lapply(force)
   
-  # combine the argument values and the function name  
-  unlist(use.names = FALSE) %>% c(name) %>% 
-  
-  # return hash  
-  hash()
+  hash(c(all.args.forced, fc$name))
+}

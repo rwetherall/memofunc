@@ -35,20 +35,14 @@ memo <- function (f, allow.null=FALSE) {
   # get cache
   f.cache <- cache()
 
-  # grab the information about the function
-  f.formals <- formals(f)
-
   # create the memo function
   f.memo <- function (force=FALSE) {
 
-    # grab the call
-    call <- match.call()
-
-    # remove force from call if present
-    if (!is.null(call[["force"]])) call[["force"]] <- NULL
-
-    # generate hash from function name and arguments
-    hash <- hashFunctionCall(call[[1]], f.formals, call[[-1]])
+    # get the function call
+    fc <- functionCall()
+    
+    # generate hash
+    hash <- hash(functionCall())
 
     # if force or cached
     if (!force && f.cache$has(hash)) {
@@ -58,11 +52,10 @@ memo <- function (f, allow.null=FALSE) {
 
     } else {
 
-      # tweak call to call f and remove force
-      call[[1]] <- quote(f)
+      if ("force" %in% names(fc$args)) fc$args[["force"]] <- NULL
       
       # get the result
-      result <- eval(call)
+      result <- do.call(f, fc$args)
 
       if (!is.null(result) || allow.null) {
         
@@ -75,7 +68,7 @@ memo <- function (f, allow.null=FALSE) {
   }
 
   # set the parameters and environment of the memo function
-  formals(f.memo) <- c(f.formals, formals(f.memo))
+  formals(f.memo) <- c(formals(f), formals(f.memo))
 
   # return the memo function
   f.memo

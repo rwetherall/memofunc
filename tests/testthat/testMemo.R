@@ -8,10 +8,14 @@ test.env <- NULL
 key.executed <- "executed"
 
 test_fn <- function (fn) {
-  function (...) {
+  
+  result <- function () {
     assign(key.executed, TRUE, envir=test.env)
-    fn(...)
+    fn(match.call()[[-1]])
   }
+  
+  formals(result) <- formals(fn)
+  result
 }
 
 test_that_eval <- function(execute) {
@@ -37,9 +41,12 @@ test_that_eval <- function(execute) {
 
 test_that("Given a simple function, When I memoise the function, Then the results are cached", {
   
-  test1 <- function(value){value}
+  test1 <- function(value){
+    assign(key.executed, TRUE, envir=test.env)
+    value
+  }
 
-  test1.memo <- memo(test_fn(test1))
+  test1.memo <- memo(test1)
  
   with(test_that_eval({test1.memo(30)}), {
     expect_equal(value, 30)

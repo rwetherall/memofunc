@@ -135,8 +135,47 @@ test_that("
     expect_list_equal(list(z=20)) 
 })
 
-## TODO Given a function and call, When I ask for the function call, Then I get the correct details
-## TODO Given no details, When I ask for the function call, Then I get the correct details based on my current calling location
+test_that("
+  Given a function and a call, 
+  When I ask for the function call, 
+  Then the arguments are fully named correctly", {
+
+  test.fn <- function (a, b=10, c=10, d) NULL
+  
+  test.call1 <- call("test.fn", 20, b=30)
+  test.call2 <- call("test.fn", 20, b=30, c=10)
+  test.call3 <- call("test.fn", b=30, a=20)
+  test.call4 <- call("test.fn", 20, 30)
+  test.call5 <- call("test.fn", 20, 30, a=10, 40)
+  
+  with (functionCall(test.fn, test.call1), expect_list_equal(args, list(a=20, b=30)))
+  with (functionCall(test.fn, test.call2), expect_list_equal(args, list(a=20, b=30, c=10)))
+  with (functionCall(test.fn, test.call3), expect_list_equal(args, list(b=30, a=20)))
+  with (functionCall(test.fn, test.call4), expect_list_equal(args, list(a=20, b=30)))
+  with (functionCall(test.fn, test.call5), expect_list_equal(args, list(b=20, c=30, a=10, d=40)))
+  
+  
+  
+})
+
+test_that("
+  Given a function, 
+  When I ask for the function call, 
+  Then I get the arguments fully named 
+  And the function 
+  And the calling name", {
+    
+    test.fn <- function (a, b=10, c=10, d) functionCall()
+
+    expect_equal(test.fn(20, 10)$f, test.fn)
+    expect_equal(test.fn(20, 20)$name, quote(test.fn))
+    
+    with (test.fn(20, b=30), expect_list_equal(args, list(a=20, b=30)))
+    with (test.fn(20, b=30, c=10), expect_list_equal(args, list(a=20, b=30, c=10)))
+    with (test.fn(b=30, a=20), expect_list_equal(args, list(b=30, a=20)))
+    with (test.fn(20, 30), expect_list_equal(args, list(a=20, b=30)))
+    with (test.fn(20, 30, a=10, 40), expect_list_equal(args, list(b=20, c=30, a=10, d=40)))
+  })
 
 test_that("
   Given a function with mandatory and non-mandatory arguments, 

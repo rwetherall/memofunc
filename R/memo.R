@@ -47,7 +47,7 @@ memo <- function (f, allow.null=FALSE) {
     fc <- functionCall()
     
     # generate hash
-    hash <- hash(functionCall())
+    hash <- hash(fc)
 
     # if force or cached
     if (!force && f.cache$has(hash)) {

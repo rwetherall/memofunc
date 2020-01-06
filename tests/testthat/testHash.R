@@ -230,10 +230,26 @@ test_that("
     call("test.fn", 25, 30, 10)) %>%
     
   lapply(function (call) functionCall(test.fn, call) %>% hash()) %>%
+  
   all_different() %>% expect_true()
 })
 
-
-## TODO Given a function with mandatory and non-mandatory arguments, When I hash the function call with varibale argument values, Then the results reflect the changes to the varible value
-
-
+test_that("
+  Given a function with mandatory and non-mandatory arguments, 
+  When I hash the function call with varibale argument values, 
+  Then the results reflect the changes to the value", {
+  
+  test.fn <- function (a, b=10, c=10) NULL
+  
+  alpha <- 20
+  hash1 <- functionCall(test.fn, call("test.fn", alpha)) %>% hash()
+  
+  alpha <-10
+  hash2 <- functionCall(test.fn, call("test.fn", alpha)) %>% hash()
+  
+  alpha <- 20
+  hash3 <- functionCall(test.fn, call("test.fn", alpha)) %>% hash()
+  
+  expect_false(hash1 == hash2)
+  expect_true(hash1 == hash3)
+})

@@ -55,25 +55,27 @@ test_that("
     list())
 })
 
-# TODO Given a set of arguments with or without names, When I ask for their names, Then I get a list of names that can be used to name the arguments
-test_that("", {
+test_that("
+  Given a set of arguments with or without names, 
+  When I ask for their names, 
+  Then I get the full list of argument names in the order they appear", {
   
   test.fn <- function (a, b=10, c=10, d, e) NULL
   
   expect_list_equal(
-    name.args(formals(test.fn), list(10, 10, 10, 10, 10)),
+    all.names(formals(test.fn), list(10, 10, 10, 10, 10)),
     list("a", "b", "c", "d", "e"))
   
   expect_list_equal(
-    name.args(formals(test.fn), list(a=10, 10, c=10, 10, 10)),
+    all.names(formals(test.fn), list(a=10, 10, c=10, 10, 10)),
     list("a", "b", "c", "d", "e"))
   
   expect_list_equal(
-    name.args(formals(test.fn), list(a=10, b=10, c=10, d=10, e=10)),
+    all.names(formals(test.fn), list(a=10, b=10, c=10, d=10, e=10)),
     list("a", "b", "c", "d", "e"))
   
   expect_list_equal(
-    name.args(formals(test.fn), list(b=10, 10, d=10, 10, 10)),
+    all.names(formals(test.fn), list(b=10, 10, d=10, 10, 10)),
     list("b", "a", "d", "c", "e"))
   
 })
@@ -130,7 +132,7 @@ test_that("
   
   alist(y=20, z=20) %>% 
     unset.defaultArgs(alist(10, x=10, y=10)) %>%
-    expect_list_equal(list(z=20))
+    expect_list_equal(list(z=20)) 
 })
 
 ## TODO Given a function and call, When I ask for the function call, Then I get the correct details

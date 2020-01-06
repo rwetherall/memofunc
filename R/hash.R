@@ -1,49 +1,62 @@
 require(digest)
 
 ##
+# Helper to get the first N elements of a vector or list
 #
-#
-unused.formals <- function (formals, args) names(formals[sapply(names(formals), function (name) {!name %in% names(args)})])
+first.n <- function (x, n) x[c(1:n)]
+`%<n>%` <- function (x,n) first.n(x,n)
 
 ##
+# Get a list of the formal names that have not been used in the provided argument list
 #
+unused.formals <- function (formals, args) formals[!sapply(names(formals), `%in%`, table=names(args))] %>% names()
+
+##
+# Get all the names of a list of arguments given a functions formals
 #
-name.args <- function (formals, args) {
+all.names <- function (formals, args) {
   
+  # formals not named in the argument list
   unused.formals <- unused.formals(formals, args)
   
+  # argument names used
   names.args <- names(args)
   
+  # if no argument names are set
   if (is.null(names.args)) {
     
-    unused.formals[c(1:length(args))]
+    # return the argument names based on those provided in the formals
+    unused.formals %<n>% length(args)
   
-    } else {
+  } else {
     
-    mask <- sapply(names.args, function (name) name == "")
-
-    names.args[mask] <- lapply(seq_along(names.args[mask]), function (index) unused.formals[[index]])
+    # which argument names are not set
+    mask <- sapply(names.args, `==`, y="")
     
+    # return the full list of names, in the order the arguments appear, including those already set
+    names.args[mask] <- unused.formals %<n>% length(names.args[mask]) 
     names.args
   }
 }
 
 ##
-#
+# Get a 'functionCall', which is a hash'able class containing information about a call to a function
 #
 functionCall <- function (f = sys.function(sys.parent()), call = sys.call(sys.parent())) {
   
+  # function call name
   name <- call[[1]]
+  
+  # function call arguments
   args <- as.list(call)
   args[[1]] <- NULL
   
-  # make sure all the passed args are named
-  args.all.names <- name.args(formals(f), args)
-  names(args) <- args.all.names
+  # name all the function call arguments
+  names(args) <- all.names(formals(f), args)
   
+  # return functionCall
   result <- list(f=f, name=name, args=args)
   class(result) <- "functionCall"
-  
   result
 }
 
@@ -70,26 +83,32 @@ defaultArgs <- function (formals) formals[!sapply(formals, is.emptyName)]
 ##
 # Gets the unset default arguments. 
 #
-unset.defaultArgs <- function (defaultArgs, args)
-  defaultArgs[
-    unlist(lapply(
-        names(defaultArgs),
-        function (name) {!name %in% names(args)}))]
+unset.defaultArgs <- function (defaultArgs, args) defaultArgs[!sapply(names(defaultArgs), `%in%`, table=names(args))]
+
+##
+# Helper function to order arguments by name
+#
+orderby.name <- function (args) args[order(names(args))]
 
 ##
 # Hash a function call
 # 
-hash.functionCall <- function (fc) {
+hash.functionCall <- function (fc)
+
+  # get functions default arguments
+  formals(fc$f) %>% defaultArgs() %>%
   
-  all.args <- 
-    formals(fc$f) %>%
-    defaultArgs() %>% 
-    unset.defaultArgs(fc$args) %>% 
-    c(fc$args)
+  # add the unset default arguments to the argument list
+  unset.defaultArgs(fc$args) %>% c(fc$args) %>%
   
-  all.args <- all.args[order(names(all.args))]
+  # order arguments by name
+  orderby.name() %>%
   
-  all.args.forced <- unlist(all.args, use.names = FALSE) %>% lapply(force)
+  # loose the names and force the values
+  unlist(use.names = FALSE) %>% lapply(force) %>%
   
-  hash(c(all.args.forced, fc$name))
-}
+  # add the name of the function
+  c(fc$name) %>%
+
+  # hash the function call
+  hash()

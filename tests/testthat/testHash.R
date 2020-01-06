@@ -153,9 +153,6 @@ test_that("
   with (functionCall(test.fn, test.call3), expect_list_equal(args, list(b=30, a=20)))
   with (functionCall(test.fn, test.call4), expect_list_equal(args, list(a=20, b=30)))
   with (functionCall(test.fn, test.call5), expect_list_equal(args, list(b=20, c=30, a=10, d=40)))
-  
-  
-  
 })
 
 test_that("
@@ -205,7 +202,37 @@ test_that("
   
 })
 
-## TODO Given a function with mandatory and non-mandatory arguments, When I hash the function call with different argument values, Then the results are different
+all_different <- function (values) {
+  
+  if (length(values) == 1) { 
+    TRUE
+  } else {
+    
+    first <- values[[1]]
+    values[[1]] <- NULL
+    
+    all(sapply(values, `!=`, y=first)) && all_different(values)
+  }
+}
+
+test_that("
+  Given a function with mandatory and non-mandatory arguments, 
+  When I hash the function call with different argument values, 
+  Then the results are all different", {
+    
+  test.fn <- function (a, b=10, c=10) NULL
+    
+  list(
+    call("test.fn", 20, b=30),
+    call("test.fn", 20, b=30, c=5),
+    call("test.fn", b=30, a=10),
+    call("test.fn", 20, 10),
+    call("test.fn", 25, 30, 10)) %>%
+    
+  lapply(function (call) functionCall(test.fn, call) %>% hash()) %>%
+  all_different() %>% expect_true()
+})
+
 
 ## TODO Given a function with mandatory and non-mandatory arguments, When I hash the function call with varibale argument values, Then the results reflect the changes to the varible value
 

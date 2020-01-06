@@ -3,13 +3,7 @@ require(digest)
 ##
 #
 #
-unused.formals <- function (formals, args) {
-  
-  names(formals[
-    unlist(lapply(
-      names(formals),
-      function (name) {!name %in% names(args)}))])
-}
+unused.formals <- function (formals, args) names(formals[sapply(names(formals), function (name) {!name %in% names(args)})])
 
 ##
 #
@@ -17,23 +11,20 @@ unused.formals <- function (formals, args) {
 name.args <- function (formals, args) {
   
   unused.formals <- unused.formals(formals, args)
+  
   names.args <- names(args)
   
   if (is.null(names.args)) {
-    unused.formals[c(1:length(args))]
-  } else {
     
-    index <- 1
-    unlist(lapply(names.args, function(name) {
-      
-      if (name == "") {
-        result <- unused.formals[[1]]
-        index <<- index + 1
-        result
-      } else {
-        name
-      }
-    }))
+    unused.formals[c(1:length(args))]
+  
+    } else {
+    
+    mask <- sapply(names.args, function (name) name == "")
+
+    names.args[mask] <- lapply(seq_along(names.args[mask]), function (index) unused.formals[[index]])
+    
+    names.args
   }
 }
 

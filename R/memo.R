@@ -31,10 +31,15 @@ library(magrittr)
 #' @export
 ##
 memo <- function (f, allow.null=FALSE) {
+  
+  # TODO add option to prevent "force" and others being added to formals of memo function
 
   # get cache
   f.cache <- cache()
 
+  # TODO add 'dryRun' parameter 
+  # TODO change name of 'force" to 'memo.force' to reduce chance of name clash
+  
   # create the memo function
   f.memo <- function (force=FALSE) {
 

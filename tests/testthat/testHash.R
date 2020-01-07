@@ -3,8 +3,6 @@ context("hash")
 library(magrittr)
 library(testthat)
 
-
-
 ##
 # Helper to test whether two functions are the same
 #

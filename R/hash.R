@@ -4,7 +4,12 @@ require(digest)
 # Helper to get the first N elements of a vector or list
 #
 first.n <- function (x, n) x[c(1:n)]
-`%<n>%` <- function (x,n) first.n(x,n)
+`%<n>%` <- function (x, n) first.n(x,n)
+
+##
+# Helper to pad a list 
+#
+pad <- function (x, n, by=NA) lapply(1:n, function (index) if (index > length(x)) x[[index]] <- by else x[[index]])
 
 ##
 # Get a list of the formal names that have not been used in the provided argument list
@@ -16,6 +21,9 @@ unused.formals <- function (formals, args) formals[!sapply(names(formals), `%in%
 #
 all.names <- function (formals, args) {
   
+  # remove the elip from the list of formals if it is present
+  if ("..." %in% names(formals)) formals[["..."]] <- NULL
+  
   # formals not named in the argument list
   unused.formals <- unused.formals(formals, args)
   
@@ -26,15 +34,17 @@ all.names <- function (formals, args) {
   if (is.null(names.args)) {
     
     # return the argument names based on those provided in the formals
-    unused.formals %<n>% length(args)
+    pad(unused.formals, length(args), "mf.na")
   
   } else {
     
     # which argument names are not set
     mask <- sapply(names.args, `==`, y="")
     
-    # return the full list of names, in the order the arguments appear, including those already set
-    names.args[mask] <- unused.formals %<n>% length(names.args[mask]) 
+    # set the argument names that haven't been set
+    if (any(mask)) names.args[mask] <- pad(unused.formals, length(names.args[mask]), "mf.na")
+    
+    # return all the argument names
     names.args
   }
 }
@@ -104,8 +114,8 @@ hash.functionCall <- function (fc)
   # order arguments by name
   orderby.name() %>%
   
-  # loose the names and force the values
-  unlist(use.names = FALSE) %>% lapply(force) %>%
+  # force the values
+  lapply(force) %>%
   
   # add the name of the function
   c(fc$name) %>%

@@ -3,15 +3,15 @@ context("hash")
 library(magrittr)
 library(testthat)
 
+
+
 ##
 # Helper to test whether two functions are the same
 #
 expect_list_equal <- function (given, expected) {
-  
   given %>% length() %>% expect_equal(length(expected))
-  names(expected) %in% names(expected) %>% all() %>% expect_true()
-  expected %in% given %>% all() %>% expect_true()
-  
+  mapply(identical, names(expected), names(given)) %>% all() %>% expect_true(label=paste(names(expected), " equals ", names(given)))
+  mapply(identical, expected, given) %>% all() %>% expect_true(label=paste(expected, " equals ", given))
 }
 
 ##
@@ -79,7 +79,6 @@ test_that("
     list("b", "a", "d", "c", "e"))
   
 })
-
 
 test_that("
   Given a function, 
@@ -162,17 +161,29 @@ test_that("
   And the function 
   And the calling name", {
     
-    test.fn <- function (a, b=10, c=10, d) functionCall()
+  test.fn <- function (a, b=10, c=10, d) functionCall()
 
-    expect_equal(test.fn(20, 10)$f, test.fn)
-    expect_equal(test.fn(20, 20)$name, quote(test.fn))
-    
-    with (test.fn(20, b=30), expect_list_equal(args, list(a=20, b=30)))
-    with (test.fn(20, b=30, c=10), expect_list_equal(args, list(a=20, b=30, c=10)))
-    with (test.fn(b=30, a=20), expect_list_equal(args, list(b=30, a=20)))
-    with (test.fn(20, 30), expect_list_equal(args, list(a=20, b=30)))
-    with (test.fn(20, 30, a=10, 40), expect_list_equal(args, list(b=20, c=30, a=10, d=40)))
-  })
+  expect_equal(test.fn(20, 10)$f, test.fn)
+  expect_equal(test.fn(20, 20)$name, quote(test.fn))
+  
+  with (test.fn(20, b=30), expect_list_equal(args, list(a=20, b=30)))
+  with (test.fn(20, b=30, c=10), expect_list_equal(args, list(a=20, b=30, c=10)))
+  with (test.fn(b=30, a=20), expect_list_equal(args, list(b=30, a=20)))
+  with (test.fn(20, 30), expect_list_equal(args, list(a=20, b=30)))
+  with (test.fn(20, 30, a=10, 40), expect_list_equal(args, list(b=20, c=30, a=10, d=40)))
+
+  test.fn.elip <- function (a, b=10, ...) functionCall()
+  
+  with (test.fn.elip(20, b=30), expect_list_equal(args, list(a=20, b=30)))
+  with (test.fn.elip(20, b=30, c=10), expect_list_equal(args, list(a=20, b=30, c=10)))
+  with (test.fn.elip(b=30, a=20), expect_list_equal(args, list(b=30, a=20)))
+  with (test.fn.elip(20, 30), expect_list_equal(args, list(a=20, b=30)))
+  
+  with (test.fn.elip(20, a=10, 30, 40), expect_list_equal(args, list(b=20, a=10, mf.na=30, mf.na=40)))
+  with (test.fn.elip(10, 20, 30, 40), expect_list_equal(args, list(a=10, b=20, mf.na=30, mf.na=40)))
+  with (test.fn.elip(10, 20, c=30, d=40), expect_list_equal(args, list(a=10, b=20, c=30, d=40)))
+  with (test.fn.elip(10, 20, 30, d=40), expect_list_equal(args, list(a=10, b=20, mf.na=30, d=40)))
+})
 
 test_that("
   Given a function with mandatory and non-mandatory arguments, 
@@ -202,18 +213,12 @@ test_that("
   
 })
 
-all_different <- function (values) {
-  
-  if (length(values) == 1) { 
-    TRUE
-  } else {
-    
-    first <- values[[1]]
-    values[[1]] <- NULL
-    
-    all(sapply(values, `!=`, y=first)) && all_different(values)
-  }
-}
+all_this <- function(this, values) 
+  if (length(values) <= 1) TRUE else
+    values[2:length(values)] %>% sapply(this, y = values[[1]]) %>% all() && all_this(this, values[2:length(values)])
+
+all_different <- function(values) all_this(`!=`, values)
+all_same <- function (values) all_this(`==`, values)
 
 test_that("
   Given a function with mandatory and non-mandatory arguments, 
@@ -252,4 +257,32 @@ test_that("
   
   expect_false(hash1 == hash2)
   expect_true(hash1 == hash3)
+})
+
+test_that("Given a function with elipse,
+When I hash the function call 
+Then the hash is equivalent for additional arguments of the same names and order
+And the has is different when the additional arguments are in a different order or have a different name
+  ", {
+   
+    test.fn <- function (a, b=10, ...) NULL
+    
+    list(
+      call("test.fn", 10, 20, 30, d=40, 50),
+      call("test.fn", a=10, b=20, 30, d=40, 50),
+      call("test.fn", b=20, a=10, 30, d=40, 50),
+      call("test.fn", b=20, a=10, d=40, 30, 50)
+    ) %>%
+    lapply(function (call) functionCall(test.fn, call) %>% hash()) %>%  
+    all_same() %>% expect_true();
+    
+    values <- list(
+      call("test.fn", 10, 20, 30, d=40, 50), 
+      call("test.fn", 10, 20, d=30, 40, 50),
+      call("test.fn", 10, 20, f=30, 40, 50),
+      call("test.fn", 10, 20, 50, 40, 30)
+    ) %>%
+    lapply(function (call) functionCall(test.fn, call) %>% hash())
+    
+    all_different(values) %>% expect_true(label = paste(values, " are all different"))
 })

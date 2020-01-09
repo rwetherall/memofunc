@@ -1,5 +1,7 @@
 library(magrittr)
 
+source("./R/helper.R")
+
 ##
 #' @title
 #' Memoises a given function
@@ -12,22 +14,22 @@ library(magrittr)
 #' Memoised function
 #' @examples
 #' # create a simple memo function
-#' memo <- memo(function (someValue) {
+#' my.memo <- memo(function (someValue) {
 #'   print("Getting some value")
 #'   someValue
 #' })
 #'
 #' # call first time
-#' memo(10)               # prints "Getting some value" and returns 10
+#' my.memo(10)               # prints "Getting some value" and returns 10
 #'
 #' # call second time
-#' memo(10)               # immediately returns 10
+#' my.memo(10)               # immediately returns 10
 #'
 #' # can use 'force' parameter to ensure method is executed despite
 #' # being value being previously cached.
-#' memo(10, force=TRUE)   # prints "Getting some value" and returns 10
-#' memo(10)               # immediately returns 10
-#' memo(10, force=FALSE)  # immediately returns 10
+#' my.memo(10, force=TRUE)   # prints "Getting some value" and returns 10
+#' my.memo(10)               # immediately returns 10
+#' my.memo(10, force=FALSE)  # immediately returns 10
 #' @export
 ##
 memo <- function (f, allow.null=FALSE) {
@@ -88,14 +90,14 @@ memo <- function (f, allow.null=FALSE) {
 #' @return \code{TRUE} if memo function, \code{FALSE} otherwise
 #' @examples
 #' # create a simple memo function
-#' memo <- memo(function (someValue) {
+#' my.memo <- memo(function (someValue) {
 #'   print("Getting some value")
 #'   someValue
 #' })
 #'
 #' # check whether function is a memo
 #' is.memo(print) # expect FALSE
-#' is.memo(memo)  # expect TRUE
+#' is.memo(my.memo)  # expect TRUE
 #' @export
 ##
 is.memo <- function(f) "f.memo" %>% exists(envir=environment(f))
@@ -110,18 +112,18 @@ is.memo <- function(f) "f.memo" %>% exists(envir=environment(f))
 #' @return Cache storing values for memoed function.
 #' @examples
 #' # create a simple memo function
-#' memo <- memo(function (someValue) {
+#' my.memo <- memo(function (someValue) {
 #'   print("Getting some value")
 #'   someValue
 #' })
 #'
 #' # make a couple of calls to memoed function to populate cache
-#' memo(10)
-#' memo(20)
-#' memo(30)
+#' my.memo(10)
+#' my.memo(20)
+#' my.memo(30)
 #'
 #' # get the memo's cache
-#' cache <- memo.cache(memo)
+#' cache <- memo.cache(my.memo)
 #'
 #' # clear the contents of the cache
 #' cache$ls()     # expect to see cache entries from memo calls
@@ -129,7 +131,7 @@ is.memo <- function(f) "f.memo" %>% exists(envir=environment(f))
 #' cache$ls()     # expect to see cache is now empty
 #'
 #' # calling memo function again will repopulate cache
-#' memo(10)
+#' my.memo(10)
 #' @export
 ##
 memo.cache <- function(f) {
@@ -148,13 +150,13 @@ memo.cache <- function(f) {
 #' @return Original unmemoised function.
 #' @examples
 #' # create a simple memo function
-#' memo <- memo(function (someValue) {
+#' my.memo <- memo(function (someValue) {
 #'   print("Getting some value")
 #'   someValue
 #' })
 #'
 #' # get the origional function
-#' orig <- memo.function(memo)
+#' orig <- memo.function(my.memo)
 #'
 #' # call the original function
 #' orig(10)

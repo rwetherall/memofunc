@@ -20,20 +20,20 @@ function performance
 }
 \examples{
 # create a simple memo function
-memo <- memo(function (someValue) {
+my.memo <- memo(function (someValue) {
   print("Getting some value")
   someValue
 })
 
 # call first time
-memo(10)               # prints "Getting some value" and returns 10
+my.memo(10)               # prints "Getting some value" and returns 10
 
 # call second time
-memo(10)               # immediately returns 10
+my.memo(10)               # immediately returns 10
 
 # can use 'force' parameter to ensure method is executed despite
 # being value being previously cached.
-memo(10, force=TRUE)   # prints "Getting some value" and returns 10
-memo(10)               # immediately returns 10
-memo(10, force=FALSE)  # immediately returns 10
+my.memo(10, force=TRUE)   # prints "Getting some value" and returns 10
+my.memo(10)               # immediately returns 10
+my.memo(10, force=FALSE)  # immediately returns 10
 }

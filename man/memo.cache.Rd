@@ -20,18 +20,18 @@ Execution is stopped if function passed is not a valid memoed function.
 }
 \examples{
 # create a simple memo function
-memo <- memo(function (someValue) {
+my.memo <- memo(function (someValue) {
   print("Getting some value")
   someValue
 })
 
 # make a couple of calls to memoed function to populate cache
-memo(10)
-memo(20)
-memo(30)
+my.memo(10)
+my.memo(20)
+my.memo(30)
 
 # get the memo's cache
-cache <- memo.cache(memo)
+cache <- memo.cache(my.memo)
 
 # clear the contents of the cache
 cache$ls()     # expect to see cache entries from memo calls
@@ -39,5 +39,5 @@ cache$clear()
 cache$ls()     # expect to see cache is now empty
 
 # calling memo function again will repopulate cache
-memo(10)
+my.memo(10)
 }

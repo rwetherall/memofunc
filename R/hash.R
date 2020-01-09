@@ -1,6 +1,8 @@
 require(digest)
 require(magrittr)
 
+source("./R/helper.R")
+
 ##
 # Get a list of the formal names that have not been used in the provided argument list
 #
@@ -55,18 +57,27 @@ functionCall <- function (f = sys.function(sys.parent()), call = sys.call(sys.pa
 }
 
 ##
-# Generic hash function
-#
+#' @title
+#' Hash
+#' @description
+#' Hashes an R object into a string hash
+#' @param value value to hash
+#' @return hashed value
+#' @export
+##
 hash <- function (value) UseMethod("hash", value)
 
 ##
 # Default hash function
+#' @export
 #
 hash.default <- function (value) digest::digest(value)
 
 ##
 # Hash function, using body
-hash.function <- function (f) hash.default(body(f))
+#' @export
+#
+hash.function <- function (value) hash.default(body(value))
 
 ##
 # Is the value an empty name.
@@ -85,23 +96,24 @@ unset.defaultArgs <- function (defaultArgs, args) defaultArgs[!sapply(names(defa
 
 ##
 # Hash a function call
-# 
-hash.functionCall <- function (fc) 
+#' @export
+hash.functionCall <- function (value) {
   
   # get functions default arguments
-  formals(fc$f) %>% defaultArgs() %>%
+  w <- formals(value$f) %>% defaultArgs() %>%
   
   # add the unset default arguments to the argument list
-  unset.defaultArgs(fc$args) %>% c(fc$args) %>%
+  unset.defaultArgs(value$args) %>% c(value$args) %>%
   
   # order arguments by name
   orderby.name() %>%
   
   # force the values and hash, this ensures that things like functions are comparable in a consistant way
-  lapply(force) %>% #lapply(hash) %>%
+  lapply(force) %>% lapply(hash) %>%
   
   # add the hash of original function
-  c(hash(fc$f)) %>%
+  c(hash(value$f)) %>%
 
   # hash the function call
   hash() 
+}

@@ -39,8 +39,15 @@ all.names <- function (formals, args) {
 }
 
 ##
-# Get a 'functionCall', which is a hash'able class containing information about a call to a function
-#
+#' @title Function Call
+#' @description 
+#' For a given function and call, return a list of class 'functionCall' which
+#' can be hashed to provide a unique identifier for the function and parameters used for this call.
+#' @param f function, defaults to the containing function
+#' @param call call, default to the containing call
+#' @return functionCall, a hashable form of the function call information
+#' @export
+##
 functionCall <- function (f = sys.function(sys.parent()), call = sys.call(sys.parent())) {
   
   # function call name
@@ -56,27 +63,28 @@ functionCall <- function (f = sys.function(sys.parent()), call = sys.call(sys.pa
   list(f = f, name = name, args = args) %>% `class<-`("functionCall")
 }
 
+## TODO add algo as optional parameter, allow system default to be set
+
 ##
-#' @title
-#' Hash
+#' @title Hash
 #' @description
-#' Hashes an R object into a string hash
+#' Hashes a value into a string.
 #' @param value value to hash
-#' @return hashed value
+#' @return hashed value as a string
 #' @export
 ##
 hash <- function (value) UseMethod("hash", value)
 
 ##
-# Default hash function
+#' @inherit hash
 #' @export
-#
+##
 hash.default <- function (value) digest::digest(value)
 
 ##
-# Hash function, using body
+#' @inherit hash
 #' @export
-#
+##
 hash.function <- function (value) hash.default(body(value))
 
 ##
@@ -95,8 +103,9 @@ defaultArgs <- function (formals) formals[!sapply(formals, is.emptyName)]
 unset.defaultArgs <- function (defaultArgs, args) defaultArgs[!sapply(names(defaultArgs), `%in%`, table=names(args))]
 
 ##
-# Hash a function call
+#' @inherit hash
 #' @export
+##
 hash.functionCall <- function (value) {
   
   # get functions default arguments

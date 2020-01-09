@@ -46,6 +46,7 @@ all.names <- function (formals, args) {
 #' @param f function, defaults to the containing function
 #' @param call call, default to the containing call
 #' @return functionCall, a hashable form of the function call information
+#' @example examples/hash/example.functionCall.R
 #' @export
 ##
 functionCall <- function (f = sys.function(sys.parent()), call = sys.call(sys.parent())) {

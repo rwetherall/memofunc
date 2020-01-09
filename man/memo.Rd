@@ -18,22 +18,3 @@ Memoised function
 Memoises a given function such that the result of the function is cached to improve
 function performance
 }
-\examples{
-# create a simple memo function
-my.memo <- memo(function (someValue) {
-  print("Getting some value")
-  someValue
-})
-
-# call first time
-my.memo(10)               # prints "Getting some value" and returns 10
-
-# call second time
-my.memo(10)               # immediately returns 10
-
-# can use 'force' parameter to ensure method is executed despite
-# being value being previously cached.
-my.memo(10, force=TRUE)   # prints "Getting some value" and returns 10
-my.memo(10)               # immediately returns 10
-my.memo(10, force=FALSE)  # immediately returns 10
-}

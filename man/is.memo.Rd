@@ -15,14 +15,3 @@ is.memo(f)
 \description{
 Checks whether the passed function is a memo function.
 }
-\examples{
-# create a simple memo function
-my.memo <- memo(function (someValue) {
-  print("Getting some value")
-  someValue
-})
-
-# check whether function is a memo
-is.memo(print) # expect FALSE
-is.memo(my.memo)  # expect TRUE
-}

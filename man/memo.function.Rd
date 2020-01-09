@@ -17,16 +17,3 @@ Gets the original function that was memoised.
 
 Execution is stopped if function passed is not a valid memoed function.
 }
-\examples{
-# create a simple memo function
-my.memo <- memo(function (someValue) {
-  print("Getting some value")
-  someValue
-})
-
-# get the origional function
-orig <- memo.function(my.memo)
-
-# call the original function
-orig(10)
-}

@@ -65,6 +65,10 @@ hash <- function (value) UseMethod("hash", value)
 hash.default <- function (value) digest::digest(value)
 
 ##
+# Hash function, using body
+hash.function <- function (f) hash.default(body(f))
+
+##
 # Is the value an empty name.
 #
 is.emptyName <- function (value) (value == "" && class(value) == "name")
@@ -93,12 +97,11 @@ hash.functionCall <- function (fc)
   # order arguments by name
   orderby.name() %>%
   
-  # force the values
-  lapply(force) %>%
+  # force the values and hash, this ensures that things like functions are comparable in a consistant way
+  lapply(force) %>% lapply(hash) %>%
   
-  # add the name of the function
-  #c(fc$name) %>%
-  c(hash(body(fc$f))) %>%
+  # add the hash of original function
+  c(hash(fc$f)) %>%
 
   # hash the function call
   hash() 

@@ -98,7 +98,7 @@ hash.functionCall <- function (fc)
   orderby.name() %>%
   
   # force the values and hash, this ensures that things like functions are comparable in a consistant way
-  lapply(force) %>% lapply(hash) %>%
+  lapply(force) %>% #lapply(hash) %>%
   
   # add the hash of original function
   c(hash(fc$f)) %>%

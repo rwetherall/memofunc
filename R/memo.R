@@ -33,6 +33,8 @@ library(magrittr)
 memo <- function (f, allow.null=FALSE) {
   
   # TODO add option to prevent "force" and others being added to formals of memo function
+  # TODO providing some sort of id, means the memo could use a shared cache
+  # TODO provide a way to supply cache arguments, for example the algo to use, max size, storage strategy, etc
 
   # get cache
   f.cache <- cache()
@@ -164,3 +166,7 @@ memo.function <- function(f) {
 
   "f" %>% get(envir=environment(f))
 }
+
+## TODO add memo.force(memo, force=TRUE) - forces the execution of memo .. sets memo.force to value in environment(f) to temproarily override value
+## TODO add memo.force<-(memo, force) - sets the memo.force value perminantly in the evironment(f)
+## TODO add is.memo.force - gets the current value of memo.force from the environment

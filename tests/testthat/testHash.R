@@ -26,6 +26,17 @@ test_that_defaultArgs_expected <- function (fn.test, result.expected) {
 }
 
 test_that("
+  Given a list,
+  When I ask for the first n of a list
+  Then I get the first n of a list", {
+    
+  values <- list(1,2,3,4,5)
+  
+  expect_list_equal(list(1,2,3), first.n(values, 3))
+  expect_list_equal(list(1,2,3), values %<n>% 3)
+})
+
+test_that("
   Given some arguments, 
   When I ask which have not been named, 
   Then I get a list the missing names in the order they appear in the argument list", {
@@ -284,3 +295,25 @@ And the has is different when the additional arguments are in a different order 
     
     all_different(values) %>% expect_true(label = paste(values, " are all different"))
 })
+
+test_that("
+  Given a function, 
+  When I evaluate it using do.call, 
+  Then I get the same hash from the function call as I would if I invoked the function normally", {
+  
+  test.fn <- function (a, b=10) functionCall() %>% hash()
+  
+  expect_equal(
+    do.call(test.fn, list(10, b=20)),
+    test.fn(10, 20)
+  )
+  
+  expect_equal(
+    do.call(test.fn, list(b=10, a=20)),
+    test.fn(20, b=10)
+  )
+})
+
+# TODO test with functions as parameters!!!
+
+# TODO Note: anonymouse functions can't be hashed atm!

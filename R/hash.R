@@ -1,30 +1,5 @@
 require(digest)
-
-##
-# Helper function to get the first n of a list
-#
-first.n <- function (x, n) x[c(1:n)]
-`%<n>%` <- function (x, n) first.n(x,n)
-
-##
-# Helper function to pad out a list to size n with a specified value defaulting to NA
-#
-pad <- function (x, n, by=NA) lapply(1:n, function (index) if (index > length(x)) x[[index]] <- by else x[[index]])
-
-##
-# Helper function to order arguments by name
-#
-orderby.name <- function (args) args[order(names(args))]
-
-##
-# Helper function to remove an item from a list
-#
-removeby.name <- function (x, name) if (name %in% names(x)) x[sapply(names(x), `!=`, y = name)] else x
-
-##
-# Helper to get the rest of a given list
-#
-rest <- function (x) if (length(x) <= 1) list() else x[2:length(x)]
+require(magrittr)
 
 ##
 # Get a list of the formal names that have not been used in the provided argument list
@@ -107,8 +82,8 @@ unset.defaultArgs <- function (defaultArgs, args) defaultArgs[!sapply(names(defa
 ##
 # Hash a function call
 # 
-hash.functionCall <- function (fc)
-
+hash.functionCall <- function (fc) 
+  
   # get functions default arguments
   formals(fc$f) %>% defaultArgs() %>%
   
@@ -122,7 +97,8 @@ hash.functionCall <- function (fc)
   lapply(force) %>%
   
   # add the name of the function
-  c(fc$name) %>%
+  #c(fc$name) %>%
+  c(hash(body(fc$f))) %>%
 
   # hash the function call
-  hash()
+  hash() 

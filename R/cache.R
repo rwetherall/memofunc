@@ -60,4 +60,7 @@ cache <- function () {
 
   # combine cache and storage features
   list(set = set, get = get, unset = unset, has = has, clear = clear, ls=ls)
+  
+  ## TODO set the class of the cache
+  ## TODO move the methods out and make then generic to react to different classes of cache
 }

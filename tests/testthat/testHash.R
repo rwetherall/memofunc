@@ -7,7 +7,7 @@ library(testthat)
 # Helper to test whether two functions are the same
 #
 expect_list_equal <- function (given, expected) {
-  given %>% length() %>% expect_equal(length(expected))
+  given %>% length() %>% expect_equal(length(expected), label=paste(expected, " length equals ", given))
   mapply(identical, names(expected), names(given)) %>% all() %>% expect_true(label=paste(names(expected), " equals ", names(given)))
   mapply(identical, expected, given) %>% all() %>% expect_true(label=paste(expected, " equals ", given))
 }
@@ -173,9 +173,8 @@ test_that("
   test.fn <- function (a, b=10, c=10, d) functionCall()
 
   expect_equal(test.fn(20, 10)$f, test.fn)
-  expect_equal(test.fn(20, 20)$name, quote(test.fn))
   
-  with (test.fn(20, b=30), expect_list_equal(args, list(a=20, b=30)))
+  expect_list_equal(test.fn(20, b=30)$args, list(a=20, b=30))
   with (test.fn(20, b=30, c=10), expect_list_equal(args, list(a=20, b=30, c=10)))
   with (test.fn(b=30, a=20), expect_list_equal(args, list(b=30, a=20)))
   with (test.fn(20, 30), expect_list_equal(args, list(a=20, b=30)))

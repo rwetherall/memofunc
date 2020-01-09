@@ -50,17 +50,14 @@ all.names <- function (formals, args) {
 ##
 functionCall <- function (f = sys.function(sys.parent()), call = sys.call(sys.parent())) {
   
-  # function call name
-  name <- call[[1]]
-  
   # function call arguments
-  args <- call %>% as.list() %>% rest()
+  args <- rest(as.list(call))
   
   # name all the function call arguments
   names(args) <- all.names(formals(f), args)
   
   # return functionCall
-  list(f = f, name = name, args = args) %>% `class<-`("functionCall")
+  list(f = f, args = args) %>% `class<-`("functionCall")
 }
 
 ## TODO add algo as optional parameter, allow system default to be set
@@ -109,7 +106,7 @@ unset.defaultArgs <- function (defaultArgs, args) defaultArgs[!sapply(names(defa
 hash.functionCall <- function (value) {
   
   # get functions default arguments
-  w <- formals(value$f) %>% defaultArgs() %>%
+  formals(value$f) %>% defaultArgs() %>%
   
   # add the unset default arguments to the argument list
   unset.defaultArgs(value$args) %>% c(value$args) %>%

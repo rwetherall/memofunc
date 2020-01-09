@@ -12,24 +12,6 @@ source("./R/helper.R")
 #' @param allow.null indicates whether results are cached when a function returns NULL, default value FALSE
 #' @return
 #' Memoised function
-#' @examples
-#' # create a simple memo function
-#' my.memo <- memo(function (someValue) {
-#'   print("Getting some value")
-#'   someValue
-#' })
-#'
-#' # call first time
-#' my.memo(10)               # prints "Getting some value" and returns 10
-#'
-#' # call second time
-#' my.memo(10)               # immediately returns 10
-#'
-#' # can use 'force' parameter to ensure method is executed despite
-#' # being value being previously cached.
-#' my.memo(10, force=TRUE)   # prints "Getting some value" and returns 10
-#' my.memo(10)               # immediately returns 10
-#' my.memo(10, force=FALSE)  # immediately returns 10
 #' @export
 ##
 memo <- function (f, allow.null=FALSE) {
@@ -88,16 +70,6 @@ memo <- function (f, allow.null=FALSE) {
 #' @description Checks whether the passed function is a memo function.
 #' @param f function, memo or otherwise
 #' @return \code{TRUE} if memo function, \code{FALSE} otherwise
-#' @examples
-#' # create a simple memo function
-#' my.memo <- memo(function (someValue) {
-#'   print("Getting some value")
-#'   someValue
-#' })
-#'
-#' # check whether function is a memo
-#' is.memo(print) # expect FALSE
-#' is.memo(my.memo)  # expect TRUE
 #' @export
 ##
 is.memo <- function(f) "f.memo" %>% exists(envir=environment(f))
@@ -110,28 +82,6 @@ is.memo <- function(f) "f.memo" %>% exists(envir=environment(f))
 #' Execution is stopped if function passed is not a valid memoed function.
 #' @param f memo function
 #' @return Cache storing values for memoed function.
-#' @examples
-#' # create a simple memo function
-#' my.memo <- memo(function (someValue) {
-#'   print("Getting some value")
-#'   someValue
-#' })
-#'
-#' # make a couple of calls to memoed function to populate cache
-#' my.memo(10)
-#' my.memo(20)
-#' my.memo(30)
-#'
-#' # get the memo's cache
-#' cache <- memo.cache(my.memo)
-#'
-#' # clear the contents of the cache
-#' cache$ls()     # expect to see cache entries from memo calls
-#' cache$clear()
-#' cache$ls()     # expect to see cache is now empty
-#'
-#' # calling memo function again will repopulate cache
-#' my.memo(10)
 #' @export
 ##
 memo.cache <- function(f) {
@@ -148,18 +98,6 @@ memo.cache <- function(f) {
 #' Execution is stopped if function passed is not a valid memoed function.
 #' @param f memo function
 #' @return Original unmemoised function.
-#' @examples
-#' # create a simple memo function
-#' my.memo <- memo(function (someValue) {
-#'   print("Getting some value")
-#'   someValue
-#' })
-#'
-#' # get the origional function
-#' orig <- memo.function(my.memo)
-#'
-#' # call the original function
-#' orig(10)
 #' @export
 ##
 memo.function <- function(f) {

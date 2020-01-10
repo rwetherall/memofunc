@@ -28,6 +28,7 @@ source("./R/helper.R")
 #' @param f function to memoise
 #' @param allow.null if \code{TRUE} then the memoed function will cache \code{NULL} results, otherwise it won't.  \code{FALSE} by default.
 #' @return the memoed function
+#' @example R/examples/memo/example.memo.R
 #' @export
 ##
 memo <- function (f, allow.null=FALSE) {

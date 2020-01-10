@@ -20,7 +20,7 @@ memo <- function (f, allow.null=FALSE) {
   stopifnot(!is.memo(f))
   
   # TODO add option to prevent "force" and others being added to formals of memo function
-  # TODO providing some sort of id, means the memo could use a shared cache
+  # TODO providing some sort of id, means the memo could use a shared cache (or use the hash of the fn to lookup a cache)
   # TODO provide a way to supply cache arguments, for example the algo to use, max size, storage strategy, etc
 
   # get cache

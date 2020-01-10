@@ -23,20 +23,3 @@ orderby.name <- function (args) args[order(names(args))]
 # Helper function to remove an item from a list
 #
 removeby.name <- function (x, name) if (name %in% names(x)) x[sapply(names(x), `!=`, y = name)] else x
-
-##
-# Helper to insert expression into function to be executed before the current body.
-#
-insert.before <- function (f, expr) {
-  
-  expr.rest <- function (expr) {
-    
-    expr.list <- expr %>% as.list()
-    
-    if (length(expr.list) == 1) expr.list else rest(expr.list)
-  }
-  
-  body(f) <- c(`{`, expr.rest(expr), expr.rest(body(f))) %>% as.call()
-  
-  f
-}

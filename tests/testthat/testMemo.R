@@ -11,6 +11,23 @@ test.env <- NULL
 key.executed <- "executed"
 
 ##
+# Helper to insert expression into function to be executed before the current body.
+#
+insert.before <- function (f, expr) {
+  
+  expr.rest <- function (expr) {
+    
+    expr.list <- expr %>% as.list()
+    
+    if (length(expr.list) == 1) expr.list else rest(expr.list)
+  }
+  
+  body(f) <- c(`{`, expr.rest(expr), expr.rest(body(f))) %>% as.call()
+  
+  f
+}
+
+##
 # marks memo execution in environment
 #
 mark.executed <- function () assign(key.executed, TRUE, envir=test.env)

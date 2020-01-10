@@ -3,15 +3,31 @@ library(magrittr)
 source("./R/helper.R")
 
 ##
-#' @title
-#' Memoises a given function
+#' @title Memo
 #' @description
-#' Memoises a given function such that the result of the function is cached to improve
-#' function performance
+#' Creates a memoised function, based on the provided named or anonymous function.  Calls to the memoised function will 
+#' be retrieved from a cache, unless it is the first time it is called.
+#' 
+#' Passing \code{memo.force = TRUE} to the memo function call will by-pass any previously cached values and execute the underlying
+#' function, storing the newly retrieved values for subsequent calls.  \code{memo.force = FALSE} by default.
+#' 
+#' Passing \code{memo.dryrun = TRUE} to the memo function call will prevent the underlying function from executing and return TRUE
+#' if call isn't caches and \code{FALSE} if it is.  These values are not cached as responses for the function.
+#' 
+#' Note that results are cached based on the argument values passed to the function.  The order is not important since all
+#' names are resolved.  So \code{fun(a=1, b=2)} will return the same cached value as \code{fun(b=2, a=1)}, for example.
+#' 
+#' Functions as arguments are supported, but only the body is compared.  So a named function parameter and an anonymouse function
+#' parameter with the same body, will be evaluated as identical and return the same cached value.
+#' 
+#' \code{...} is supported, but note that unless named then the order of the values is significant and will produce different cache values
+#' unless identical.
+#' 
+#' By default \code{NULL} values are not cached.  Setting \code{allow.null=TRUE} when creating the memo will, however, ensure that NULL values
+#' are cached.
 #' @param f function to memoise
-#' @param allow.null indicates whether results are cached when a function returns NULL, default value FALSE
-#' @return
-#' Memoised function
+#' @param allow.null if \code{TRUE} then the memoed function will cache \code{NULL} results, otherwise it won't.  \code{FALSE} by default.
+#' @return the memoed function
 #' @export
 ##
 memo <- function (f, allow.null=FALSE) {
@@ -71,7 +87,7 @@ memo <- function (f, allow.null=FALSE) {
 }
 
 ##
-#' @title Is this a memo function
+#' @title Is Memo
 #' @description Checks whether the passed function is a memo function.
 #' @param f function, memo or otherwise
 #' @return \code{TRUE} if memo function, \code{FALSE} otherwise
@@ -80,7 +96,7 @@ memo <- function (f, allow.null=FALSE) {
 is.memo <- function(f) inherits(f, "memo")
 
 ##
-#' @title Get memo function cache
+#' @title Memo Cache
 #' @description Gets the cache associated with a memo function allowing further manipulation and control of the underlying values
 #' being stored.
 #'
@@ -91,13 +107,13 @@ is.memo <- function(f) inherits(f, "memo")
 ##
 memo.cache <- function(f) {
 
-  if (!is.memo(f)) stop("Invalid parameter - memo is nor a memoised function")
+  stopifnot(is.memo(f))
 
   "f.cache" %>% get(envir=environment(f))
 }
 
 ##
-#' @title Get memo function origional function
+#' @title Memo Function
 #' @description Gets the original function that was memoised.
 #'
 #' Execution is stopped if function passed is not a valid memoed function.
@@ -107,7 +123,7 @@ memo.cache <- function(f) {
 ##
 memo.function <- function(f) {
 
-  if (!is.memo(f)) stop("Invalid parameter - memo is nor a memoised function")
+  stopifnot(is.memo(f))
 
   "f" %>% get(envir=environment(f))
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/memo.R
 \name{memo.cache}
 \alias{memo.cache}
-\title{Get memo function cache}
+\title{Memo Cache}
 \usage{
 memo.cache(f)
 }

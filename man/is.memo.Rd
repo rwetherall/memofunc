@@ -2,7 +2,7 @@
 % Please edit documentation in R/memo.R
 \name{is.memo}
 \alias{is.memo}
-\title{Is this a memo function}
+\title{Is Memo}
 \usage{
 is.memo(f)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/memo.R
 \name{memo.function}
 \alias{memo.function}
-\title{Get memo function origional function}
+\title{Memo Function}
 \usage{
 memo.function(f)
 }

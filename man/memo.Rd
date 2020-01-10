@@ -2,19 +2,37 @@
 % Please edit documentation in R/memo.R
 \name{memo}
 \alias{memo}
-\title{Memoises a given function}
+\title{Memo}
 \usage{
 memo(f, allow.null = FALSE)
 }
 \arguments{
 \item{f}{function to memoise}
 
-\item{allow.null}{indicates whether results are cached when a function returns NULL, default value FALSE}
+\item{allow.null}{if \code{TRUE} then the memoed function will cache \code{NULL} results, otherwise it won't.  \code{FALSE} by default.}
 }
 \value{
-Memoised function
+the memoed function
 }
 \description{
-Memoises a given function such that the result of the function is cached to improve
-function performance
+Creates a memoised function, based on the provided named or anonymous function.  Calls to the memoised function will 
+be retrieved from a cache, unless it is the first time it is called.
+
+Passing \code{memo.force = TRUE} to the memo function call will by-pass any previously cached values and execute the underlying
+function, storing the newly retrieved values for subsequent calls.  \code{memo.force = FALSE} by default.
+
+Passing \code{memo.dryrun = TRUE} to the memo function call will prevent the underlying function from executing and return TRUE
+if call isn't caches and \code{FALSE} if it is.  These values are not cached as responses for the function.
+
+Note that results are cached based on the argument values passed to the function.  The order is not important since all
+names are resolved.  So \code{fun(a=1, b=2)} will return the same cached value as \code{fun(b=2, a=1)}, for example.
+
+Functions as arguments are supported, but only the body is compared.  So a named function parameter and an anonymouse function
+parameter with the same body, will be evaluated as identical and return the same cached value.
+
+\code{...} is supported, but note that unless named then the order of the values is significant and will produce different cache values
+unless identical.
+
+By default \code{NULL} values are not cached.  Setting \code{allow.null=TRUE} when creating the memo will, however, ensure that NULL values
+are cached.
 }

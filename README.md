@@ -6,7 +6,7 @@
 
 A simple way to memoise function results to improve performance by eliminating unnecessary computation or data retrieval activities.
 
-Functions can be memoized with a simple call to \code{memo}.
+Functions can be memoized with a simple call to memo.
 
 ``` r
 

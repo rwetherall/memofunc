@@ -62,6 +62,9 @@ memo <- function (f, allow.null=FALSE) {
 
   # set the parameters and environment of the memo function
   formals(f.memo) <- c(formals(f), formals(f.memo))
+  
+  # set the class of the memo function
+  class(f.memo) <- c("memo", class(f.memo))
 
   # return the memo function
   f.memo
@@ -74,7 +77,7 @@ memo <- function (f, allow.null=FALSE) {
 #' @return \code{TRUE} if memo function, \code{FALSE} otherwise
 #' @export
 ##
-is.memo <- function(f) "f.memo" %>% exists(envir=environment(f))
+is.memo <- function(f) inherits(f, "memo")
 
 ##
 #' @title Get memo function cache

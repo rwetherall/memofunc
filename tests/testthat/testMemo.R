@@ -52,10 +52,10 @@ test_that("
   
   memo <- (function (value) value) %>% test.memo()
   
-  do.test(memo, list(10, force=FALSE), 10, TRUE)
-  do.test(memo, list(10, force=TRUE), 10, TRUE)
-  do.test(memo, list(10, force=FALSE), 10, FALSE)
-  do.test(memo, list(10, force=TRUE), 10, TRUE)
+  do.test(memo, list(10, memo.force=FALSE), 10, TRUE)
+  do.test(memo, list(10, memo.force=TRUE), 10, TRUE)
+  do.test(memo, list(10, memo.force=FALSE), 10, FALSE)
+  do.test(memo, list(10, memo.force=TRUE), 10, TRUE)
 })
 
 test_that("
@@ -69,7 +69,7 @@ test_that("
   do.test(memo, list(10), NULL, TRUE)
   do.test(memo, list(10), NULL, TRUE)
   do.test(memo, list(20), NULL, TRUE)
-  do.test(memo, list(10, force=TRUE), NULL, TRUE)
+  do.test(memo, list(10, memo.force=TRUE), NULL, TRUE)
   
   memo <- (function (value) return(NULL)) %>% test.memo(allow.null=FALSE)
   
@@ -77,7 +77,7 @@ test_that("
   do.test(memo, list(10), NULL, TRUE)
   do.test(memo, list(20), NULL, TRUE)
   do.test(memo, list(20), NULL, TRUE)
-  do.test(memo, list(10, force=TRUE), NULL, TRUE)
+  do.test(memo, list(10, memo.force=TRUE), NULL, TRUE)
 })
 
 test_that("
@@ -92,7 +92,7 @@ test_that("
   do.test(memo, list(10), NULL, FALSE)
   do.test(memo, list(20), NULL, TRUE)
   do.test(memo, list(20), NULL, FALSE)
-  do.test(memo, list(10, force=TRUE), NULL, TRUE)
+  do.test(memo, list(10, memo.force=TRUE), NULL, TRUE)
 })
 
 ## TODO what happens if the function returns an invisible value

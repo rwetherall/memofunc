@@ -24,10 +24,9 @@ memo <- function (f, allow.null=FALSE) {
   f.cache <- cache()
 
   # TODO add 'dryRun' parameter 
-  # TODO change name of 'force" to 'memo.force' to reduce chance of name clash
   
   # create the memo function
-  f.memo <- function (force=FALSE) {
+  f.memo <- function (memo.force=FALSE) {
 
     # get the function call
     fc <- functionCall()
@@ -36,14 +35,14 @@ memo <- function (f, allow.null=FALSE) {
     hash <- hash(fc)
 
     # if force or cached
-    if (!force && f.cache$has(hash)) {
+    if (!memo.force && f.cache$has(hash)) {
 
       # returned cached value
       f.cache$get(hash)
 
     } else {
 
-      if ("force" %in% names(fc$args)) fc$args[["force"]] <- NULL
+      if ("memo.force" %in% names(fc$args)) fc$args[["memo.force"]] <- NULL
       
       # get the result
       result <- do.call(f, fc$args)

@@ -4,9 +4,9 @@
 
 ## MemoFunc - A Function Memoization Package for R
 
-Provides a simple way to cache function results to improve performance by illiminating unessesary computation or data retrieval activities.
+A simple way to cache function results to improve performance by illiminating unessesary computation or data retrieval activities.
 
-Functions can be memoized with a simple call to the memo function.
+Functions can be memoized with a simple call to \code{memo}.
 
 ``` r
 
@@ -26,8 +26,9 @@ Functions can be memoized with a simple call to the memo function.
 > simple.function2 <- (function (value) value) %>% memo()
 
 ```
-Calling a memo function is exactly like calling a normal function.  The memo has all the same arguments and defaults
-as the origional function.
+Calling a memo is exactly like calling a normal function, in fact it is a normal function!  The memo has all the same arguments and defaults as the origional function so it can be used in legacy code without the need for any risky refactoring.
+
+Memoing a function can significantly improve the performance of a system by limiting how often expensive call are made.
 
 ``` r
 

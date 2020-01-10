@@ -187,7 +187,17 @@ are cached.</p>
 <span class='fu'>simple.function</span>(<span class='fl'>10</span>)</div><div class='output co'>#&gt; [1] 10</div><div class='input'>
 <span class='co'># calling the memo with a different set of parameter values will</span>
 <span class='co'># cause the function to execute</span>
-<span class='fu'>simple.function</span>(<span class='fl'>20</span>)</div><div class='output co'>#&gt; [1] "Executing!"</div><div class='output co'>#&gt; [1] 20</div></pre>
+<span class='fu'>simple.function</span>(<span class='fl'>20</span>)</div><div class='output co'>#&gt; [1] "Executing!"</div><div class='output co'>#&gt; [1] 20</div><div class='input'>
+<span class='co'># consider a slow function which is memoised, note that we have used the allow.null argument</span>
+<span class='co'># so that NULL is cached when returned from a function, the default is FALSE</span>
+<span class='no'>slow.function</span> <span class='kw'>&lt;-</span> (<span class='kw'>function</span> (<span class='no'>value</span>) <span class='fu'><a href='https://rdrr.io/r/base/Sys.sleep.html'>Sys.sleep</a></span>(<span class='no'>value</span>)) <span class='kw'>%&gt;%</span> <span class='fu'>memo</span>(<span class='kw'>allow.null</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'># the first time we call the slow function it takes some time</span>
+<span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='fu'>slow.function</span>(<span class='fl'>3</span>))</div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;       0       0       3 </div><div class='input'>
+<span class='co'># subsequent calls make use of the cache and are much faster</span>
+<span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='fu'>slow.function</span>(<span class='fl'>3</span>))</div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;       0       0       0 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

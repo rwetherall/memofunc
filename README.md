@@ -48,6 +48,20 @@ Memoing a function can significantly improve the performance of a system by limi
 [1] "Executing!"
 [1] 20
 
+> # consider a slow function which is memoised, note that we have used the allow.null argument
+> # so that NULL is cached when returned from a function, the default is FALSE
+> slow.function <- (function (value) Sys.sleep(value)) %>% memo(allow.null = TRUE)
+
+> # the first time we call the slow function it takes some time
+> system.time(slow.function(3))
+   user  system elapsed 
+   0.00    0.00    3.01 
+
+> # subsequent calls make use of the cache and are much faster
+> system.time(slow.function(3))
+   user  system elapsed 
+   0.01    0.00    0.02 
+
 ```
 
 ## Installation

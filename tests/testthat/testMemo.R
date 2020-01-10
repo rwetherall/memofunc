@@ -99,3 +99,49 @@ test_that("
 ## TODO what happens if the function returns NA or "" ??
 
 ## TODO show that different memos do not share cached values
+
+test_that("
+  Given a memo,
+  When I ask for the cache,
+  Then I get the cache", {
+    
+  memo <- (function (value) value) %>% memo() 
+  memo %>% memo.cache() %>% is.null() %>% expect_false()
+})
+
+test_that("
+  Given a memo,
+  When I ask for the function,
+  Then I get the original function", {
+    
+  memo <- (function (value) value) %>% memo() 
+  memo %>% memo.function() %>% hash() %>% expect_equal(hash(function (value) value))
+})
+
+test_that("
+  Given a memo,
+  When I memo the memo,
+  Then I get an error", {
+    
+  expect_error((function (value) value) %>% memo() %>% memo())
+})
+
+test_that("
+  Given a memo,
+  When I call it with the dry run argument set to TRUE,
+  Then it returns TRUE if the memoed function would be executed and FALSE if the value would have been 
+  retrived from the cache,
+  And it doesn't store these values in the cache", {
+
+  memo <- (function (value) value) %>% memo()
+  
+  memo(10, memo.dryrun = TRUE) %>% expect_true()
+  memo(10, memo.dryrun = TRUE) %>% expect_true()
+  memo(10, memo.dryrun = FALSE) %>% expect_equal(10)
+  memo(10, memo.dryrun = TRUE) %>% expect_false()
+  memo(10, memo.force = TRUE, memo.dryrun = TRUE) %>% expect_true()
+  memo(10, memo.dryrun = FALSE) %>% expect_equal(10)
+  memo(10, memo.force = TRUE, memo.dryrun = FALSE) %>% expect_equal(10)
+  memo(10) %>% expect_equal(10)
+  
+})

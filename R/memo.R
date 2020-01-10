@@ -16,20 +16,24 @@ source("./R/helper.R")
 ##
 memo <- function (f, allow.null=FALSE) {
   
+  # you can't memo a memo
+  stopifnot(!is.memo(f))
+  
   # TODO add option to prevent "force" and others being added to formals of memo function
   # TODO providing some sort of id, means the memo could use a shared cache
   # TODO provide a way to supply cache arguments, for example the algo to use, max size, storage strategy, etc
 
   # get cache
   f.cache <- cache()
-
-  # TODO add 'dryRun' parameter 
   
   # create the memo function
-  f.memo <- function (memo.force=FALSE) {
+  f.memo <- function (memo.force=FALSE, memo.dryrun=FALSE) {
 
     # get the function call
     fc <- functionCall()
+    
+    # remove memo args we have added to the function
+    fc$args %<>% removeby.name("memo.force") %>% removeby.name("memo.dryrun")
     
     # generate hash
     hash <- hash(fc)
@@ -37,20 +41,19 @@ memo <- function (f, allow.null=FALSE) {
     # if force or cached
     if (!memo.force && f.cache$has(hash)) {
 
-      # returned cached value
-      f.cache$get(hash)
-
+      # false if dry run otherwise cached value
+      if (memo.dryrun) FALSE else f.cache$get(hash)
+      
     } else {
 
-      if ("memo.force" %in% names(fc$args)) fc$args[["memo.force"]] <- NULL
-      
-      # get the result
-      result <- do.call(f, fc$args)
+      # TRUE if dry run otherwise call the function
+      result <- if (memo.dryrun) TRUE else do.call(f, fc$args)
 
+      # handle null results
       if (!is.null(result) || allow.null) {
         
         # cache the result
-        f.cache$set(hash, result)
+        if (!memo.dryrun) f.cache$set(hash, result)
       }
       
       result
@@ -105,7 +108,3 @@ memo.function <- function(f) {
 
   "f" %>% get(envir=environment(f))
 }
-
-## TODO add memo.force(memo, force=TRUE) - forces the execution of memo .. sets memo.force to value in environment(f) to temproarily override value
-## TODO add memo.force<-(memo, force) - sets the memo.force value perminantly in the evironment(f)
-## TODO add is.memo.force - gets the current value of memo.force from the environment

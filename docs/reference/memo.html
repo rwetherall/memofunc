@@ -161,7 +161,10 @@ are cached.</p>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>magrittr</span>)
 
 <span class='co'># a simple example function</span>
-<span class='no'>simple.function</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span> (<span class='no'>value</span>) <span class='no'>value</span>
+<span class='no'>simple.function</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span> (<span class='no'>value</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='st'>"Executing!"</span>)
+  <span class='no'>value</span>
+}
 
 <span class='co'># call memo function to memoise a function</span>
 <span class='no'>simple.function.memo</span> <span class='kw'>&lt;-</span> <span class='fu'>memo</span>(<span class='no'>simple.function</span>)
@@ -170,7 +173,16 @@ are cached.</p>
 <span class='no'>simple.function</span> <span class='kw'>%&lt;&gt;%</span> <span class='fu'>memo</span>()
 
 <span class='co'># or use an anon function</span>
-<span class='no'>simple.function2</span> <span class='kw'>&lt;-</span> (<span class='kw'>function</span> (<span class='no'>value</span>) <span class='no'>value</span>) <span class='kw'>%&gt;%</span> <span class='fu'>memo</span>()</div></pre>
+<span class='no'>simple.function2</span> <span class='kw'>&lt;-</span> (<span class='kw'>function</span> (<span class='no'>value</span>) <span class='no'>value</span>) <span class='kw'>%&gt;%</span> <span class='fu'>memo</span>()
+
+<span class='co'># the first time we call the memo the function will execute</span>
+<span class='fu'>simple.function</span>(<span class='fl'>10</span>)</div><div class='output co'>#&gt; [1] "Executing!"</div><div class='output co'>#&gt; [1] 10</div><div class='input'>
+<span class='co'># if we call the memo again with the same parameter values then</span>
+<span class='co'># the cached value will be returned</span>
+<span class='fu'>simple.function</span>(<span class='fl'>10</span>)</div><div class='output co'>#&gt; [1] 10</div><div class='input'>
+<span class='co'># calling the memo with a different set of parameter values will</span>
+<span class='co'># cause the function to execute</span>
+<span class='fu'>simple.function</span>(<span class='fl'>20</span>)</div><div class='output co'>#&gt; [1] "Executing!"</div><div class='output co'>#&gt; [1] 20</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

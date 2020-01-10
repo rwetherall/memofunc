@@ -4,113 +4,54 @@
 
 ## MemoFunc - A Function Memoization Package for R
 
-This package provides a simple way to cache function results to improve performance by illiminating unessesary computation or data retrieval activities.
+Provides a simple way to cache function results to improve performance by illiminating unessesary computation or data retrieval activities.
 
 Functions can be memoized with a simple call to the memo function.
 
 ``` r
 
-> library(memofunc)
+> # a simple example function
+> simple.function <- function (value) {
++   print("Executing!")
++   value
++ }
 
-> double <- function (value) value*2
+> # call memo function to memoise a function
+> simple.function.memo <- memo(simple.function)
 
-> memoedDouble <- memo(double)
+> # or like this
+> simple.function %<>% memo()
+
+> # or use an anon function
+> simple.function2 <- (function (value) value) %>% memo()
 
 ```
-A memoed function can be called as normal with the same parameters as the original.
+Calling a memo function is exactly like calling a normal function.  The memo has all the same arguments and defaults
+as the origional function.
 
 ``` r
 
-> memoedDouble(10)
+> # the first time we call the memo the function will execute
+> simple.function(10)
+[1] "Executing!"
+[1] 10
+
+> # if we call the function again with the same parameter values then
+> # the cached value will be returned
+> simple.function(10)
+[1] 10
+
+> # calling the memo with a different set of parameter values will
+> # cause the function to execute
+> simple.function(20)
+[1] "Executing!"
 [1] 20
 
 ```
-
-The first time the function is called it is executed and the result cached.  Subsequent calls will return the cached value without executing the function logic, thus saving time.  The cached results are keyed on the passed parameter values.
 
 ## Installation
 
 ``` r
 devtools::install_github("rwetherall/memofunc")
-```
-
-## Usage
-
-### Forcing Execution
-
-Execution of a memoed function can be forced in situations where it is known that that cached data may be out of date by using the force parameter.
-
-``` r
-
-> memoedDouble(10, force=TRUE)
-[1] 20
-
-```
-Note that using force=TRUE will not only force the function implementation to be executed, even if a cached value is available, but it will also overwirte any exisiting cache value with the new one so it is available for future calls to the memoed function.
-
-### Identifing a Memoed Function
-
-Memoed functions can be identified using the is.memo function.
-
-``` r
-
-> is.memo(double)
-[1] FALSE
-
-> is.memo(memoedDouble)
-[1] TRUE
-
-```
-
-### Accessing the Original Function
-
-Sometimes it might be desirable to access and call the original function.  This can be achieved using the memo.function function.
-
-``` r
-
-> ogFunction <- memo.function(memoedDouble)
-
-> ogFunction(20)
-[1] 40
-
-```
-
-### Managing the Cache of a Memoed Function
-
-Behind every memoed function is a simple cache.  You can access this cache using the memo.cache function.
-
-``` r
-
-> cache <- memo.cache(memoedDouble)
-
-```
-
-This allows the cache to be managed directly.  In perticular the contents of the cache can be inspected, retrieved, updated and cleared.
-
-``` r
-
-> cache$ls()
-[1] "47c584c88970ee81c783da03093871ea"
-
-> cache$get("47c584c88970ee81c783da03093871ea")
-[1] 20
-
-> memoedDouble(10)
-[1] 20
-
-> cache$set("47c584c88970ee81c783da03093871ea", 100)
-[1] 100
-
-> memoedDouble(10)
-[1] 100
-
-> cache$clear()
-
-> cache$ls()
-character(0)
-
-> memoedDouble(10)
-[1] 20
-
 ```
 

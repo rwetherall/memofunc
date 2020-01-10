@@ -67,89 +67,45 @@
 <div id="memofunc---a-function-memoization-package-for-r" class="section level2">
 <h2 class="hasAnchor">
 <a href="#memofunc---a-function-memoization-package-for-r" class="anchor"></a>MemoFunc - A Function Memoization Package for R</h2>
-<p>This package provides a simple way to cache function results to improve performance by illiminating unessesary computation or data retrieval activities.</p>
+<p>Provides a simple way to cache function results to improve performance by illiminating unessesary computation or data retrieval activities.</p>
 <p>Functions can be memoized with a simple call to the memo function.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(memofunc)</a>
-<a class="sourceLine" id="cb1-3" title="3"></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="op">&gt;</span><span class="st"> </span>double &lt;-<span class="st"> </span><span class="cf">function</span> (value) value<span class="op">*</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb1-5" title="5"></a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="op">&gt;</span><span class="st"> </span>memoedDouble &lt;-<span class="st"> </span><span class="kw"><a href="reference/memo.html">memo</a></span>(double)</a></code></pre></div>
-<p>A memoed function can be called as normal with the same parameters as the original.</p>
+<a class="sourceLine" id="cb1-2" title="2"><span class="op">&gt;</span><span class="st"> </span><span class="co"># a simple example function</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="er">&gt;</span><span class="st"> </span>simple.function &lt;-<span class="st"> </span><span class="cf">function</span> (value) {</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="op">+</span><span class="st">   </span><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Executing!"</span>)</a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="op">+</span><span class="st">   </span>value</a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="op">+</span><span class="st"> </span>}</a>
+<a class="sourceLine" id="cb1-7" title="7"></a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="op">&gt;</span><span class="st"> </span><span class="co"># call memo function to memoise a function</span></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="er">&gt;</span><span class="st"> </span>simple.function.memo &lt;-<span class="st"> </span><span class="kw"><a href="reference/memo.html">memo</a></span>(simple.function)</a>
+<a class="sourceLine" id="cb1-10" title="10"></a>
+<a class="sourceLine" id="cb1-11" title="11"><span class="op">&gt;</span><span class="st"> </span><span class="co"># or like this</span></a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="er">&gt;</span><span class="st"> </span>simple.function <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/memo.html">memo</a></span>()</a>
+<a class="sourceLine" id="cb1-13" title="13"></a>
+<a class="sourceLine" id="cb1-14" title="14"><span class="op">&gt;</span><span class="st"> </span><span class="co"># or use an anon function</span></a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="er">&gt;</span><span class="st"> </span>simple.function2 &lt;-<span class="st"> </span>(<span class="cf">function</span> (value) value) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="reference/memo.html">memo</a></span>()</a></code></pre></div>
+<p>Calling a memo function is exactly like calling a normal function. The memo has all the same arguments and defaults as the origional function.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="op">&gt;</span><span class="st"> </span><span class="kw">memoedDouble</span>(<span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb2-3" title="3">[<span class="dv">1</span>] <span class="dv">20</span></a></code></pre></div>
-<p>The first time the function is called it is executed and the result cached. Subsequent calls will return the cached value without executing the function logic, thus saving time. The cached results are keyed on the passed parameter values.</p>
+<a class="sourceLine" id="cb2-2" title="2"><span class="op">&gt;</span><span class="st"> </span><span class="co"># the first time we call the memo the function will execute</span></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="er">&gt;</span><span class="st"> </span><span class="kw">simple.function</span>(<span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb2-4" title="4">[<span class="dv">1</span>] <span class="st">"Executing!"</span></a>
+<a class="sourceLine" id="cb2-5" title="5">[<span class="dv">1</span>] <span class="dv">10</span></a>
+<a class="sourceLine" id="cb2-6" title="6"></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="op">&gt;</span><span class="st"> </span><span class="co"># if we call the function again with the same parameter values then</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="er">&gt;</span><span class="st"> </span><span class="co"># the cached value will be returned</span></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="er">&gt;</span><span class="st"> </span><span class="kw">simple.function</span>(<span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb2-10" title="10">[<span class="dv">1</span>] <span class="dv">10</span></a>
+<a class="sourceLine" id="cb2-11" title="11"></a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="op">&gt;</span><span class="st"> </span><span class="co"># calling the memo with a different set of parameter values will</span></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="er">&gt;</span><span class="st"> </span><span class="co"># cause the function to execute</span></a>
+<a class="sourceLine" id="cb2-14" title="14"><span class="er">&gt;</span><span class="st"> </span><span class="kw">simple.function</span>(<span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb2-15" title="15">[<span class="dv">1</span>] <span class="st">"Executing!"</span></a>
+<a class="sourceLine" id="cb2-16" title="16">[<span class="dv">1</span>] <span class="dv">20</span></a></code></pre></div>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"rwetherall/memofunc"</span>)</a></code></pre></div>
-</div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
-<div id="forcing-execution" class="section level3">
-<h3 class="hasAnchor">
-<a href="#forcing-execution" class="anchor"></a>Forcing Execution</h3>
-<p>Execution of a memoed function can be forced in situations where it is known that that cached data may be out of date by using the force parameter.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"></a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="op">&gt;</span><span class="st"> </span><span class="kw">memoedDouble</span>(<span class="dv">10</span>, <span class="dt">force=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb4-3" title="3">[<span class="dv">1</span>] <span class="dv">20</span></a></code></pre></div>
-<p>Note that using force=TRUE will not only force the function implementation to be executed, even if a cached value is available, but it will also overwirte any exisiting cache value with the new one so it is available for future calls to the memoed function.</p>
-</div>
-<div id="identifing-a-memoed-function" class="section level3">
-<h3 class="hasAnchor">
-<a href="#identifing-a-memoed-function" class="anchor"></a>Identifing a Memoed Function</h3>
-<p>Memoed functions can be identified using the is.memo function.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"></a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="reference/is.memo.html">is.memo</a></span>(double)</a>
-<a class="sourceLine" id="cb5-3" title="3">[<span class="dv">1</span>] <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb5-4" title="4"></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="reference/is.memo.html">is.memo</a></span>(memoedDouble)</a>
-<a class="sourceLine" id="cb5-6" title="6">[<span class="dv">1</span>] <span class="ot">TRUE</span></a></code></pre></div>
-</div>
-<div id="accessing-the-original-function" class="section level3">
-<h3 class="hasAnchor">
-<a href="#accessing-the-original-function" class="anchor"></a>Accessing the Original Function</h3>
-<p>Sometimes it might be desirable to access and call the original function. This can be achieved using the memo.function function.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"></a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="op">&gt;</span><span class="st"> </span>ogFunction &lt;-<span class="st"> </span><span class="kw"><a href="reference/memo.function.html">memo.function</a></span>(memoedDouble)</a>
-<a class="sourceLine" id="cb6-3" title="3"></a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="op">&gt;</span><span class="st"> </span><span class="kw">ogFunction</span>(<span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb6-5" title="5">[<span class="dv">1</span>] <span class="dv">40</span></a></code></pre></div>
-</div>
-<div id="managing-the-cache-of-a-memoed-function" class="section level3">
-<h3 class="hasAnchor">
-<a href="#managing-the-cache-of-a-memoed-function" class="anchor"></a>Managing the Cache of a Memoed Function</h3>
-<p>Behind every memoed function is a simple cache. You can access this cache using the memo.cache function.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"></a>
-<a class="sourceLine" id="cb7-2" title="2"><span class="op">&gt;</span><span class="st"> </span>cache &lt;-<span class="st"> </span><span class="kw"><a href="reference/memo.cache.html">memo.cache</a></span>(memoedDouble)</a></code></pre></div>
-<p>This allows the cache to be managed directly. In perticular the contents of the cache can be inspected, retrieved, updated and cleared.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"></a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="op">&gt;</span><span class="st"> </span>cache<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/ls.html">ls</a></span>()</a>
-<a class="sourceLine" id="cb8-3" title="3">[<span class="dv">1</span>] <span class="st">"47c584c88970ee81c783da03093871ea"</span></a>
-<a class="sourceLine" id="cb8-4" title="4"></a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="op">&gt;</span><span class="st"> </span>cache<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/get.html">get</a></span>(<span class="st">"47c584c88970ee81c783da03093871ea"</span>)</a>
-<a class="sourceLine" id="cb8-6" title="6">[<span class="dv">1</span>] <span class="dv">20</span></a>
-<a class="sourceLine" id="cb8-7" title="7"></a>
-<a class="sourceLine" id="cb8-8" title="8"><span class="op">&gt;</span><span class="st"> </span><span class="kw">memoedDouble</span>(<span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb8-9" title="9">[<span class="dv">1</span>] <span class="dv">20</span></a>
-<a class="sourceLine" id="cb8-10" title="10"></a>
-<a class="sourceLine" id="cb8-11" title="11"><span class="op">&gt;</span><span class="st"> </span>cache<span class="op">$</span><span class="kw">set</span>(<span class="st">"47c584c88970ee81c783da03093871ea"</span>, <span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb8-12" title="12">[<span class="dv">1</span>] <span class="dv">100</span></a>
-<a class="sourceLine" id="cb8-13" title="13"></a>
-<a class="sourceLine" id="cb8-14" title="14"><span class="op">&gt;</span><span class="st"> </span><span class="kw">memoedDouble</span>(<span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb8-15" title="15">[<span class="dv">1</span>] <span class="dv">100</span></a>
-<a class="sourceLine" id="cb8-16" title="16"></a>
-<a class="sourceLine" id="cb8-17" title="17"><span class="op">&gt;</span><span class="st"> </span>cache<span class="op">$</span><span class="kw">clear</span>()</a>
-<a class="sourceLine" id="cb8-18" title="18"></a>
-<a class="sourceLine" id="cb8-19" title="19"><span class="op">&gt;</span><span class="st"> </span>cache<span class="op">$</span><span class="kw"><a href="https://rdrr.io/r/base/ls.html">ls</a></span>()</a>
-<a class="sourceLine" id="cb8-20" title="20"><span class="kw"><a href="https://rdrr.io/r/base/character.html">character</a></span>(<span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb8-21" title="21"></a>
-<a class="sourceLine" id="cb8-22" title="22"><span class="op">&gt;</span><span class="st"> </span><span class="kw">memoedDouble</span>(<span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb8-23" title="23">[<span class="dv">1</span>] <span class="dv">20</span></a></code></pre></div>
-</div>
 </div>
 
   </div>

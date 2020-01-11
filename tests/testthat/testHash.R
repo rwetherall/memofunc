@@ -342,4 +342,15 @@ test_that("
 
 })
 
+# TODO what happens if we have a function call with no arguments?!!
+test_that("
+    Given a function call that has no arguments,
+    When I hash the function call,
+    Then I get a hash value", {
+      
+  test.fn <- function () 10
+  expect_true(!is.null(functionCall(test.fn, call("test.fn")) %>% hash()))
+})
+
+# TODO Note: what do we do about closures?  could we use variables used within the closure to create the hash?
 # TODO Note: anonymouse functions can't be hashed atm!

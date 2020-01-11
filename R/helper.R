@@ -17,7 +17,7 @@ pad <- function (x, n, by=NA) lapply(1:n, function (index) if (index > length(x)
 ##
 # Helper function to order arguments by name
 #
-orderby.name <- function (args) args[order(names(args))]
+orderby.name <- function (args) if (length(args) != 0) args[order(names(args))]
 
 ##
 # Helper function to remove an item from a list

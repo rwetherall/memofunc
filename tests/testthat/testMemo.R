@@ -98,6 +98,18 @@ test_that("
 })
 
 test_that("
+  Given a simple function that has no arguments,
+  And has been memoised,
+  When I evaluate the memo,
+  Then it will cache the result as expected", {
+    
+  memo <- (function () 10) %>% test.memo()
+  
+  do.test(memo, list(), 10, TRUE)
+  do.test(memo, list(), 10, FALSE)
+})
+
+test_that("
   Given a simple function that has no return value
   And has been memoised indicating that null results are allowed,
   When I evaluate the memo,

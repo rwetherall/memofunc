@@ -13,6 +13,8 @@ unused.formals <- function (formals, args) formals[!sapply(names(formals), `%in%
 #
 all.names <- function (formals, args) {
   
+  if (is.null(formals)) list()
+  
   # exclude elip and get all formals that haven't been named in the argument list
   unused.formals <- removeby.name(formals, "...") %>% unused.formals(args)
   
@@ -55,7 +57,7 @@ functionCall <- function (f = sys.function(sys.parent()), call = sys.call(sys.pa
   args <- rest(as.list(call))
   
   # name all the function call arguments
-  names(args) <- all.names(formals(f), args)
+  if (length(args) != 0) names(args) <- all.names(formals(f), args)
   
   # return functionCall
   list(f = f, args = args) %>% `class<-`("functionCall")
@@ -85,6 +87,10 @@ hash.default <- function (value) digest::digest(value)
 #' @export
 ##
 hash.function <- function (value) hash.default(body(value))
+
+## TODO hash.list .. so each item can be hashes correctly and combined with the name
+
+## TODO hash.environment .. going to be useful when we support closures
 
 ##
 # Is the value an empty name.

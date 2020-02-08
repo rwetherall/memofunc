@@ -28,8 +28,6 @@ Functions can be memoized with a simple call to memo.
 ```
 Calling a memo is exactly like calling a normal function, in fact it is a normal function!  The memo has all the same arguments and defaults as the origional function so it can be used in legacy code without the need for any risky refactoring.
 
-Memoing a function can significantly improve the performance of a system by limiting how often expensive call are made.
-
 ``` r
 
 > # the first time we call the memo the function will execute
@@ -47,6 +45,12 @@ Memoing a function can significantly improve the performance of a system by limi
 > simple.function(20)
 [1] "Executing!"
 [1] 20
+
+```
+
+Memoing a function can significantly improve the performance of a system by limiting how often expensive call are made.  Functions that return a NULL value can be memoed by using the allow.null argument.
+
+``` r
 
 > # consider a slow function which is memoised, note that we have used the allow.null argument
 > # so that NULL is cached when returned from a function, the default is FALSE

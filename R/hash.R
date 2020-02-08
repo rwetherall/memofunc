@@ -86,9 +86,13 @@ hash.default <- function (value) digest::digest(value)
 #' @inherit hash
 #' @export
 ##
-hash.function <- function (value) hash.default(body(value))
+hash.function <- function (value) c(hash.default(formals(value)), hash.default(body(value))) %>% hash.default()
 
-## TODO hash.list .. so each item can be hashes correctly and combined with the name
+##
+#' @inherit hash
+#' @export
+##
+hash.list <- function (value) lapply(value, hash) %>% `names<-`(names(value)) %>% hash.default()
 
 ## TODO hash.environment .. going to be useful when we support closures
 

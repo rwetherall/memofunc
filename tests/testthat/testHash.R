@@ -342,7 +342,6 @@ test_that("
 
 })
 
-# TODO what happens if we have a function call with no arguments?!!
 test_that("
     Given a function call that has no arguments,
     When I hash the function call,
@@ -350,6 +349,39 @@ test_that("
       
   test.fn <- function () 10
   expect_true(!is.null(functionCall(test.fn, call("test.fn")) %>% hash()))
+})
+
+test_that("
+    Given a function,
+    When I hash the function,
+    Then I get consistent results", {
+      
+  fn_hash <- (function (value) value) %>% hash()
+
+  (function (another_value) value)  %>% hash() %>% `==`(fn_hash) %>% expect_false()
+  (function (value = 10) value)     %>% hash() %>% `==`(fn_hash) %>% expect_false()
+  (function (value) print(value))   %>% hash() %>% `==`(fn_hash) %>% expect_false()
+  
+  (function (value) value)          %>% hash() %>% `==`(fn_hash) %>% expect_true()
+})
+
+
+test_that("
+    Given a list that contains different types of arguments
+    When I hash the list,
+    Then I get consistent results", {
+  
+  f <- function (value) value
+  
+  expect_equal(
+    list(10,20,30) %>% hash(),
+    list(10, 20 ,30) %>% hash())
+  
+  expect_equal(
+    list((function (value) value)) %>% hash(), 
+    list(f) %>% hash())
+  
+  
 })
 
 # TODO Note: what do we do about closures?  could we use variables used within the closure to create the hash?

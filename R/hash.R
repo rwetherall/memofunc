@@ -92,7 +92,7 @@ hash.function <- function (value) c(hash.default(formals(value)), hash.default(b
 #' @inherit hash
 #' @export
 ##
-hash.list <- function (value) lapply(value, hash) %>% `names<-`(names(value)) %>% hash.default()
+hash.list <- function (value) lapply(value, hash) %>% `names<-`(names(value)) %>% orderby.name() %>% hash.default()
 
 ## TODO hash.environment .. going to be useful when we support closures
 

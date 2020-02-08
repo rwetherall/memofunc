@@ -371,11 +371,39 @@ test_that("
     When I hash the list,
     Then I get consistent results", {
   
-  f <- function (value) value
+  sl_hash <- list("a", 1, TRUE, 3.142) %>% hash()
+  sn_hash <- list(a = "a", b = 1, c = TRUE, d = 3.142) %>% hash()
   
-  expect_equal(
-    list(10,20,30) %>% hash(),
-    list(10, 20 ,30) %>% hash())
+  list("a", 1, TRUE, 3.142) %>% hash() %>% `==`(sl_hash) %>% expect_true()
+  list("a", TRUE, 1, 3.142) %>% hash() %>% `==`(sl_hash) %>% expect_false()
+  list("a", TRUE, 1)        %>% hash() %>% `==`(sl_hash) %>% expect_false()
+  list("b", 2, FALSE, 3.12) %>% hash() %>% `==`(sl_hash) %>% expect_false()
+  list("a", 1, TRUE, 3.14)  %>% hash() %>% `==`(sl_hash) %>% expect_false()
+  
+  expect_false(sl_hash == sn_hash)
+    
+  list(a = "a", b = 1, c = TRUE, d = 3.142) %>% hash() %>% `==`(sn_hash) %>% expect_true()
+  list(b = 1, a = "a", c = TRUE, d = 3.142) %>% hash() %>% `==`(sn_hash) %>% expect_true()
+  list(z = "a", b = 1, c = TRUE, d = 3.142) %>% hash() %>% `==`(sn_hash) %>% expect_false()
+  list(a = "a", b = 1, c = TRUE, d = 3.1)   %>% hash() %>% `==`(sn_hash) %>% expect_false()
+  list(z = 1, a = "a", c = TRUE, d = 3.142) %>% hash() %>% `==`(sn_hash) %>% expect_false()
+    
+  one <- 1
+  two <- 2
+  too <- 2
+  value <- 3
+  
+  vl_hash <- list(a=one, b=two, value) %>% hash()
+  
+  list(a=one, b=two, value) %>% hash() %>% `==`(vl_hash) %>% expect_true()
+  list(a=1, b=2, 3) %>% hash() %>% `==`(vl_hash) %>% expect_true()
+  list(a=one, b=too, 3) %>% hash() %>% `==`(vl_hash) %>% expect_true()    
+  
+  one <- 2;
+  
+  list(a=one, b=two, value) %>% hash() %>% `==`(vl_hash) %>% expect_false()
+      
+  f <- function (value) value
   
   expect_equal(
     list((function (value) value)) %>% hash(), 

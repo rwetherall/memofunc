@@ -82,7 +82,7 @@ are cached." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">memofunc</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -194,10 +194,10 @@ are cached.</p>
 
 <span class='co'># the first time we call the slow function it takes some time</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='fu'>slow.function</span>(<span class='fl'>3</span>))</div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;    0.00    0.00    3.01 </div><div class='input'>
+#&gt;    0.02    0.00    3.02 </div><div class='input'>
 <span class='co'># subsequent calls make use of the cache and are much faster</span>
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='fu'>slow.function</span>(<span class='fl'>3</span>))</div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;       0       0       0 </div></pre>
+#&gt;    0.02    0.00    0.02 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

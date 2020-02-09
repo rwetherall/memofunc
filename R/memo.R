@@ -5,7 +5,7 @@ source("./R/helper.R")
 ##
 #' @title Memo
 #' @description
-#' Creates a memoised function, based on the provided named or anonymous function.  Calls to the memoised function will 
+#' Creates a memoized function, based on the provided named or anonymous function.  Calls to the memoized function will 
 #' be retrieved from a cache, unless it is the first time it is called.
 #' 
 #' Passing \code{memo.force = TRUE} to the memo function call will by-pass any previously cached values and execute the underlying
@@ -115,11 +115,11 @@ memo.cache <- function(f) {
 
 ##
 #' @title Memo Function
-#' @description Gets the original function that was memoised.
+#' @description Gets the original function that was memoized.
 #'
 #' Execution is stopped if function passed is not a valid memoed function.
 #' @param f memo function
-#' @return Original unmemoised function.
+#' @return Original unmemoized function.
 #' @export
 ##
 memo.function <- function(f) {

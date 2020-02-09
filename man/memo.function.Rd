@@ -10,10 +10,10 @@ memo.function(f)
 \item{f}{memo function}
 }
 \value{
-Original unmemoised function.
+Original unmemoized function.
 }
 \description{
-Gets the original function that was memoised.
+Gets the original function that was memoized.
 
 Execution is stopped if function passed is not a valid memoed function.
 }

@@ -15,7 +15,7 @@ memo(f, allow.null = FALSE)
 the memoed function
 }
 \description{
-Creates a memoised function, based on the provided named or anonymous function.  Calls to the memoised function will 
+Creates a memoized function, based on the provided named or anonymous function.  Calls to the memoized function will 
 be retrieved from a cache, unless it is the first time it is called.
 
 Passing \code{memo.force = TRUE} to the memo function call will by-pass any previously cached values and execute the underlying

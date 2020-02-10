@@ -15,5 +15,5 @@ storage.has.memory(cache, key)
 TRUE if the storage has the key, FALSE otherwise
 }
 \description{
-Determines whether a ket is set in the memory storage.
+Determines whether a key is set in the memory storage.
 }

@@ -38,7 +38,7 @@ storage.unset.memory <- function(cache, key)
 ##
 #' @title Memory Storage Has
 #' @description 
-#' Determines whether a ket is set in the memory storage.
+#' Determines whether a key is set in the memory storage.
 #' @param cache cache
 #' @param key key value
 #' @return TRUE if the storage has the key, FALSE otherwise

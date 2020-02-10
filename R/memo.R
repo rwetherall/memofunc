@@ -56,10 +56,10 @@ memo <- function (f, allow.null=FALSE) {
     hash <- hash(fc)
 
     # if force or cached
-    if (!memo.force && f.cache$has(hash)) {
+    if (!memo.force && cache.has(f.cache, hash)) {
 
       # false if dry run otherwise cached value
-      if (memo.dryrun) FALSE else f.cache$get(hash)
+      if (memo.dryrun) FALSE else cache.get(f.cache, hash)
       
     } else {
 
@@ -70,7 +70,7 @@ memo <- function (f, allow.null=FALSE) {
       if (!is.null(result) || allow.null) {
         
         # cache the result
-        if (!memo.dryrun) f.cache$set(hash, result)
+        if (!memo.dryrun) cache.set(f.cache, hash, result)
       }
       
       result

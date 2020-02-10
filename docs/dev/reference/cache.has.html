@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function Call — functionCall • memofunc</title>
+<title>Cache Has — cache.has • memofunc</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,8 @@
 
 
 
-<meta property="og:title" content="Function Call — functionCall" />
-<meta property="og:description" content="For a given function and call, return a list of class 'functionCall' which
-can be hashed to provide a unique identifier for the function and parameters used for this call." />
+<meta property="og:title" content="Cache Has — cache.has" />
+<meta property="og:description" content="Determines whether the key is in the cache." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,69 +111,40 @@ can be hashed to provide a unique identifier for the function and parameters use
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Function Call</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rwetherall/memofunc/blob/master/R/hash.R'><code>R/hash.R</code></a></small>
-    <div class="hidden name"><code>functionCall.Rd</code></div>
+    <h1>Cache Has</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rwetherall/memofunc/blob/master/R/cache.R'><code>R/cache.R</code></a></small>
+    <div class="hidden name"><code>cache.has.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>For a given function and call, return a list of class 'functionCall' which
-can be hashed to provide a unique identifier for the function and parameters used for this call.</p>
+    <p>Determines whether the key is in the cache.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>functionCall</span>(<span class='kw'>f</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>sys.function</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>sys.parent</a></span>()), <span class='kw'>call</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>sys.call</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>sys.parent</a></span>()))</pre>
+    <pre class="usage"><span class='fu'>cache.has</span>(<span class='no'>cache</span>, <span class='no'>key</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>f</th>
-      <td><p>function, defaults to the containing function</p></td>
+      <th>cache</th>
+      <td><p>cache</p></td>
     </tr>
     <tr>
-      <th>call</th>
-      <td><p>call, default to the containing call</p></td>
+      <th>key</th>
+      <td><p>value key</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>functionCall, a hashable form of the function call information</p>
+    <p>TRUE if the cache contains the key, FALSE otherwise</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># my example function</span>
-<span class='no'>my.function</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span> (<span class='no'>x</span>, <span class='no'>y</span>) <span class='no'>x</span>+<span class='no'>y</span>
-
-<span class='co'># create a new function call</span>
-<span class='no'>my.functionCall</span> <span class='kw'>&lt;-</span> <span class='fu'>functionCall</span>(<span class='no'>my.function</span>, <span class='fu'><a href='https://rdrr.io/r/base/call.html'>call</a></span>(<span class='st'>"my.function"</span>, <span class='fl'>10</span>, <span class='fl'>10</span>))
-
-<span class='co'># the function and arguments are now available</span>
-<span class='no'>my.functionCall</span>$<span class='no'>f</span></div><div class='output co'>#&gt; function (x, y) x+y
-#&gt; &lt;environment: 0x000000001fcd0108&gt;</div><div class='input'><span class='no'>my.functionCall</span>$<span class='no'>args</span></div><div class='output co'>#&gt; $x
-#&gt; [1] 10
-#&gt; 
-#&gt; $y
-#&gt; [1] 10
-#&gt; </div><div class='input'>
-<span class='co'># using the default argument values to get the function call of the containing function</span>
-<span class='no'>my.function2</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span> (<span class='no'>x</span>, <span class='no'>y</span>) <span class='fu'>functionCall</span>()
-<span class='no'>my.functionCall2</span> <span class='kw'>&lt;-</span> <span class='fu'>my.function2</span>(<span class='fl'>10</span>, <span class='fl'>10</span>)
-
-<span class='co'># the function and arguments are now available</span>
-<span class='no'>my.functionCall2</span>$<span class='no'>f</span></div><div class='output co'>#&gt; function (x, y) functionCall()
-#&gt; &lt;environment: 0x000000001fcd0108&gt;</div><div class='input'><span class='no'>my.functionCall2</span>$<span class='no'>args</span></div><div class='output co'>#&gt; $x
-#&gt; [1] 10
-#&gt; 
-#&gt; $y
-#&gt; [1] 10
-#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

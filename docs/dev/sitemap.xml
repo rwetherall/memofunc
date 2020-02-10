@@ -4,7 +4,22 @@
     <loc>https://rwetherall.github.io/memofunc//index.html</loc>
   </url>
   <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/cache.clear.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/cache.get.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/cache.has.html</loc>
+  </url>
+  <url>
     <loc>https://rwetherall.github.io/memofunc//reference/cache.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/cache.set.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/cache.unset.html</loc>
   </url>
   <url>
     <loc>https://rwetherall.github.io/memofunc//reference/functionCall.html</loc>
@@ -38,5 +53,20 @@
   </url>
   <url>
     <loc>https://rwetherall.github.io/memofunc//reference/memofunc.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.clear.memory.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.get.memory.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.has.memory.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.set.memory.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.unset.memory.html</loc>
   </url>
 </urlset>

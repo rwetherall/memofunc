@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Simple cache used to store the values of memoised functions — cache • memofunc</title>
+<title>Create Cache — cache • memofunc</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,9 @@
 
 
 
-<meta property="og:title" content="Simple cache used to store the values of memoised functions — cache" />
-<meta property="og:description" content="A simple in memory cache used to store the value of memoised functions." />
+<meta property="og:title" content="Create Cache — cache" />
+<meta property="og:description" content="Creates a cache that can be used to store name, value pairs.
+The provided storage class indicates where the values in the cache are stored for it's duration." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,34 +112,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Simple cache used to store the values of memoised functions</h1>
+    <h1>Create Cache</h1>
     <small class="dont-index">Source: <a href='https://github.com/rwetherall/memofunc/blob/master/R/cache.R'><code>R/cache.R</code></a></small>
     <div class="hidden name"><code>cache.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A simple in memory cache used to store the value of memoised functions.</p>
+    <p>Creates a cache that can be used to store name, value pairs.</p>
+<p>The provided storage class indicates where the values in the cache are stored for it's duration.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cache</span>()</pre>
+    <pre class="usage"><span class='fu'>cache</span>(<span class='kw'>storage</span> <span class='kw'>=</span> <span class='st'>"memory"</span>)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>storage</th>
+      <td><p>storage class</p></td>
+    </tr>
+    </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A cache which can be accessed using:</p><ul>
-<li><p>cache()#set - set the value of a given key</p></li>
-<li><p>cache()#get - get the value of a given key</p></li>
-<li><p>cache()#unset - clear the value for a given key</p></li>
-<li><p>cache()#has - true if given key has value, false otherwise</p></li>
-<li><p>cache()clear - clears all values and keys</p></li>
-<li><p>cache()#ls - lists all the values and keys</p></li>
-</ul>
-
+    <p>a new cache</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
     </ul>
 

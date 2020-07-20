@@ -10,4 +10,6 @@
 
 ## Notes
 
-* This is a new release.
+Changes made based on submission feedback:
+
+* There are no additional licence restricitions, so removed LICENCE file and adjusted DESRIPTION file accordingly.

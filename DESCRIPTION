@@ -6,7 +6,7 @@ Author: Roy Wetherall <rwetherall@gmail.com>
 Maintainer: Roy Wetherall <rwetherall@gmail.com>
 Description: A simple way to memoise function results to improve performance by eliminating unnecessary computation or data retrieval activities.
 Depends: R (>= 3.5.0)
-License: GPL-3 | file LICENSE
+License: GPL-3 
 URL: https://github.com/rwetherall/memofunc, https://rwetherall.github.io/memofunc/
 BugReports: https://github.com/rwetherall/memofunc/issues
 Encoding: UTF-8

@@ -1,3 +1,5 @@
+# memofunc 1.1.0
+
 # memofunc 1.0.0
 
 * Added memo function, allowing functions to be memoized.

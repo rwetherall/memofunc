@@ -1,1 +1,42 @@
 destination: docs
+url: https://rwetherall.github.io/memofunc/
+
+development:
+  mode: auto
+
+navbar:
+  structure:
+    left:
+    - home
+    - intro
+    - reference
+    - articles
+    - tutorials
+    - news
+    right: github
+  components:
+    home:
+      icon: fa-home fa-lg
+      href: index.html
+    reference:
+      text: API Reference
+      href: reference/index.html
+    news:
+      text: Change Log
+      href: news/index.html
+    dev:
+      text: Dev Version
+      href: dev/index.html
+    github:
+      icon: fa-github fa-lg
+      href: https://github.com/rwetherall/memofunc
+
+reference:
+  - title: "Memo"
+    desc: >
+      Functions to create and manage function memoization.
+    contents:
+      - '`memo`'
+      - '`is.memo`'
+      - '`memo.function`'
+      - '`memo.cache`'

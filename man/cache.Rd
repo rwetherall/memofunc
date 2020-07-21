@@ -2,21 +2,18 @@
 % Please edit documentation in R/cache.R
 \name{cache}
 \alias{cache}
-\title{Simple cache used to store the values of memoised functions}
+\title{Create Cache}
 \usage{
-cache()
+cache(storage = "memory")
+}
+\arguments{
+\item{storage}{storage class}
 }
 \value{
-A cache which can be accessed using:
-\itemize{
-  \item cache()#set - set the value of a given key
-  \item cache()#get - get the value of a given key
-  \item cache()#unset - clear the value for a given key
-  \item cache()#has - true if given key has value, false otherwise
-  \item cache()clear - clears all values and keys
-  \item cache()#ls - lists all the values and keys 
-  }
+a new cache
 }
 \description{
-A simple in memory cache used to store the value of memoised functions.
+Creates a cache that can be used to store name, value pairs.
+
+The provided storage class indicates where the values in the cache are stored for it's duration.
 }

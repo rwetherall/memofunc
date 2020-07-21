@@ -1,66 +1,93 @@
 library(digest)
 library(uuid)
+require(magrittr)
 
 ##
-#' @title Simple cache used to store the values of memoised functions
-#' @description A simple in memory cache used to store the value of memoised functions.
-#' @return A cache which can be accessed using:
-#' \itemize{
-#'   \item cache()#set - set the value of a given key
-#'   \item cache()#get - get the value of a given key
-#'   \item cache()#unset - clear the value for a given key
-#'   \item cache()#has - true if given key has value, false otherwise
-#'   \item cache()clear - clears all values and keys
-#'   \item cache()#ls - lists all the values and keys 
-#'   }
+#' @title Create Cache
+#' @description 
+#' Creates a cache that can be used to store name, value pairs.
+#' 
+#' The provided storage class indicates where the values in the cache are stored for it's duration.
+#' @param storage storage class
+#' @return a new cache
 #' @export
 ##
-cache <- function () {
+cache <- function (storage = "memory")
+  list(
+    memory_cache = new.env(parent=emptyenv()),
+    storage = storage %>% `class<-`(storage)
+  ) %>% `class<-`("cache")
 
-  # environment used as memory storage
-  memoryStorage <- new.env(parent=emptyenv())
-
-  # Set value for given key
-  set <- function(key, value) {
-
-    # store value in memory
-    assign(key, value, envir=memoryStorage)
-
-    # return value since assign return is invisible
-    value
-  }
-
-  # get value with key
-  get <- function(key) {
-
-    if (exists(key, envir=memoryStorage)) base::get(key, envir=memoryStorage) else NULL
-  }
-
-  # unset value with key
-  unset <- function(key) {
-
-    # remove for memory
-    if (exists(key, envir=memoryStorage)) rm(list=c(key), envir=memoryStorage)
-
-  }
-
-  # has value with key
-  has <- function(key) exists(key, envir=memoryStorage)
-
-  # clear all
-  clear <- function() {
-
-    # clear memory
-    rm(list=base::ls(memoryStorage), envir=memoryStorage)
-
-  }
-
-  # list cache contents
-  ls <- function() base::ls(memoryStorage) 
-
-  # combine cache and storage features
-  list(set = set, get = get, unset = unset, has = has, clear = clear, ls=ls)
+##
+#' @title Cache Get
+#' @description 
+#' Gets a value from the cache.
+#' @param cache cache
+#' @param key value key
+#' @return value, NULL otherwise
+#' @export
+##
+cache.get <- function(cache, key) {
   
-  ## TODO set the class of the cache
-  ## TODO move the methods out and make then generic to react to different classes of cache
+  stopifnot(inherits(cache, "cache"))
+  UseMethod("storage.get", cache$storage)
+}
+
+##
+#' @title Cache Set
+#' @description 
+#' Sets a value into the cache.
+#' @param cache cache
+#' @param key value key
+#' @param value value
+#' @return set value
+#' @export
+##
+cache.set <- function (cache, key, value) {
+
+  stopifnot(inherits(cache, "cache"))
+  UseMethod("storage.set", cache$storage)
+}
+
+##
+#' @title Cache Unset
+#' @description 
+#' Unsets a value from the cache.
+#' @param cache cache 
+#' @param key value key
+#' @export
+##
+cache.unset <- function (cache, key) {
+  
+  stopifnot(inherits(cache, "cache"))
+  UseMethod("storage.unset", cache$storage)
+}
+
+##
+#' @title Cache Has
+#' @description 
+#' Determines whether the key is in the cache.
+#' @param cache cache
+#' @param key value key
+#' @return TRUE if the cache contains the key, FALSE otherwise
+#' @export
+##
+cache.has <- function (cache, key) {
+  
+  stopifnot(inherits(cache, "cache"))
+  UseMethod("storage.has", cache$storage) 
+}
+
+##
+#' @title Cache Clear
+#' @description 
+#' Clears all the values from the cache.
+#' @param cache cache
+#' @param key value key
+#' @export
+##
+cache.clear <- function (cache, key) {
+  
+  stopifnot(inherits(cache, "cache"))
+  UseMethod("storage.clear", cache$storage)
 }

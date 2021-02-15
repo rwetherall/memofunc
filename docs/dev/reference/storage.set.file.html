@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Hash — hash • memofunc</title>
+<title>File Storage Set — storage.set.file • memofunc</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Hash — hash" />
-<meta property="og:description" content="Hashes a value into a string." />
+<meta property="og:title" content="File Storage Set — storage.set.file" />
+<meta property="og:description" content="Sets a value into the file storage." />
 
 
 <meta name="robots" content="noindex">
@@ -114,74 +114,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Hash</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rwetherall/memofunc/blob/master/R/hash.R'><code>R/hash.R</code></a></small>
-    <div class="hidden name"><code>hash.Rd</code></div>
+    <h1>File Storage Set</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rwetherall/memofunc/blob/master/R/storagefile.R'><code>R/storagefile.R</code></a></small>
+    <div class="hidden name"><code>storage.set.file.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Hashes a value into a string.</p>
+    <p>Sets a value into the file storage.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>hash</span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S3 method for file</span>
+<span class='fu'>storage.set</span><span class='op'>(</span><span class='va'>cache</span>, <span class='va'>key</span>, <span class='va'>value</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>cache</th>
+      <td><p>cache</p></td>
+    </tr>
+    <tr>
+      <th>key</th>
+      <td><p>key value</p></td>
+    </tr>
+    <tr>
       <th>value</th>
-      <td><p>value to hash</p></td>
+      <td><p>value</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>hashed value as a string</p>
+    <p>set value</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>my.function</span> <span class='op'>&lt;-</span> <span class='kw'>function</span> <span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span> <span class='va'>x</span><span class='op'>+</span><span class='va'>y</span>
-
-<span class='co'># a list of values to hash</span>
-<span class='va'>values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-  <span class='st'>"Hello world!"</span>,
-  <span class='fl'>101</span>,
-  <span class='fl'>3.142</span>,
-  <span class='cn'>TRUE</span>,
-  <span class='va'>my.function</span>,
-  <span class='op'>(</span><span class='kw'>function</span> <span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span> <span class='va'>x</span><span class='op'>+</span><span class='va'>y</span><span class='op'>)</span>,
-  <span class='fu'><a href='functionCall.html'>functionCall</a></span><span class='op'>(</span><span class='va'>my.function</span>, <span class='fu'><a href='https://rdrr.io/r/base/call.html'>call</a></span><span class='op'>(</span><span class='st'>"my.function"</span>, <span class='fl'>10</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>1</span>, b<span class='op'>=</span><span class='fl'>2</span>, c<span class='op'>=</span><span class='st'>"hello"</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='co'># hash the values in the list</span>
-<span class='op'>(</span><span class='va'>hashes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>values</span>, <span class='va'>hash</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [[1]]
-#&gt; [1] "16b7be13540e73459f61994a22b8f213"
-#&gt; 
-#&gt; [[2]]
-#&gt; [1] "16e8b34f96a712da6a2c777162d0d032"
-#&gt; 
-#&gt; [[3]]
-#&gt; [1] "a1f25f79aa7db7dd9a9568405ff5cbc5"
-#&gt; 
-#&gt; [[4]]
-#&gt; [1] "bb73ad91bcb7e948250d465016f7bea8"
-#&gt; 
-#&gt; [[5]]
-#&gt; [1] "8b331ebc7ab9fd41f9d8f361403b7161"
-#&gt; 
-#&gt; [[6]]
-#&gt; [1] "8b331ebc7ab9fd41f9d8f361403b7161"
-#&gt; 
-#&gt; [[7]]
-#&gt; [1] "08c6f757f4217e477295f6a38cc092f5"
-#&gt; 
-#&gt; [[8]]
-#&gt; [1] "fac8a04274af9ddca322dffa790ae3cc"
-#&gt; </div><div class='input'>
-<span class='co'># Note that functions with the same body will have the same hash</span>
-<span class='va'>hashes</span><span class='op'>[[</span><span class='fl'>5</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>==</span> <span class='va'>hashes</span><span class='op'>[[</span><span class='fl'>6</span><span class='op'>]</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

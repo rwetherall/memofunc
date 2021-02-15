@@ -55,18 +55,18 @@
     <loc>https://rwetherall.github.io/memofunc//reference/memofunc.html</loc>
   </url>
   <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/storage.clear.memory.html</loc>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.clear.file.html</loc>
   </url>
   <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/storage.get.memory.html</loc>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.get.file.html</loc>
   </url>
   <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/storage.has.memory.html</loc>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.has.file.html</loc>
   </url>
   <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/storage.set.memory.html</loc>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.set.file.html</loc>
   </url>
   <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/storage.unset.memory.html</loc>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.unset.file.html</loc>
   </url>
 </urlset>

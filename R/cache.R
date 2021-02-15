@@ -1,6 +1,9 @@
+#' @include storagememory.R
+NULL
+
 library(digest)
 library(uuid)
-require(magrittr)
+library(magrittr)
 
 ##
 #' @title Create Cache
@@ -10,6 +13,7 @@ require(magrittr)
 #' The provided storage class indicates where the values in the cache are stored for it's duration.
 #' @param storage storage class
 #' @return a new cache
+#' @example R/examples/cache/example.cache.R
 #' @export
 ##
 cache <- function (storage = "memory")
@@ -25,12 +29,13 @@ cache <- function (storage = "memory")
 #' @param cache cache
 #' @param key value key
 #' @return value, NULL otherwise
+#' @example R/examples/cache/example.cache.R
 #' @export
 ##
 cache.get <- function(cache, key) {
   
   stopifnot(inherits(cache, "cache"))
-  UseMethod("storage.get", cache$storage)
+  storage.get(cache, key)
 }
 
 ##
@@ -40,13 +45,14 @@ cache.get <- function(cache, key) {
 #' @param cache cache
 #' @param key value key
 #' @param value value
-#' @return set value
+#' @return the cache
+#' @example R/examples/cache/example.cache.R
 #' @export
 ##
 cache.set <- function (cache, key, value) {
 
   stopifnot(inherits(cache, "cache"))
-  UseMethod("storage.set", cache$storage)
+  storage.set(cache, key, value)
 }
 
 ##
@@ -55,12 +61,13 @@ cache.set <- function (cache, key, value) {
 #' Unsets a value from the cache.
 #' @param cache cache 
 #' @param key value key
+#' @example R/examples/cache/example.cache.R
 #' @export
 ##
 cache.unset <- function (cache, key) {
   
   stopifnot(inherits(cache, "cache"))
-  UseMethod("storage.unset", cache$storage)
+  storage.unset(cache, key)
 }
 
 ##
@@ -70,12 +77,13 @@ cache.unset <- function (cache, key) {
 #' @param cache cache
 #' @param key value key
 #' @return TRUE if the cache contains the key, FALSE otherwise
+#' @example R/examples/cache/example.cache.R
 #' @export
 ##
 cache.has <- function (cache, key) {
   
   stopifnot(inherits(cache, "cache"))
-  UseMethod("storage.has", cache$storage) 
+  storage.has(cache, key) 
 }
 
 ##
@@ -84,10 +92,13 @@ cache.has <- function (cache, key) {
 #' Clears all the values from the cache.
 #' @param cache cache
 #' @param key value key
+#' @example R/examples/cache/example.cache.R
 #' @export
 ##
 cache.clear <- function (cache, key) {
   
   stopifnot(inherits(cache, "cache"))
-  UseMethod("storage.clear", cache$storage)
+  storage.clear(cache)
 }
+
+

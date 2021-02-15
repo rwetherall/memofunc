@@ -22,18 +22,12 @@ test_that("Given the default cache settings, When a value is set, Then it can be
   # create memory cache
   cache <- cache()
 
-  expect_equal(cache.set(cache, "string", "one"), "one")
-  expect_equal(cache.get(cache, "string"), "one")
-
-  expect_equal(cache.set(cache, "number", 100), 100)
-  expect_equal(cache.get(cache, "number"), 100)
-
-  expect_equal(cache.set(cache, "logical", TRUE), TRUE)
-  expect_equal(cache.get(cache, "logical"), TRUE)
+  expect_equal(cache.set(cache, "string", "one") %>% cache.get("string"), "one")
+  expect_equal(cache.set(cache, "number", 100) %>% cache.get("number"), 100)
+  expect_equal(cache.set(cache, "logical", TRUE) %>% cache.get("logical"), TRUE)
 
   myTestFn <- function() print("Hello")
-  expect_equal(cache.set(cache, "function", myTestFn), myTestFn)
-  expect_equal(cache.get(cache, "function"), myTestFn)
+  expect_equal(cache.set(cache, "function", myTestFn) %>% cache.get("function"), myTestFn)
 })
 
 test_that("Given the default cache settings, When retieving a value that hasn't been set, Then NULL is retrieved", {
@@ -46,8 +40,7 @@ test_that("Given the default cache settings, When a value is unset, Then it is n
   # create memory cache
   cache <- cache()
 
-  expect_equal(cache.set(cache, "value", "one"), "one")
-  expect_equal(cache.get(cache, "value"), "one")
+  expect_equal(cache.set(cache, "value", "one") %>% cache.get("value"), "one")
   cache.unset(cache, "value")
   expect_null(cache.get(cache, "value"))
 

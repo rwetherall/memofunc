@@ -13,7 +13,9 @@
 hashed value as a string
 }
 \description{
-Hashes a value into a string.
+Hashes a function call, taking into account the values provided to the function call and unprovided
+default values.  Ensures the order the parameters are provided does not change the outcome of the
+hash calculation.
 }
 \examples{
 my.function <- function (x, y) x+y
@@ -31,8 +33,7 @@ values <- list(
 )
 
 # hash the values in the list
-hashes <- lapply(values, hash)
-hashes
+(hashes <- lapply(values, hash))
 
 # Note that functions with the same body will have the same hash
 hashes[[5]] == hashes[[6]]

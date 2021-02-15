@@ -13,7 +13,7 @@
 hashed value as a string
 }
 \description{
-Hashes a value into a string.
+Default hash function.
 }
 \examples{
 my.function <- function (x, y) x+y
@@ -31,9 +31,11 @@ values <- list(
 )
 
 # hash the values in the list
-hashes <- lapply(values, hash)
-hashes
+(hashes <- lapply(values, hash))
 
 # Note that functions with the same body will have the same hash
 hashes[[5]] == hashes[[6]]
+}
+\references{
+digest::digest(value)
 }

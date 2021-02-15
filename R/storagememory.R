@@ -1,57 +1,27 @@
-##
-#' @title Memory Storage Set
-#' @description 
-#' Sets a value into the memory storage.
-#' @param cache cache 
-#' @param key key value
-#' @param value value
-#' @return set value
-#' @export
-##
-storage.set.memory <- function (cache, key, value)
-  assign(key, value, envir=cache$memory_cache) %>% return()
 
+storage.set <- function (cache, key, value) UseMethod("storage.set", cache$storage)
 
-##
-#' @title Memory Storage Get
-#' @description 
-#' Gets a value from the memory storage.
-#' @param cache cache
-#' @param key key value
-#' @return value, NULL if not set
-#' @export
-##
-storage.get.memory <- function(cache, key) 
+storage.set.default <- function (cache, key, value) {
+  assign(key, value, envir=cache$memory_cache)
+  cache
+}
+
+storage.get <- function (cache, key) UseMethod("storage.get", cache$storage)
+
+storage.get.default <- function(cache, key) 
   if (exists(key, envir=cache$memory_cache)) base::get(key, envir=cache$memory_cache) else NULL
 
-##
-#' @title Memory Storage Unset
-#' @description 
-#' Unsets a value from the memory storage.
-#' @param cache cache
-#' @param key key value
-#' @export
-##
-storage.unset.memory <- function(cache, key) 
+storage.unset <- function (cache, key) UseMethod("storage.unset", cache$storage)
+
+storage.unset.default <- function(cache, key) 
   if (exists(key, envir=cache$memory_cache)) rm(list=c(key), envir=cache$memory_cache)
 
-##
-#' @title Memory Storage Has
-#' @description 
-#' Determines whether a key is set in the memory storage.
-#' @param cache cache
-#' @param key key value
-#' @return TRUE if the storage has the key, FALSE otherwise
-#' @export
-##
-storage.has.memory <- function(cache, key) exists(key, envir=cache$memory_cache)
+storage.has <- function (cache, key) UseMethod("storage.has", cache$storage)
 
-##
-#' @title Memory Storage Clear
-#' @description 
-#' Clears the memory storage of all values.
-#' @param cache cache
-#' @export
-##
-storage.clear.memory <- function(cache) 
+storage.has.default <- function(cache, key) exists(key, envir=cache$memory_cache)
+
+storage.clear <- function (cache) UseMethod("storage.clear", cache$storage)
+
+storage.clear.default <- function(cache) 
   rm(list=base::ls(cache$memory_cache), envir=cache$memory_cache)
+

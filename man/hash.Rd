@@ -31,8 +31,7 @@ values <- list(
 )
 
 # hash the values in the list
-hashes <- lapply(values, hash)
-hashes
+(hashes <- lapply(values, hash))
 
 # Note that functions with the same body will have the same hash
 hashes[[5]] == hashes[[6]]

@@ -77,23 +77,32 @@ functionCall <- function (f = sys.function(sys.parent()), call = sys.call(sys.pa
 hash <- function (value) UseMethod("hash", value)
 
 ##
+#' @description 
+#' Default hash function.
 #' @inherit hash
+#' @references digest::digest(value)
 #' @export
 ##
 hash.default <- function (value) digest::digest(value)
 
 ##
+#' @description 
+#' Hashes a function, but considering the formals and body, thus the resulting has is influenced by changes to signature
+#' and implementation.
 #' @inherit hash
 #' @export
 ##
 hash.function <- function (value) c(hash.default(formals(value)), hash.default(body(value))) %>% hash.default()
 
 ##
+#' @description
+#' Hashes a list of items, generating a single unique hash value which is based on the combination of hashed list items.
 #' @inherit hash
 #' @export
 ##
 hash.list <- function (value) lapply(value, hash) %>% `names<-`(names(value)) %>% orderby.name() %>% hash.default()
 
+## TODO is this the right way to has a list?
 ## TODO hash.environment .. going to be useful when we support closures
 
 ##
@@ -112,6 +121,10 @@ defaultArgs <- function (formals) formals[!sapply(formals, is.emptyName)]
 unset.defaultArgs <- function (defaultArgs, args) defaultArgs[!sapply(names(defaultArgs), `%in%`, table=names(args))]
 
 ##
+#' @description 
+#' Hashes a function call, taking into account the values provided to the function call and unprovided
+#' default values.  Ensures the order the parameters are provided does not change the outcome of the
+#' hash calculation.
 #' @inherit hash
 #' @export
 ##

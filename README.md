@@ -22,7 +22,7 @@ Functions can be memoized with a simple call to memo.
 > # or like this
 > simple.function %<>% memo()
 
-> # or use an anon function
+> # or like this
 > simple.function2 <- (function (value) value) %>% memo()
 
 ```

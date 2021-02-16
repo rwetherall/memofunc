@@ -1,4 +1,6 @@
-# memofunc 1.1.0
+# memofunc 1.0.1
+
+* CRAN feedback
 
 # memofunc 1.0.0
 

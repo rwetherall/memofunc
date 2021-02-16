@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create Cache — cache • memofunc</title>
+<title>Cache Has — cache.has • memofunc</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Create Cache — cache" />
-<meta property="og:description" content="Creates a cache that can be used to store name, value pairs.
-The provided storage class indicates where the values in the cache are stored for it's duration." />
+<meta property="og:title" content="Cache Has — cache.has" />
+<meta property="og:description" content="Determines whether the key is in the cache." />
 
 
 
@@ -115,42 +114,45 @@ The provided storage class indicates where the values in the cache are stored fo
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create Cache</h1>
+    <h1>Cache Has</h1>
     <small class="dont-index">Source: <a href='https://github.com/rwetherall/memofunc/blob/master/R/cache.R'><code>R/cache.R</code></a></small>
-    <div class="hidden name"><code>cache.Rd</code></div>
+    <div class="hidden name"><code>cache.has.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Creates a cache that can be used to store name, value pairs.</p>
-<p>The provided storage class indicates where the values in the cache are stored for it's duration.</p>
+    <p>Determines whether the key is in the cache.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cache</span><span class='op'>(</span>storage <span class='op'>=</span> <span class='st'>"memory"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>cache.has</span><span class='op'>(</span><span class='va'>cache</span>, <span class='va'>key</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>storage</th>
-      <td><p>storage class</p></td>
+      <th>cache</th>
+      <td><p>cache</p></td>
+    </tr>
+    <tr>
+      <th>key</th>
+      <td><p>value key</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a new cache</p>
+    <p>TRUE if the cache contains the key, FALSE otherwise</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># by default a memory cache will be created</span>
-<span class='va'>myCache</span> <span class='op'>&lt;-</span> <span class='fu'>cache</span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>myCache</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cache.html'>cache</a></span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'># the cache storage type can be specified, but only 'memory' is currently supported</span>
-<span class='va'>alsoMyCache</span> <span class='op'>&lt;-</span> <span class='fu'>cache</span><span class='op'>(</span>storage <span class='op'>=</span> <span class='st'>"memory"</span><span class='op'>)</span>
+<span class='va'>alsoMyCache</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cache.html'>cache</a></span><span class='op'>(</span>storage <span class='op'>=</span> <span class='st'>"memory"</span><span class='op'>)</span>
 
 <span class='co'># values can be stored in the cache </span>
 <span class='fu'><a href='cache.set.html'>cache.set</a></span><span class='op'>(</span><span class='va'>myCache</span>, <span class='st'>"name"</span>, <span class='st'>"Pete Smith"</span><span class='op'>)</span> 
 </div><div class='output co'>#&gt; $memory_cache
-#&gt; &lt;environment: 0x0000000016058f88&gt;
+#&gt; &lt;environment: 0x000000003d498528&gt;
 #&gt; 
 #&gt; $storage
 #&gt; [1] "memory"
@@ -160,7 +162,7 @@ The provided storage class indicates where the values in the cache are stored fo
 #&gt; attr(,"class")
 #&gt; [1] "cache"</div><div class='input'><span class='fu'><a href='cache.set.html'>cache.set</a></span><span class='op'>(</span><span class='va'>myCache</span>, <span class='st'>"age"</span>, <span class='st'>"72"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $memory_cache
-#&gt; &lt;environment: 0x0000000016058f88&gt;
+#&gt; &lt;environment: 0x000000003d498528&gt;
 #&gt; 
 #&gt; $storage
 #&gt; [1] "memory"
@@ -175,7 +177,7 @@ The provided storage class indicates where the values in the cache are stored fo
 <span class='co'># setting a value with key that has already been used overwrites the currently stored value</span>
 <span class='fu'><a href='cache.set.html'>cache.set</a></span><span class='op'>(</span><span class='va'>myCache</span>, <span class='st'>"name"</span>, <span class='st'>"Sam Smith"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $memory_cache
-#&gt; &lt;environment: 0x0000000016058f88&gt;
+#&gt; &lt;environment: 0x000000003d498528&gt;
 #&gt; 
 #&gt; $storage
 #&gt; [1] "memory"
@@ -186,11 +188,11 @@ The provided storage class indicates where the values in the cache are stored fo
 #&gt; [1] "cache"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fu'><a href='cache.get.html'>cache.get</a></span><span class='op'>(</span><span class='va'>myCache</span>, <span class='st'>"name"</span><span class='op'>)</span>, <span class='st'>"is"</span>, <span class='fu'><a href='cache.get.html'>cache.get</a></span><span class='op'>(</span><span class='va'>myCache</span>, <span class='st'>"age"</span><span class='op'>)</span>, <span class='st'>"years old."</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "Sam Smith is 72 years old."</div><div class='input'>
 <span class='co'># set keys can be detected</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='cache.has.html'>cache.has</a></span><span class='op'>(</span><span class='va'>myCache</span>, <span class='st'>"name"</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"value for name key is set"</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'>cache.has</span><span class='op'>(</span><span class='va'>myCache</span>, <span class='st'>"name"</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"value for name key is set"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "value for name key is set"</div><div class='input'>
 <span class='co'># keys can be unset</span>
 <span class='fu'><a href='cache.unset.html'>cache.unset</a></span><span class='op'>(</span><span class='va'>myCache</span>, <span class='st'>"name"</span><span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='cache.has.html'>cache.has</a></span><span class='op'>(</span><span class='va'>myCache</span>, <span class='st'>"name"</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"value for name key is not set"</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>cache.has</span><span class='op'>(</span><span class='va'>myCache</span>, <span class='st'>"name"</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"value for name key is not set"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "value for name key is not set"</div><div class='input'>
 <span class='co'># all values in the cache can be cleared</span>
 <span class='fu'><a href='cache.clear.html'>cache.clear</a></span><span class='op'>(</span><span class='va'>myCache</span><span class='op'>)</span>

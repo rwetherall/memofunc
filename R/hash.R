@@ -1,8 +1,6 @@
 require(digest)
 require(magrittr)
 
-source("./R/helper.R")
-
 ##
 # Get a list of the formal names that have not been used in the provided argument list
 #

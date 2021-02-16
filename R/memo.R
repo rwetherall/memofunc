@@ -1,7 +1,5 @@
 library(magrittr)
 
-source("./R/helper.R")
-
 ##
 #' @title Memo
 #' @description

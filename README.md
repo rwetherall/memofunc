@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/rwetherall/memofunc.svg?token=x2QLvsytRz6d82hRES7c&branch=master)](https://travis-ci.com/rwetherall/memofunc)
+[![R-CMD-check](https://github.com/rwetherall/memofunc/workflows/R-CMD-check/badge.svg)](https://github.com/rwetherall/memofunc/actions)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/rwetherall/memofunc?branch=master&svg=true)](https://ci.appveyor.com/project/rwetherall/memofunc)
 [![Coveralls test coverage](https://coveralls.io/repos/github/rwetherall/memofunc/badge.svg)](https://coveralls.io/r/rwetherall/memofunc?branch=master)
 

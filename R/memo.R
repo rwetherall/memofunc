@@ -39,7 +39,7 @@ memo <- function (f, allow.null=FALSE) {
   # TODO provide a way to supply cache arguments, for example the algo to use, max size, storage strategy, etc
 
   # get cache
-  f.cache <- storage.init("memory")
+  f.cache <- storage.init()
   
   # create the memo function
   f.memo <- function (memo.force=FALSE, memo.dryrun=FALSE) {

@@ -21,11 +21,3 @@ Suggests:
   devtools,
   roxygen2,
   covr
-Collate: 
-    'storagememory.R'
-    'cache.R'
-    'hash.R'
-    'helper.R'
-    'memo.R'
-    'memofunc.R'
-    'storagefile.R'

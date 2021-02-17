@@ -1,3 +1,7 @@
+# memofunc 1.1
+
+* Collapsed cache and storage into one concept
+
 # memofunc 1.0.1
 
 * CRAN feedback

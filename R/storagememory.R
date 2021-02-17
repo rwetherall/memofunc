@@ -13,11 +13,15 @@ storage.set.default <- function (storage, key, value){
 storage.get.default <- function(storage, key) 
   if (exists(key, envir=storage$env)) base::get(key, envir=storage$env) else NULL
 
-storage.unset.default <- function(storage, key) 
+storage.unset.default <- function(storage, key) {
   if (exists(key, envir=storage$env)) rm(list=c(key), envir=storage$env)
+  invisible(storage)
+}
 
 storage.has.default <- function(storage, key) exists(key, envir=storage$env)
 
-storage.clear.default <- function(storage) 
+storage.clear.default <- function(storage) {
   rm(list=base::ls(storage$env), envir=storage$env)
+  invisible(storage)
+}
 

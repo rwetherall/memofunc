@@ -14,7 +14,7 @@ intensive actions.
   \item \code{\link{memo}} - memoize a function
   \item \code{\link{is.memo}} - is the given function a memo
   \item \code{\link{memo.function}} - get a memo's origional function
-  \item \code{\link{memo.cache}} - get a memo's cache
+  \item \code{\link{memo.cache}} - get a memo's cache storage
 }
 }
 

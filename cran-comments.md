@@ -9,3 +9,7 @@
 0 errors | 0 warnings | 1 note
 
 ## Notes
+
+Changes made based on previous submission feedback:
+
+* Remove use of <<- from testMemo.R

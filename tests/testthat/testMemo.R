@@ -5,7 +5,7 @@ library(magrittr)
 library(testthat)
 
 # environment used to mark memo execution
-test.env <- NULL
+current.test.env <- function () test.env
 
 # memo execution key
 key.executed <- "executed"
@@ -42,9 +42,9 @@ test.memo <- function (f, ...) f %>% insert.before(quote({mark.executed()})) %>%
 #
 do.test <- function (f, params, expected, executed) {
 
-  test.env <<- test_env()
+  assign("test.env", test_env(), envir = environment(current.test.env))
   expect_true(identical(do.call(f, params), expected))
-  expect_equal(mget(key.executed, envir=test.env, inherits=FALSE, ifnotfound=FALSE)[[1]], executed)
+  expect_equal(mget(key.executed, envir=current.test.env(), inherits=FALSE, ifnotfound=FALSE)[[1]], executed)
 }
 
 test_that("

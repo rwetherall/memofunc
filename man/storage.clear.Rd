@@ -41,4 +41,16 @@ sprintf(
   "\%s is \%i years old.", 
   storage.get(my.storage, "name"),
   storage.get(my.storage, "age"))
+
+# remove a value from storage
+storage.unset(my.storage, "children")
+
+# .. and show it's not there anymore
+if (!storage.has(my.storage, "address")) print("I don't know who your children are!")
+
+# clear all values from storage
+storage.clear(my.storage)
+
+# .. and everything is gone
+if (!storage.has(my.storage, "name") && !storage.has(my.storage, "age")) print("I know nothing!")
 }

@@ -4,24 +4,6 @@
     <loc>https://rwetherall.github.io/memofunc//index.html</loc>
   </url>
   <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/cache.clear.html</loc>
-  </url>
-  <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/cache.get.html</loc>
-  </url>
-  <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/cache.has.html</loc>
-  </url>
-  <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/cache.html</loc>
-  </url>
-  <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/cache.set.html</loc>
-  </url>
-  <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/cache.unset.html</loc>
-  </url>
-  <url>
     <loc>https://rwetherall.github.io/memofunc//reference/functionCall.html</loc>
   </url>
   <url>
@@ -55,18 +37,39 @@
     <loc>https://rwetherall.github.io/memofunc//reference/memofunc.html</loc>
   </url>
   <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/storage.clear.file.html</loc>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.clear.default.html</loc>
   </url>
   <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/storage.get.file.html</loc>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.clear.html</loc>
   </url>
   <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/storage.has.file.html</loc>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.get.default.html</loc>
   </url>
   <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/storage.set.file.html</loc>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.get.html</loc>
   </url>
   <url>
-    <loc>https://rwetherall.github.io/memofunc//reference/storage.unset.file.html</loc>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.has.default.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.has.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.init.default.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.init.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.set.default.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.set.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.unset.default.html</loc>
+  </url>
+  <url>
+    <loc>https://rwetherall.github.io/memofunc//reference/storage.unset.html</loc>
   </url>
 </urlset>

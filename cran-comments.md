@@ -13,3 +13,4 @@
 Changes made based on previous submission feedback:
 
 * Remove use of <<- from testMemo.R
+* Added \value in documentation for all exported functions.

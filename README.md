@@ -72,6 +72,14 @@ Memoing a function can significantly improve the performance of a system by limi
 
 ## Installation
 
+Install from CRAN:
+
+```r
+install.packages("memofunc")
+```
+
+Install latest release:
+
 ``` r
 devtools::install_github("rwetherall/memofunc")
 ```

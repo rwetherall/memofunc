@@ -4,7 +4,7 @@
 \alias{storage.init.default}
 \title{Initialize a memory store.}
 \usage{
-\method{storage.init}{default}(storage.type, ...)
+\method{storage.init}{default}(storage.type = storage.memory.class, ...)
 }
 \arguments{
 \item{storage.type}{storage type to initialize, defaults to \code{memory}}

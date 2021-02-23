@@ -1,3 +1,8 @@
+
+# Storage class names
+storage.root.class = "storage"
+storage.memory.class = "memory"
+
 ##
 #' @title Initialize a memory store.
 #' @description 
@@ -9,11 +14,10 @@
 #' @inherit storage.init
 #' @export
 ##
-storage.init.default <- function (storage.type, ...) 
+storage.init.default <- function (storage.type = storage.memory.class, ...) 
   list(
-    type = "memory",
     env = new.env(parent=emptyenv())
-  ) %>% `class<-`("storage")
+  ) %>% `class<-`(c(storage.root.class, storage.memory.class))
 
 ##
 #' @title Set value into a memory store.

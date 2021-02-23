@@ -1,4 +1,8 @@
 
+# memofunc 1.0.3
+
+* bug: storage methods are not redirected to the correct implementation when type is specified
+
 # memofunc 1.0.2
 
 * Collapsed cache and storage into one concept

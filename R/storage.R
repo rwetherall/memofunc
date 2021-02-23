@@ -21,7 +21,9 @@
 #' @example R/examples/storage/example.storage.R
 #' @export
 ##
-storage.init <- function(storage.type = "memory", ...) UseMethod("storage.init", storage.type)
+storage.init <- function(storage.type = storage.memory.class, ...)
+  UseMethod("storage.init", (obj <- list()) %>% `class<-`(storage.type) )
+
 
 ##
 #' @title Set value into a store.
@@ -36,7 +38,7 @@ storage.init <- function(storage.type = "memory", ...) UseMethod("storage.init",
 #' @return Invisbily returns storage
 #' @example R/examples/storage/example.storage.R
 #' @export
-storage.set <- function (storage, key, value) UseMethod("storage.set", storage$type)
+storage.set <- function (storage, key, value) UseMethod("storage.set", storage)
 
 ##
 #' @title Get value from a store.
@@ -50,7 +52,7 @@ storage.set <- function (storage, key, value) UseMethod("storage.set", storage$t
 #' @example R/examples/storage/example.storage.R
 #' @export
 ##
-storage.get <- function (storage, key) UseMethod("storage.get", storage$type)
+storage.get <- function (storage, key) UseMethod("storage.get", storage)
 
 ##
 #' @title Unset a value that corresponds to a key within a store.
@@ -64,7 +66,7 @@ storage.get <- function (storage, key) UseMethod("storage.get", storage$type)
 #' @example R/examples/storage/example.storage.R
 #' @export
 ##
-storage.unset <- function (storage, key) UseMethod("storage.unset", storage$type)
+storage.unset <- function (storage, key) UseMethod("storage.unset", storage)
 
 ##
 #' @title Has key has been used to store a value?
@@ -76,7 +78,7 @@ storage.unset <- function (storage, key) UseMethod("storage.unset", storage$type
 #' @example R/examples/storage/example.storage.R
 #' @export
 ##
-storage.has <- function (storage, key) UseMethod("storage.has", storage$type)
+storage.has <- function (storage, key) UseMethod("storage.has", storage)
 
 ##
 #' @title Clear the storage.
@@ -87,4 +89,4 @@ storage.has <- function (storage, key) UseMethod("storage.has", storage$type)
 #' @example R/examples/storage/example.storage.R
 #' @export
 ##
-storage.clear <- function (storage) UseMethod("storage.clear", storage$type)
+storage.clear <- function (storage) UseMethod("storage.clear", storage)

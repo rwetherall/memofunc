@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Unset a value that corresponds to a key within a store. — storage.unset • memofunc</title>
+<title>Unset a value that corresponds to a key within a memory store. — storage.unset.memory • memofunc</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Unset a value that corresponds to a key within a store. — storage.unset" />
+<meta property="og:title" content="Unset a value that corresponds to a key within a memory store. — storage.unset.memory" />
 <meta property="og:description" content="Unsets the value stored for a given key.
 If there is no value for the key provided no action is taken." />
 
@@ -115,9 +115,9 @@ If there is no value for the key provided no action is taken." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Unset a value that corresponds to a key within a store.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/rwetherall/memofunc/blob/master/R/storage.R'><code>R/storage.R</code></a></small>
-    <div class="hidden name"><code>storage.unset.Rd</code></div>
+    <h1>Unset a value that corresponds to a key within a memory store.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/rwetherall/memofunc/blob/master/R/storagememory.R'><code>R/storagememory.R</code></a></small>
+    <div class="hidden name"><code>storage.unset.memory.Rd</code></div>
     </div>
 
     <div class="ref-description">
@@ -125,7 +125,8 @@ If there is no value for the key provided no action is taken." />
 <p>If there is no value for the key provided no action is taken.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>storage.unset</span><span class='op'>(</span><span class='va'>storage</span>, <span class='va'>key</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S3 method for memory</span>
+<span class='fu'><a href='storage.unset.html'>storage.unset</a></span><span class='op'>(</span><span class='va'>storage</span>, <span class='va'>key</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,7 +173,7 @@ If there is no value for the key provided no action is taken." />
   <span class='fu'><a href='storage.get.html'>storage.get</a></span><span class='op'>(</span><span class='va'>my.storage</span>, <span class='st'>"age"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "Roy Wetherall is 45 years old."</div><div class='input'>
 <span class='co'># remove a value from storage</span>
-<span class='fu'>storage.unset</span><span class='op'>(</span><span class='va'>my.storage</span>, <span class='st'>"children"</span><span class='op'>)</span>
+<span class='fu'><a href='storage.unset.html'>storage.unset</a></span><span class='op'>(</span><span class='va'>my.storage</span>, <span class='st'>"children"</span><span class='op'>)</span>
 
 <span class='co'># .. and show it's not there anymore</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='storage.has.html'>storage.has</a></span><span class='op'>(</span><span class='va'>my.storage</span>, <span class='st'>"address"</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"I don't know who your children are!"</span><span class='op'>)</span>

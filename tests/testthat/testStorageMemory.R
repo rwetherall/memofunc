@@ -12,8 +12,7 @@ test_that("
   storage <- storage.init()
   
   # check the details 
-  expect_equal(class(storage), "storage")
-  expect_equal(storage$type, "memory")
+  expect_equal(class(storage), c("storage", "memory"))
   expect_false(is.null(storage$env))
   expect_equal(class(storage$env), "environment")
 

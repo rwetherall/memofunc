@@ -1,6 +1,8 @@
+[![CRAN status](https://www.r-pkg.org/badges/version/memofunc)](https://CRAN.R-project.org/package=memofunc)
 [![R-CMD-check](https://github.com/rwetherall/memofunc/workflows/R-CMD-check/badge.svg)](https://github.com/rwetherall/memofunc/actions)
 [![codecov](https://codecov.io/gh/rwetherall/memofunc/branch/master/graph/badge.svg?token=zPeCig27vf)](https://codecov.io/gh/rwetherall/memofunc)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/rwetherall/memofunc?branch=master&svg=true)](https://ci.appveyor.com/project/rwetherall/memofunc)
+[![](https://cranlogs.r-pkg.org/badges/memofunc)](https://cran.r-project.org/package=memofunc)
 
 ## MemoFunc - A Function Memoization Package for R
 
@@ -69,6 +71,14 @@ Memoing a function can significantly improve the performance of a system by limi
 ```
 
 ## Installation
+
+Install from CRAN:
+
+```r
+install.packages("memofunc")
+```
+
+Install latest release:
 
 ``` r
 devtools::install_github("rwetherall/memofunc")

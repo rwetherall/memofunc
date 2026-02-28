@@ -1,6 +1,5 @@
 
 # Storage class names
-storage.root.class = "storage"
 storage.memory.class = "memory"
 
 ##
@@ -17,7 +16,7 @@ storage.memory.class = "memory"
 storage.init.memory <- function (storage.type = storage.memory.class, ...) 
   list(
     env = new.env(parent=emptyenv())
-  ) %>% `class<-`(c(storage.root.class, storage.memory.class))
+  ) %>% `storage.class<-`(storage.memory.class)
 
 ##
 #' @title Set value into a memory store.

@@ -90,3 +90,13 @@ storage.has <- function (storage, key) UseMethod("storage.has", storage)
 #' @export
 ##
 storage.clear <- function (storage) UseMethod("storage.clear", storage)
+
+storage.root.class = "storage"
+
+storage.new <- function() {
+  
+}
+
+`storage.class<-` <- function(storage, storage.type)
+  `classs<-`(storage, c(storage.root.class, storage.type))
+  

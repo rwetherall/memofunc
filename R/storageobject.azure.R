@@ -40,7 +40,8 @@ provider.azure.blob <- function(account, container, key = NULL, token = NULL, en
   blob_exists <- function(blob) {
     exports <- getNamespaceExports("AzureStor")
     if ("storage_exists" %in% exports) {
-      return(AzureStor::storage_exists(container_client, blob))
+      storage_exists <- utils::getFromNamespace("storage_exists", "AzureStor")
+      return(storage_exists(container_client, blob))
     }
     if ("blob_exists" %in% exports) {
       return(AzureStor::blob_exists(container_client, blob))

@@ -13,6 +13,10 @@
 #' Additional paramters may be provided when initializing different types of storage.
 #' If \\code{storage.type} is not provided and \\code{memofunc.storage.provider} is set,
 #' then the provider is used to initialize storage.
+#'
+#' Providers are resolved by name (for example \\code{file} or \\code{azure.blob}), with
+#' synonyms such as \\code{local} or \\code{azure} mapping to their canonical names. The
+#' Azure provider requires the \\code{AzureStor} package.
 #' 
 #' See specific storage types for details.
 #' @param storage.type storage type to initialize, defaults to \code{memory}

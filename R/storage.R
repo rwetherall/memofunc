@@ -7,6 +7,7 @@
 #' \itemize{
 #'    \item{\code{memory} - transient in-memory storage}
 #'    \item{\code{file} - persistent storage, using local file storage}
+#'    \item{\code{object} - provider-backed object storage}
 #' }
 #' 
 #' Additional paramters may be provided when initializing different types of storage.  
@@ -97,6 +98,6 @@ storage.new <- function() {
   
 }
 
-`storage.class<-` <- function(storage, storage.type)
-  `classs<-`(storage, c(storage.root.class, storage.type))
+`storage.class<-` <- function(storage, value)
+  `class<-`(storage, c(storage.root.class, value))
   

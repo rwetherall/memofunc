@@ -6,7 +6,18 @@
 
 ## MemoFunc - A Function Memoization Package for R
 
-A simple way to memoise function results to improve performance by eliminating unnecessary computation or data retrieval activities.
+Programmable memory for R functions.
+
+memofunc extends traditional memoization by treating function calls as first-class memory primitives. Instead of simple input → output caching, it gives functions memory you can persist, inspect, and compose across functions.
+
+## Why memofunc
+
+Traditional memoization focuses on deterministic caching. memofunc focuses on the memory of function calls:
+
+- Function identity: a call is tied to the function signature and implementation, not just the input.
+- Persistent memory: store results beyond a single session with pluggable storage backends.
+- Inspectable history: trace what was computed, when, and why.
+- Composable memory: reuse and share cached results across functions.
 
 Functions can be memoized with a simple call to memo.
 

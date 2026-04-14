@@ -70,6 +70,42 @@ Memoing a function can significantly improve the performance of a system by limi
 
 ```
 
+## Storage backends
+
+By default, memoised values are stored in memory. You can opt into file or object storage backends.
+
+``` r
+# local file storage
+file.storage <- storage.init("file", base.dir = file.path(tempdir(), "memofunc"))
+
+# object storage using a provider name
+object.storage <- storage.init("object", provider = "file", base.dir = file.path(tempdir(), "memofunc"))
+
+# default provider via options
+options(memofunc.storage.provider = list(name = "file", base.dir = file.path(tempdir(), "memofunc")))
+storage.init()
+
+# Azure Blob provider (requires AzureStor + credentials)
+if (requireNamespace("AzureStor", quietly = TRUE)) {
+  account <- Sys.getenv("AZURE_STORAGE_ACCOUNT")
+  container <- Sys.getenv("AZURE_STORAGE_CONTAINER")
+  key <- Sys.getenv("AZURE_STORAGE_KEY")
+  token <- Sys.getenv("AZURE_STORAGE_TOKEN")
+
+  if (account != "" && container != "" && (key != "" || token != "")) {
+    storage.init(
+      "object",
+      provider = "azure.blob",
+      account = account,
+      container = container,
+      key = if (key == "") NULL else key,
+      token = if (token == "") NULL else token,
+      prefix = "memofunc"
+    )
+  }
+}
+```
+
 ## Installation
 
 Install from CRAN:

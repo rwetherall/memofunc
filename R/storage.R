@@ -7,12 +7,20 @@
 #' \itemize{
 #'    \item{\code{memory} - transient in-memory storage}
 #'    \item{\code{file} - persistent storage, using local file storage}
+#'    \item{\code{object} - provider-backed object storage}
 #' }
 #' 
-#' Additional paramters may be provided when initializing different types of storage.  
+#' Additional paramters may be provided when initializing different types of storage.
+#' If \\code{storage.type} is not provided and \\code{memofunc.storage.provider} is set,
+#' then the provider is used to initialize storage.
+#'
+#' Providers are resolved by name (for example \\code{file} or \\code{azure.blob}), with
+#' synonyms such as \\code{local} or \\code{azure} mapping to their canonical names. The
+#' Azure provider requires the \\code{AzureStor} package.
 #' 
 #' See specific storage types for details.
 #' @param storage.type storage type to initialize, defaults to \code{memory}
+#' @param provider optional provider name or provider configuration
 #' @param ... additional configuration values used by storage implementations
 #' @return List containing characteristics perticular to the storage implementation, including:
 #' \itemize{
@@ -21,8 +29,12 @@
 #' @example R/examples/storage/example.storage.R
 #' @export
 ##
-storage.init <- function(storage.type = storage.memory.class, ...)
-  UseMethod("storage.init", (obj <- list()) %>% `class<-`(storage.type) )
+storage.init <- function(storage.type = storage.memory.class, provider = getOption("memofunc.storage.provider", NULL), ...)
+  if (missing(storage.type) && !is.null(provider)) {
+    storage.init_from_provider(provider = provider, ...)
+  } else {
+    UseMethod("storage.init", (obj <- list()) %>% `class<-`(storage.type))
+  }
 
 
 ##
@@ -90,3 +102,41 @@ storage.has <- function (storage, key) UseMethod("storage.has", storage)
 #' @export
 ##
 storage.clear <- function (storage) UseMethod("storage.clear", storage)
+
+storage.root.class = "storage"
+
+storage.init_from_provider <- function(provider, ...) {
+  if (storage.provider.is_provider(provider)) {
+    return(storage.init.object(provider = provider))
+  }
+
+  if (is.list(provider) && !is.null(provider$name)) {
+    provider.name <- provider$name
+    provider.config <- provider$config
+    if (is.null(provider.config)) {
+      provider.config <- list()
+    }
+    provider.args <- provider
+    provider.args$name <- NULL
+    provider.args$config <- NULL
+    return(do.call(storage.init_from_provider, c(list(provider = provider.name), provider.config, provider.args, list(...))))
+  }
+
+  if (is.character(provider) && length(provider) == 1) {
+    if (provider == storage.file.class) {
+      return(do.call(storage.init.file, list(...)))
+    }
+
+    return(storage.init.object(provider = provider, ...))
+  }
+
+  stop("provider must be a provider name, provider config, or provider implementation")
+}
+
+storage.new <- function() {
+  
+}
+
+`storage.class<-` <- function(storage, value)
+  `class<-`(storage, c(storage.root.class, value))
+  

@@ -36,15 +36,16 @@ storage.clear(my.storage)
 # .. and everything is gone
 if (!storage.has(my.storage, "name") && !storage.has(my.storage, "age")) print("I know nothing!")
 
-# initialize file storage
+# initialize file storage (direct backend; simplest local-only path)
 base.dir <- file.path(tempdir(), "memofunc-storage")
 file.storage <- storage.init("file", base.dir = base.dir)
 
-# set and retrieve a value from file storage
+# set and retrieve a value from file storage (direct backend)
 storage.set(file.storage, "name", "Roy Wetherall")
 storage.get(file.storage, "name")
 
-# initialize object storage using a provider name
+# initialize object storage using a provider name (provider-backed interface)
+# this uses the same local file backend now, but lets you swap to azure.blob/s3 later
 object.storage <- storage.init("object", provider = "file", base.dir = base.dir)
 storage.set(object.storage, "name", "Roy Wetherall")
 storage.get(object.storage, "name")

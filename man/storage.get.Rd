@@ -57,4 +57,47 @@ storage.clear(my.storage)
 
 # .. and everything is gone
 if (!storage.has(my.storage, "name") && !storage.has(my.storage, "age")) print("I know nothing!")
+
+# initialize file storage (direct backend; simplest local-only path)
+base.dir <- file.path(tempdir(), "memofunc-storage")
+file.storage <- storage.init("file", base.dir = base.dir)
+
+# set and retrieve a value from file storage (direct backend)
+storage.set(file.storage, "name", "Roy Wetherall")
+storage.get(file.storage, "name")
+
+# initialize object storage using a provider name (provider-backed interface)
+# this uses the same local file backend now, but lets you swap to azure.blob/s3 later
+object.storage <- storage.init("object", provider = "file", base.dir = base.dir)
+storage.set(object.storage, "name", "Roy Wetherall")
+storage.get(object.storage, "name")
+
+# set a default provider via options
+old.options <- options(memofunc.storage.provider = list(name = "file", base.dir = base.dir))
+on.exit(options(old.options), add = TRUE)
+default.storage <- storage.init()
+storage.get(default.storage, "name")
+
+# Azure Blob provider example (requires AzureStor + credentials)
+if (requireNamespace("AzureStor", quietly = TRUE)) {
+  account <- Sys.getenv("AZURE_STORAGE_ACCOUNT")
+  container <- Sys.getenv("AZURE_STORAGE_CONTAINER")
+  key <- Sys.getenv("AZURE_STORAGE_KEY")
+  token <- Sys.getenv("AZURE_STORAGE_TOKEN")
+
+  if (account != "" && container != "" && (key != "" || token != "")) {
+    azure.storage <- storage.init(
+      "object",
+      provider = "azure.blob",
+      account = account,
+      container = container,
+      key = if (key == "") NULL else key,
+      token = if (token == "") NULL else token,
+      prefix = "memofunc-example"
+    )
+
+    storage.set(azure.storage, "name", "Roy Wetherall")
+    storage.get(azure.storage, "name")
+  }
+}
 }

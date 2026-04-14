@@ -1,5 +1,71 @@
 library(magrittr)
 
+memo.default_id <- function(f, f.symbol) {
+  if (missing(f.symbol)) return(NULL)
+  if (!is.symbol(f.symbol)) return(NULL)
+  name <- as.character(f.symbol)
+  if (length(name) != 1 || name == "") return(NULL)
+  if (identical(name, "function")) return(NULL)
+  if (grepl("^function", name)) return(NULL)
+  name
+}
+
+memo.create <- function(f, allow.null = FALSE, id = NULL) {
+  # you can't memo a memo
+  stopifnot(!is.memo(f))
+
+  # TODO add option to prevent "force" and others being added to formals of memo function
+  # TODO provide a way to supply cache arguments, for example the algo to use, max size, storage strategy, etc
+
+  # get cache
+  f.cache <- storage.init()
+
+  # create the memo function
+  f.memo <- function (memo.force=FALSE, memo.dryrun=FALSE) {
+
+    # get the function call
+    fc <- functionCall()
+
+    # remove memo args we have added to the function
+    fc$args %<>% removeby.name("memo.force") %>% removeby.name("memo.dryrun")
+
+    # generate hash
+    hash <- if (is.null(id)) hash(fc) else hash(list(id = id, call = fc))
+
+    # if force or cached
+    if (!memo.force && storage.has(f.cache, hash)) {
+
+      # false if dry run otherwise cached value
+      if (memo.dryrun) FALSE else storage.get(f.cache, hash)
+
+    } else {
+
+      # TRUE if dry run otherwise call the function
+      result <- if (memo.dryrun) TRUE else do.call(f, fc$args)
+
+      # handle null results
+      if (!is.null(result) || allow.null) {
+
+        # cache the result
+        if (!memo.dryrun) storage.set(f.cache, hash, result)
+      }
+
+      result
+    }
+  }
+
+  # set the parameters and environment of the memo function
+  formals(f.memo) <- c(formals(f), formals(f.memo))
+
+  # set the class of the memo function
+  class(f.memo) <- c("memo", class(f.memo))
+
+  attr(f.memo, "memo.id") <- id
+
+  # return the memo function
+  f.memo
+}
+
 ##
 #' @title Memo
 #' @description
@@ -24,65 +90,17 @@ library(magrittr)
 #' By default \code{NULL} values are not cached.  Setting \code{allow.null=TRUE} when creating the memo will, however, ensure that NULL values
 #' are cached.
 #' @param f function to memoise
+#' @param id optional identifier used to scope cache keys; defaults to the function name if available
 #' @param allow.null if \code{TRUE} then the memoed function will cache \code{NULL} results, otherwise it won't.  \code{FALSE} by default.
 #' @return the memoed function
 #' @example R/examples/memo/example.memo.R
 #' @export
 ##
-memo <- function (f, allow.null=FALSE) {
-  
-  # you can't memo a memo
-  stopifnot(!is.memo(f))
-  
-  # TODO add option to prevent "force" and others being added to formals of memo function
-  # TODO providing some sort of id, means the memo could use a shared cache (or use the hash of the fn to lookup a cache)
-  # TODO provide a way to supply cache arguments, for example the algo to use, max size, storage strategy, etc
-
-  # get cache
-  f.cache <- storage.init()
-  
-  # create the memo function
-  f.memo <- function (memo.force=FALSE, memo.dryrun=FALSE) {
-
-    # get the function call
-    fc <- functionCall()
-    
-    # remove memo args we have added to the function
-    fc$args %<>% removeby.name("memo.force") %>% removeby.name("memo.dryrun")
-    
-    # generate hash
-    hash <- hash(fc)
-
-    # if force or cached
-    if (!memo.force && storage.has(f.cache, hash)) {
-
-      # false if dry run otherwise cached value
-      if (memo.dryrun) FALSE else storage.get(f.cache, hash)
-      
-    } else {
-
-      # TRUE if dry run otherwise call the function
-      result <- if (memo.dryrun) TRUE else do.call(f, fc$args)
-
-      # handle null results
-      if (!is.null(result) || allow.null) {
-        
-        # cache the result
-        if (!memo.dryrun) storage.set(f.cache, hash, result)
-      }
-      
-      result
-    }
+memo <- function (f, id = NULL, allow.null=FALSE) {
+  if (missing(id)) {
+    id <- memo.default_id(f, substitute(f))
   }
-
-  # set the parameters and environment of the memo function
-  formals(f.memo) <- c(formals(f), formals(f.memo))
-  
-  # set the class of the memo function
-  class(f.memo) <- c("memo", class(f.memo))
-
-  # return the memo function
-  f.memo
+  memo.create(f, allow.null = allow.null, id = id)
 }
 
 ##

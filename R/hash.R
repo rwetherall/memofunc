@@ -9,7 +9,7 @@ unused.formals <- function (formals, args) formals[!sapply(names(formals), `%in%
 ##
 # Get all the names of a list of arguments given a functions formals
 #
-all.names <- function (formals, args) {
+all_names <- function (formals, args) {
   
   if (is.null(formals)) list()
   
@@ -55,7 +55,7 @@ functionCall <- function (f = sys.function(sys.parent()), call = sys.call(sys.pa
   args <- rest(as.list(call))
   
   # name all the function call arguments
-  if (length(args) != 0) names(args) <- all.names(formals(f), args)
+  if (length(args) != 0) names(args) <- all_names(formals(f), args)
   
   # return functionCall
   list(f = f, args = args) %>% `class<-`("functionCall")

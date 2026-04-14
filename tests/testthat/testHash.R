@@ -72,19 +72,19 @@ test_that("
   test.fn <- function (a, b=10, c=10, d, e) NULL
   
   expect_list_equal(
-    all.names(formals(test.fn), list(10, 10, 10, 10, 10)),
+    all_names(formals(test.fn), list(10, 10, 10, 10, 10)),
     list("a", "b", "c", "d", "e"))
   
   expect_list_equal(
-    all.names(formals(test.fn), list(a=10, 10, c=10, 10, 10)),
+    all_names(formals(test.fn), list(a=10, 10, c=10, 10, 10)),
     list("a", "b", "c", "d", "e"))
   
   expect_list_equal(
-    all.names(formals(test.fn), list(a=10, b=10, c=10, d=10, e=10)),
+    all_names(formals(test.fn), list(a=10, b=10, c=10, d=10, e=10)),
     list("a", "b", "c", "d", "e"))
   
   expect_list_equal(
-    all.names(formals(test.fn), list(b=10, 10, d=10, 10, 10)),
+    all_names(formals(test.fn), list(b=10, 10, d=10, 10, 10)),
     list("b", "a", "d", "c", "e"))
   
 })

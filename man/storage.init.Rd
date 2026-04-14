@@ -24,6 +24,7 @@ Available types of storage include:
 \itemize{
    \item{\code{memory} - transient in-memory storage}
    \item{\code{file} - persistent storage, using local file storage}
+   \item{\code{object} - provider-backed object storage}
 }
 
 Additional paramters may be provided when initializing different types of storage.  
@@ -68,4 +69,12 @@ storage.clear(my.storage)
 
 # .. and everything is gone
 if (!storage.has(my.storage, "name") && !storage.has(my.storage, "age")) print("I know nothing!")
+
+# initialize file storage
+base.dir <- file.path(tempdir(), "memofunc-storage")
+file.storage <- storage.init("file", base.dir = base.dir)
+
+# set and retrieve a value from file storage
+storage.set(file.storage, "name", "Roy Wetherall")
+storage.get(file.storage, "name")
 }

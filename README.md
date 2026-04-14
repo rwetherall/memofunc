@@ -19,6 +19,8 @@ Traditional memoization focuses on deterministic caching. memofunc focuses on th
 - Inspectable history: trace what was computed, when, and why.
 - Composable memory: reuse and share cached results across functions.
 
+Compared to traditional memoization, memofunc treats cached results as durable, inspectable memory that can be composed across functions and storage backends.
+
 Functions can be memoized with a simple call to memo.
 
 ``` r

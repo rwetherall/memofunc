@@ -3,7 +3,7 @@ storage.file.class = "file"
 ##
 #' @export
 ##
-storage.init.file <- function(storage.type = storage.file.class, base.dir = storage.file.default_dir(), ...) {
+storage.init.file <- function(storage.type = storage.file.class, provider = NULL, base.dir = storage.file.default_dir(), ...) {
   provider <- provider.file.local(base.dir = base.dir)
   storage <- storage.init.object(provider = provider)
   storage$base.dir <- base.dir

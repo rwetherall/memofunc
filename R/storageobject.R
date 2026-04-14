@@ -13,9 +13,10 @@ storage.object.class = "object"
 ##
 storage.init.object <- function(storage.type = storage.object.class, provider, ...) {
   if (missing(provider)) stop("provider is required")
-  if (!is.list(provider)) stop("provider must be a list")
 
-  required <- c("put", "get", "exists", "delete", "clear")
+  provider <- storage.provider.resolve(provider, ...)
+
+  required <- storage.provider.required
   missing_methods <- setdiff(required, names(provider))
   if (length(missing_methods) > 0) {
     stop(sprintf("provider is missing methods: %s", paste(missing_methods, collapse = ", ")))
@@ -29,6 +30,38 @@ storage.init.object <- function(storage.type = storage.object.class, provider, .
   list(
     provider = provider
   ) %>% `storage.class<-`(storage.object.class)
+}
+
+storage.provider.required <- c("put", "get", "exists", "delete", "clear")
+
+storage.provider.is_provider <- function(provider) {
+  is.list(provider) && all(storage.provider.required %in% names(provider))
+}
+
+storage.provider.resolve <- function(provider, ...) {
+  if (storage.provider.is_provider(provider)) {
+    return(provider)
+  }
+
+  if (is.list(provider) && !is.null(provider$name)) {
+    provider.name <- provider$name
+    provider.config <- provider$config
+    if (is.null(provider.config)) {
+      provider.config <- list()
+    }
+    provider.args <- provider
+    provider.args$name <- NULL
+    provider.args$config <- NULL
+    return(do.call(storage.provider.resolve, c(list(provider.name), provider.config, provider.args, list(...))))
+  }
+
+  if (is.character(provider) && length(provider) == 1) {
+    if (provider == storage.file.class) {
+      return(provider.file.local(...))
+    }
+  }
+
+  stop("provider must be a provider name, provider config, or provider implementation")
 }
 
 ##

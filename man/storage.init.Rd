@@ -4,10 +4,13 @@
 \alias{storage.init}
 \title{Initialize a store.}
 \usage{
-storage.init(storage.type = storage.memory.class, ...)
+storage.init(storage.type = storage.memory.class,
+  provider = getOption("memofunc.storage.provider", NULL), ...)
 }
 \arguments{
 \item{storage.type}{storage type to initialize, defaults to \code{memory}}
+
+\item{provider}{optional provider name or provider configuration}
 
 \item{...}{additional configuration values used by storage implementations}
 }
@@ -27,7 +30,9 @@ Available types of storage include:
    \item{\code{object} - provider-backed object storage}
 }
 
-Additional paramters may be provided when initializing different types of storage.  
+Additional paramters may be provided when initializing different types of storage.
+If \code{storage.type} is not provided and \code{memofunc.storage.provider} is set,
+then the provider is used to initialize storage.
 
 See specific storage types for details.
 }

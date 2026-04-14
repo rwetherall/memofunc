@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Function Memoization • memofunc</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -39,8 +41,8 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
+    <span class="fa fa-home fa-lg"></span>
+
   </a>
 </li>
 <li>
@@ -49,15 +51,12 @@
 <li>
   <a href="news/index.html">Change Log</a>
 </li>
-<li>
-  <a href="dev/index.html">Dev Version</a>
-</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rwetherall/memofunc">
-    <span class="fas fa-github fa-lg"></span>
-     
+  <a href="https://github.com/rwetherall/memofunc" class="external-link">
+    <span class="fa fa-github fa-lg"></span>
+
   </a>
 </li>
       </ul>
@@ -68,130 +67,180 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="contents col-md-9">
 
 
-<div id="memofunc---a-function-memoization-package-for-r" class="section level2">
-<h2 class="hasAnchor">
-<a href="#memofunc---a-function-memoization-package-for-r" class="anchor"></a>MemoFunc - A Function Memoization Package for R</h2>
-<p>A simple way to memoise function results to improve performance by eliminating unnecessary computation or data retrieval activities.</p>
-<p>Functions can be memoized with a simple call to memo.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="op">&gt;</span><span class="st"> </span><span class="co"># a simple example function</span></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="er">&gt;</span><span class="st"> </span>simple.function &lt;-<span class="st"> </span><span class="cf">function</span> (value) {</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="op">+</span><span class="st">   </span><span class="kw">print</span>(<span class="st">"Executing!"</span>)</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="op">+</span><span class="st">   </span>value</a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="op">+</span><span class="st"> </span>}</a>
-<a class="sourceLine" id="cb1-7" title="7"></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="op">&gt;</span><span class="st"> </span><span class="co"># call memo function to memoise a function</span></a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="er">&gt;</span><span class="st"> </span>simple.function.memo &lt;-<span class="st"> </span><span class="kw">memo</span>(simple.function)</a>
-<a class="sourceLine" id="cb1-10" title="10"></a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="op">&gt;</span><span class="st"> </span><span class="co"># or like this</span></a>
-<a class="sourceLine" id="cb1-12" title="12"><span class="er">&gt;</span><span class="st"> </span>simple.function <span class="op">%&lt;&gt;%</span><span class="st"> </span><span class="kw">memo</span>()</a>
-<a class="sourceLine" id="cb1-13" title="13"></a>
-<a class="sourceLine" id="cb1-14" title="14"><span class="op">&gt;</span><span class="st"> </span><span class="co"># or like this</span></a>
-<a class="sourceLine" id="cb1-15" title="15"><span class="er">&gt;</span><span class="st"> </span>simple.function2 &lt;-<span class="st"> </span>(<span class="cf">function</span> (value) value) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">memo</span>()</a></code></pre></div>
-<p>Calling a memo is exactly like calling a normal function, in fact it is a normal function! The memo has all the same arguments and defaults as the origional function so it can be used in legacy code without the need for any risky refactoring.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="op">&gt;</span><span class="st"> </span><span class="co"># the first time we call the memo the function will execute</span></a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="er">&gt;</span><span class="st"> </span><span class="kw">simple.function</span>(<span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb2-4" title="4">[<span class="dv">1</span>] <span class="st">"Executing!"</span></a>
-<a class="sourceLine" id="cb2-5" title="5">[<span class="dv">1</span>] <span class="dv">10</span></a>
-<a class="sourceLine" id="cb2-6" title="6"></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="op">&gt;</span><span class="st"> </span><span class="co"># if we call the function again with the same parameter values then</span></a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="er">&gt;</span><span class="st"> </span><span class="co"># the cached value will be returned</span></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="er">&gt;</span><span class="st"> </span><span class="kw">simple.function</span>(<span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb2-10" title="10">[<span class="dv">1</span>] <span class="dv">10</span></a>
-<a class="sourceLine" id="cb2-11" title="11"></a>
-<a class="sourceLine" id="cb2-12" title="12"><span class="op">&gt;</span><span class="st"> </span><span class="co"># calling the memo with a different set of parameter values will</span></a>
-<a class="sourceLine" id="cb2-13" title="13"><span class="er">&gt;</span><span class="st"> </span><span class="co"># cause the function to execute</span></a>
-<a class="sourceLine" id="cb2-14" title="14"><span class="er">&gt;</span><span class="st"> </span><span class="kw">simple.function</span>(<span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb2-15" title="15">[<span class="dv">1</span>] <span class="st">"Executing!"</span></a>
-<a class="sourceLine" id="cb2-16" title="16">[<span class="dv">1</span>] <span class="dv">20</span></a></code></pre></div>
-<p>Memoing a function can significantly improve the performance of a system by limiting how often expensive call are made. Functions that return a NULL value can be memoed by using the allow.null argument.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="op">&gt;</span><span class="st"> </span><span class="co"># consider a slow function which is memoised, note that we have used the allow.null argument</span></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="er">&gt;</span><span class="st"> </span><span class="co"># so that NULL is cached when returned from a function, the default is FALSE</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="er">&gt;</span><span class="st"> </span>slow.function &lt;-<span class="st"> </span>(<span class="cf">function</span> (value) <span class="kw">Sys.sleep</span>(value)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">memo</span>(<span class="dt">allow.null =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb3-5" title="5"></a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="op">&gt;</span><span class="st"> </span><span class="co"># the first time we call the slow function it takes some time</span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="er">&gt;</span><span class="st"> </span><span class="kw">system.time</span>(<span class="kw">slow.function</span>(<span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb3-8" title="8">   user  system elapsed </a>
-<a class="sourceLine" id="cb3-9" title="9">   <span class="fl">0.00</span>    <span class="fl">0.00</span>    <span class="fl">3.01</span> </a>
-<a class="sourceLine" id="cb3-10" title="10"></a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="op">&gt;</span><span class="st"> </span><span class="co"># subsequent calls make use of the cache and are much faster</span></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="er">&gt;</span><span class="st"> </span><span class="kw">system.time</span>(<span class="kw">slow.function</span>(<span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb3-13" title="13">   user  system elapsed </a>
-<a class="sourceLine" id="cb3-14" title="14">   <span class="fl">0.01</span>    <span class="fl">0.00</span>    <span class="fl">0.02</span> </a></code></pre></div>
+<div class="section level2">
+<h2 id="memofunc---a-function-memoization-package-for-r">MemoFunc - A Function Memoization Package for R<a class="anchor" aria-label="anchor" href="#memofunc---a-function-memoization-package-for-r"></a>
+</h2>
+<p>Programmable memory for R functions.</p>
+<p>memofunc extends traditional memoization by treating function calls as first-class memory primitives. Instead of simple input → output caching, it gives functions memory you can persist, inspect, and compose across functions.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>Install from CRAN:</p>
+<div class="section level2">
+<h2 id="why-memofunc">Why memofunc<a class="anchor" aria-label="anchor" href="#why-memofunc"></a>
+</h2>
+<p>Traditional memoization focuses on deterministic caching. memofunc focuses on the memory of function calls:</p>
+<ul>
+<li>Function identity: a call is tied to the function signature and implementation, not just the input.</li>
+<li>Persistent memory: store results beyond a single session with pluggable storage backends.</li>
+<li>Inspectable history: trace what was computed, when, and why.</li>
+<li>Composable memory: reuse and share cached results across functions.</li>
+</ul>
+<p>Compared to traditional memoization, memofunc treats cached results as durable, inspectable memory that can be composed across functions and storage backends.</p>
+<p>Functions can be memoized with a simple call to memo.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># a simple example function</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="er">&gt;</span> simple.function <span class="ot">&lt;-</span> <span class="cf">function</span> (value) {</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="sc">+</span>   <span class="fu">print</span>(<span class="st">"Executing!"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="sc">+</span>   value</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="sc">+</span> }</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># call memo function to memoise a function</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="er">&gt;</span> simple.function.memo <span class="ot">&lt;-</span> <span class="fu">memo</span>(simple.function)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># or like this</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="er">&gt;</span> simple.function <span class="sc">%&lt;&gt;%</span> <span class="fu">memo</span>()</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># or like this</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="er">&gt;</span> simple.function2 <span class="ot">&lt;-</span> (<span class="cf">function</span> (value) value) <span class="sc">%&gt;%</span> <span class="fu">memo</span>()</span></code></pre></div>
+<p>Calling a memo is exactly like calling a normal function, in fact it is a normal function! The memo has all the same arguments and defaults as the origional function so it can be used in legacy code without the need for any risky refactoring.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># the first time we call the memo the function will execute</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="er">&gt;</span> <span class="fu">simple.function</span>(<span class="dv">10</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"Executing!"</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">10</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># if we call the function again with the same parameter values then</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="er">&gt;</span> <span class="co"># the cached value will be returned</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="er">&gt;</span> <span class="fu">simple.function</span>(<span class="dv">10</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">10</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># calling the memo with a different set of parameter values will</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="er">&gt;</span> <span class="co"># cause the function to execute</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="er">&gt;</span> <span class="fu">simple.function</span>(<span class="dv">20</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"Executing!"</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">20</span></span></code></pre></div>
+<p>Memoing a function can significantly improve the performance of a system by limiting how often expensive call are made. Functions that return a NULL value can be memoed by using the allow.null argument.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># consider a slow function which is memoised, note that we have used the allow.null argument</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="er">&gt;</span> <span class="co"># so that NULL is cached when returned from a function, the default is FALSE</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="er">&gt;</span> slow.function <span class="ot">&lt;-</span> (<span class="cf">function</span> (value) <span class="fu">Sys.sleep</span>(value)) <span class="sc">%&gt;%</span> <span class="fu">memo</span>(<span class="at">allow.null =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># the first time we call the slow function it takes some time</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="er">&gt;</span> <span class="fu">system.time</span>(<span class="fu">slow.function</span>(<span class="dv">3</span>))</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>   user  system elapsed </span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>   <span class="fl">0.00</span>    <span class="fl">0.00</span>    <span class="fl">3.01</span> </span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># subsequent calls make use of the cache and are much faster</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="er">&gt;</span> <span class="fu">system.time</span>(<span class="fu">slow.function</span>(<span class="dv">3</span>))</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>   user  system elapsed </span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>   <span class="fl">0.01</span>    <span class="fl">0.00</span>    <span class="fl">0.02</span> </span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="storage-backends">Storage backends<a class="anchor" aria-label="anchor" href="#storage-backends"></a>
+</h2>
+<p>By default, memoised values are stored in memory. You can opt into file or object storage backends.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"memofunc"</span><span class="op">)</span></code></pre></div>
-<p>Install latest release:</p>
+<code class="sourceCode R"><span><span class="co"># local file storage</span></span>
+<span><span class="va">file.storage</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/storage.init.html">storage.init</a></span><span class="op">(</span><span class="st">"file"</span>, base.dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"memofunc"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># object storage using a provider name</span></span>
+<span><span class="va">object.storage</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/storage.init.html">storage.init</a></span><span class="op">(</span><span class="st">"object"</span>, provider <span class="op">=</span> <span class="st">"file"</span>, base.dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"memofunc"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># default provider via options</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>memofunc.storage.provider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"file"</span>, base.dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"memofunc"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/storage.init.html">storage.init</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Azure Blob provider (requires AzureStor + credentials)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"AzureStor"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">account</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"AZURE_STORAGE_ACCOUNT"</span><span class="op">)</span></span>
+<span>  <span class="va">container</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"AZURE_STORAGE_CONTAINER"</span><span class="op">)</span></span>
+<span>  <span class="va">key</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"AZURE_STORAGE_KEY"</span><span class="op">)</span></span>
+<span>  <span class="va">token</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"AZURE_STORAGE_TOKEN"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">account</span> <span class="op">!=</span> <span class="st">""</span> <span class="op">&amp;&amp;</span> <span class="va">container</span> <span class="op">!=</span> <span class="st">""</span> <span class="op">&amp;&amp;</span> <span class="op">(</span><span class="va">key</span> <span class="op">!=</span> <span class="st">""</span> <span class="op">||</span> <span class="va">token</span> <span class="op">!=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="reference/storage.init.html">storage.init</a></span><span class="op">(</span></span>
+<span>      <span class="st">"object"</span>,</span>
+<span>      provider <span class="op">=</span> <span class="st">"azure.blob"</span>,</span>
+<span>      account <span class="op">=</span> <span class="va">account</span>,</span>
+<span>      container <span class="op">=</span> <span class="va">container</span>,</span>
+<span>      key <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="va">key</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span> <span class="cn">NULL</span> <span class="kw">else</span> <span class="va">key</span>,</span>
+<span>      token <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="va">token</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span> <span class="cn">NULL</span> <span class="kw">else</span> <span class="va">token</span>,</span>
+<span>      prefix <span class="op">=</span> <span class="st">"memofunc"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>Install from CRAN:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"rwetherall/memofunc"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"memofunc"</span><span class="op">)</span></span></code></pre></div>
+<p>Install latest release:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install-deprecated.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"rwetherall/memofunc"</span><span class="op">)</span></span></code></pre></div>
 </div>
 
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=memofunc">https://​cloud.r-project.org/​package=memofunc</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/rwetherall/memofunc/">https://​github.com/​rwetherall/​memofunc/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/rwetherall/memofunc/issues">https://​github.com/​rwetherall/​memofunc/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li>
-<a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a> </li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Roy Wetherall <br><small class="roles"> Maintainer </small>  </li>
+<li><a href="https://cloud.r-project.org/package=memofunc" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/rwetherall/memofunc/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/rwetherall/memofunc/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://CRAN.R-project.org/package=memofunc"><img src="https://www.r-pkg.org/badges/version/memofunc" alt="CRAN status"></a></li>
-<li><a href="https://github.com/rwetherall/memofunc/actions"><img src="https://github.com/rwetherall/memofunc/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://codecov.io/gh/rwetherall/memofunc"><img src="https://codecov.io/gh/rwetherall/memofunc/branch/master/graph/badge.svg?token=zPeCig27vf" alt="codecov"></a></li>
-<li><a href="https://ci.appveyor.com/project/rwetherall/memofunc"><img src="https://ci.appveyor.com/api/projects/status/github/rwetherall/memofunc?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
-<li><a href="https://cran.r-project.org/package=memofunc"><img src="https://cranlogs.r-pkg.org/badges/memofunc"></a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing memofunc</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Roy Wetherall <br><small class="roles"> Maintainer </small>   </li>
+</ul>
+</div>
+
+
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Roy Wetherall.</p>
+  <p></p>
+<p>Developed by Roy Wetherall.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>
 </div>
 
-  
+
+
+
 
 
   </body>

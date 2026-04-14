@@ -40,3 +40,30 @@ reference:
       - '`is.memo`'
       - '`memo.function`'
       - '`memo.cache`'
+      - '`memofunc`'
+  - title: "Hashing"
+    desc: >
+      Helpers for hashing functions and calls.
+    contents:
+      - '`hash`'
+      - '`hash.default`'
+      - '`hash.function`'
+      - '`hash.functionCall`'
+      - '`hash.list`'
+      - '`functionCall`'
+  - title: "Storage"
+    desc: >
+      Storage backends and operations.
+    contents:
+      - '`storage.init`'
+      - '`storage.init.memory`'
+      - '`storage.set`'
+      - '`storage.set.memory`'
+      - '`storage.get`'
+      - '`storage.get.memory`'
+      - '`storage.has`'
+      - '`storage.has.memory`'
+      - '`storage.unset`'
+      - '`storage.unset.memory`'
+      - '`storage.clear`'
+      - '`storage.clear.memory`'

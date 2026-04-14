@@ -1,9 +1,8 @@
-pandoc: '2.6'
-pkgdown: 1.6.1
+pandoc: 3.9.0.2
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2021-02-23T09:37Z
+last_built: 2026-04-14T09:39Z
 urls:
-  reference: https://rwetherall.github.io/memofunc//reference
-  article: https://rwetherall.github.io/memofunc//articles
-
+  reference: https://rwetherall.github.io/memofunc/reference
+  article: https://rwetherall.github.io/memofunc/articles

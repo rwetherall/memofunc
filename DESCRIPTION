@@ -20,4 +20,5 @@ Suggests:
   testthat,
   devtools,
   roxygen2,
-  covr
+  covr,
+  AzureStor

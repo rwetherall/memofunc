@@ -34,6 +34,24 @@ storage.init.object <- function(storage.type = storage.object.class, provider, .
 
 storage.provider.required <- c("put", "get", "exists", "delete", "clear")
 
+storage.provider.registry <- list(
+  file = "provider.file.local",
+  "azure.blob" = "provider.azure.blob"
+)
+
+storage.provider.synonyms <- list(
+  local = "file",
+  azure = "azure.blob",
+  azureblob = "azure.blob",
+  blob = "azure.blob"
+)
+
+storage.provider.normalize <- function(name) {
+  if (!is.character(name) || length(name) != 1) return(name)
+  synonym <- storage.provider.synonyms[[name]]
+  if (is.null(synonym)) name else synonym
+}
+
 storage.provider.is_provider <- function(provider) {
   is.list(provider) && all(storage.provider.required %in% names(provider))
 }
@@ -56,8 +74,11 @@ storage.provider.resolve <- function(provider, ...) {
   }
 
   if (is.character(provider) && length(provider) == 1) {
-    if (provider == storage.file.class) {
-      return(provider.file.local(...))
+    provider.name <- storage.provider.normalize(provider)
+    provider.factory_name <- storage.provider.registry[[provider.name]]
+    if (!is.null(provider.factory_name)) {
+      provider.factory <- get(provider.factory_name, mode = "function")
+      return(do.call(provider.factory, list(...)))
     }
   }
 

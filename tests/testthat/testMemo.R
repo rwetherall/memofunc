@@ -174,3 +174,24 @@ test_that("
   memo(10) %>% expect_equal(10)
   
 })
+
+test_that("
+  Given a named function,
+  When I memoise without an explicit id,
+  Then the id defaults to the function name", {
+
+  named.fn <- function (value) value
+  memoed <- memo(named.fn)
+
+  expect_equal(attr(memoed, "memo.id"), "named.fn")
+})
+
+test_that("
+  Given a function and explicit id,
+  When I memoise with id,
+  Then the id is stored on the memo", {
+
+  memoed <- memo(function (value) value, id = "explicit-id")
+
+  expect_equal(attr(memoed, "memo.id"), "explicit-id")
+})

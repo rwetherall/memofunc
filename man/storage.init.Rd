@@ -4,8 +4,11 @@
 \alias{storage.init}
 \title{Initialize a store.}
 \usage{
-storage.init(storage.type = storage.memory.class,
-  provider = getOption("memofunc.storage.provider", NULL), ...)
+storage.init(
+  storage.type = storage.memory.class,
+  provider = getOption("memofunc.storage.provider", NULL),
+  ...
+)
 }
 \arguments{
 \item{storage.type}{storage type to initialize, defaults to \code{memory}}
@@ -30,9 +33,18 @@ Available types of storage include:
    \item{\code{object} - provider-backed object storage}
 }
 
+Use \code{file} when you want a simple local file store without provider configuration.
+Use \code{object} with a provider (e.g. \code{file}, \code{azure.blob}) when you want
+a consistent, pluggable interface across storage backends. This allows the same code
+path to swap between local and cloud providers.
+
 Additional paramters may be provided when initializing different types of storage.
-If \code{storage.type} is not provided and \code{memofunc.storage.provider} is set,
+If \\code{storage.type} is not provided and \\code{memofunc.storage.provider} is set,
 then the provider is used to initialize storage.
+
+Providers are resolved by name (for example \\code{file} or \\code{azure.blob}), with
+synonyms such as \\code{local} or \\code{azure} mapping to their canonical names. The
+Azure provider requires the \\code{AzureStor} package.
 
 See specific storage types for details.
 }
@@ -75,11 +87,46 @@ storage.clear(my.storage)
 # .. and everything is gone
 if (!storage.has(my.storage, "name") && !storage.has(my.storage, "age")) print("I know nothing!")
 
-# initialize file storage
+# initialize file storage (direct backend; simplest local-only path)
 base.dir <- file.path(tempdir(), "memofunc-storage")
 file.storage <- storage.init("file", base.dir = base.dir)
 
-# set and retrieve a value from file storage
+# set and retrieve a value from file storage (direct backend)
 storage.set(file.storage, "name", "Roy Wetherall")
 storage.get(file.storage, "name")
+
+# initialize object storage using a provider name (provider-backed interface)
+# this uses the same local file backend now, but lets you swap to azure.blob/s3 later
+object.storage <- storage.init("object", provider = "file", base.dir = base.dir)
+storage.set(object.storage, "name", "Roy Wetherall")
+storage.get(object.storage, "name")
+
+# set a default provider via options
+old.options <- options(memofunc.storage.provider = list(name = "file", base.dir = base.dir))
+on.exit(options(old.options), add = TRUE)
+default.storage <- storage.init()
+storage.get(default.storage, "name")
+
+# Azure Blob provider example (requires AzureStor + credentials)
+if (requireNamespace("AzureStor", quietly = TRUE)) {
+  account <- Sys.getenv("AZURE_STORAGE_ACCOUNT")
+  container <- Sys.getenv("AZURE_STORAGE_CONTAINER")
+  key <- Sys.getenv("AZURE_STORAGE_KEY")
+  token <- Sys.getenv("AZURE_STORAGE_TOKEN")
+
+  if (account != "" && container != "" && (key != "" || token != "")) {
+    azure.storage <- storage.init(
+      "object",
+      provider = "azure.blob",
+      account = account,
+      container = container,
+      key = if (key == "") NULL else key,
+      token = if (token == "") NULL else token,
+      prefix = "memofunc-example"
+    )
+
+    storage.set(azure.storage, "name", "Roy Wetherall")
+    storage.get(azure.storage, "name")
+  }
+}
 }

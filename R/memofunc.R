@@ -10,10 +10,8 @@
 #'   \item \code{\link{memo.function}} - get a memo's origional function
 #'   \item \code{\link{memo.cache}} - get a memo's cache storage
 #' }
-#' @docType package
-#' @name memofunc
-#'
 #' @import magrittr
 #' @import uuid
 #' @import digest
-NULL
+#' @keywords internal
+"_PACKAGE"

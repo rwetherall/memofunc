@@ -9,6 +9,11 @@
 #'    \item{\code{file} - persistent storage, using local file storage}
 #'    \item{\code{object} - provider-backed object storage}
 #' }
+#'
+#' Use \code{file} when you want a simple local file store without provider configuration.
+#' Use \code{object} with a provider (e.g. \code{file}, \code{azure.blob}) when you want
+#' a consistent, pluggable interface across storage backends. This allows the same code
+#' path to swap between local and cloud providers.
 #' 
 #' Additional paramters may be provided when initializing different types of storage.
 #' If \\code{storage.type} is not provided and \\code{memofunc.storage.provider} is set,

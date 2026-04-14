@@ -31,14 +31,22 @@ Functions can be memoized with a simple call to memo.
 +   value
 + }
 
-> # call memo function to memoise a function
+> # call memo to memoise a function (id defaults to the function name)
 > simple.function.memo <- memo(simple.function)
+> attr(simple.function.memo, "memo.id")
 
 > # or like this
 > simple.function %<>% memo()
 
 > # or like this
 > simple.function2 <- (function (value) value) %>% memo()
+
+> # explicit id for anonymous or generated functions
+> anonymous.memo <- memo(function (value) value, id = "example/anon")
+
+> # explicit id to keep cache stable across renames or wrappers
+> renamed.function <- simple.function
+> renamed.memo <- memo(renamed.function, id = "simple.function")
 
 ```
 Calling a memo is exactly like calling a normal function, in fact it is a normal function!  The memo has all the same arguments and defaults as the origional function so it can be used in legacy code without the need for any risky refactoring.
@@ -87,11 +95,13 @@ Memoing a function can significantly improve the performance of a system by limi
 
 By default, memoised values are stored in memory. You can opt into file or object storage backends.
 
+Use `storage.init("file")` for a direct local file store. Use `storage.init("object", provider = ...)` when you want a provider-backed interface that can swap between local file and cloud backends without changing call sites.
+
 ``` r
-# local file storage
+# local file storage (direct file backend)
 file.storage <- storage.init("file", base.dir = file.path(tempdir(), "memofunc"))
 
-# object storage using a provider name
+# object storage using a provider name (provider-backed interface)
 object.storage <- storage.init("object", provider = "file", base.dir = file.path(tempdir(), "memofunc"))
 
 # default provider via options

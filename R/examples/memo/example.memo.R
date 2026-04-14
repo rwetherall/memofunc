@@ -9,11 +9,21 @@ simple.function <- function (value) {
 # call memo function to memoise a function
 simple.function.memo <- memo(simple.function)
 
+# id defaults to the function name when available
+attr(simple.function.memo, "memo.id")
+
 # or like this
 simple.function %<>% memo()
 
 # or use an anon function
 simple.function2 <- (function (value) value) %>% memo()
+
+# use an explicit id for anonymous or generated functions
+anonymous.memo <- memo(function (value) value, id = "example/anon")
+
+# use an explicit id to keep cache stable across renames or wrappers
+renamed.function <- simple.function
+renamed.memo <- memo(renamed.function, id = "simple.function")
 
 # the first time we call the memo the function will execute
 simple.function(10)

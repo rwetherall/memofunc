@@ -22,7 +22,11 @@ simple.function2 <- (function (value) value) %>% memo()
 anonymous.memo <- memo(function (value) value, id = "example/anon")
 
 # use an explicit id to keep cache stable across renames or wrappers
-renamed.function <- simple.function
+# start from the original non-memoized function to avoid wrapping a memo twice
+renamed.function <- function (value) {
+  print("Executing!")
+  value
+}
 renamed.memo <- memo(renamed.function, id = "simple.function")
 
 # the first time we call the memo the function will execute

@@ -4,59 +4,73 @@
 \alias{memo}
 \title{Memo}
 \usage{
-memo(f, id = NULL, allow.null = FALSE)
+memo(f, id = NULL, function_hash_override = NULL, allow.null = FALSE)
 }
 \arguments{
 \item{f}{function to memoise}
 
-\item{id}{optional identifier used to scope cache keys; defaults to the function name if available}
+\item{id}{optional identifier used to scope cache keys; defaults to the
+function name when available}
 
-\item{allow.null}{if \code{TRUE} then the memoed function will cache \code{NULL} results, otherwise it won't.  \code{FALSE} by default.}
+\item{function_hash_override}{optional override value used in place of the
+default function identity hash}
+
+\item{allow.null}{if \code{TRUE}, the memoized function caches \code{NULL}
+results; \code{FALSE} by default}
 }
 \value{
 the memoed function
 }
 \description{
-Creates a memoized function, based on the provided named or anonymous function.  Calls to the memoized function will 
-be retrieved from a cache, unless it is the first time it is called.
+Creates a memoized function from a named or anonymous function. Calls to the
+memoized function are served from cache after the first execution for a given
+key.
 
-Passing \code{memo.force = TRUE} to the memo function call will by-pass any previously cached values and execute the underlying
-function, storing the newly retrieved values for subsequent calls.  \code{memo.force = FALSE} by default.
+Runtime controls:
+\itemize{
+  \item \code{memo.force = TRUE}: ignore an existing cached value and recompute
+  \item \code{memo.dryrun = TRUE}: do not execute or cache; return \code{TRUE} if execution would occur, \code{FALSE} if a cache hit exists
+}
 
-Passing \code{memo.dryrun = TRUE} to the memo function call will prevent the underlying function from executing and return TRUE
-if call isn't caches and \code{FALSE} if it is.  These values are not cached as responses for the function.
+By default, \code{NULL} results are not cached. Set \code{allow.null = TRUE} to
+cache \code{NULL} values as valid outcomes.
 
-Note that results are cached based on the argument values passed to the function.  The order is not important since all
-names are resolved.  So \code{fun(a=1, b=2)} will return the same cached value as \code{fun(b=2, a=1)}, for example.
+Hashing strategy for stored values:
+\itemize{
+  \item \strong{id component}: explicit \code{id} when provided, otherwise an inferred function name when available
+  \item \strong{function component}: hash of the function formals and body (or \code{function_hash_override} when supplied)
+  \item \strong{call component}: hash of normalized call arguments (including defaulted arguments, ordered by argument name)
+}
 
-Functions as arguments are supported, but only the body is compared.  So a named function parameter and an anonymouse function
-parameter with the same body, will be evaluated as identical and return the same cached value.
+The final storage key is a hash over these three components. This means that,
+by default, changing a function's implementation invalidates old cache entries
+for future reads while leaving historical values in storage.
 
-\code{...} is supported, but note that unless named then the order of the values is significant and will produce different cache values
-unless identical.
-
-By default \code{NULL} values are not cached.  Setting \code{allow.null=TRUE} when creating the memo will, however, ensure that NULL values
-are cached.
+Matching keys only share cached values when memo calls use the same underlying
+storage. Separate in-memory memo instances do not share values, even when keys
+are identical.
 }
 \examples{
 library(magrittr)
 
-# a simple example function
+# --- Basic memoization -----------------------------------------------------
+
+# a simple function
 simple.function <- function (value) {
   print("Executing!")
   value
 }
 
-# call memo function to memoise a function
+# memoize and keep the new function separate
 simple.function.memo <- memo(simple.function)
 
 # id defaults to the function name when available
 attr(simple.function.memo, "memo.id")
 
-# or like this
+# memoize in place
 simple.function \%<>\% memo()
 
-# or use an anon function
+# memoize anonymous functions
 simple.function2 <- (function (value) value) \%>\% memo()
 
 # use an explicit id for anonymous or generated functions
@@ -70,24 +84,86 @@ renamed.function <- function (value) {
 }
 renamed.memo <- memo(renamed.function, id = "simple.function")
 
-# the first time we call the memo the function will execute
+# first call executes
 simple.function(10)
 
-# if we call the memo again with the same parameter values then
-# the cached value will be returned
+# second call with same inputs is cached
 simple.function(10)
 
-# calling the memo with a different set of parameter values will
-# cause the function to execute
+# different inputs execute once, then cache
+simple.function(20)
 simple.function(20)
 
-# consider a slow function which is memoised, note that we have used the allow.null argument
-# so that NULL is cached when returned from a function, the default is FALSE
+# --- Runtime controls ------------------------------------------------------
+
+# force recomputation even if cached
+simple.function(10, memo.force = TRUE)
+
+# dry-run does not execute or write; it reports whether execution would occur
+simple.function(30, memo.dryrun = TRUE)   # TRUE (not cached yet)
+simple.function(30)                        # executes and caches
+simple.function(30, memo.dryrun = TRUE)   # FALSE (already cached)
+
+# --- NULL handling ---------------------------------------------------------
+
+# by default NULL results are not cached
+null.default <- memo(function (value) {
+  print("Executing NULL function")
+  NULL
+})
+null.default(1)
+null.default(1)
+
+# allow.null = TRUE caches NULL values too
+null.cached <- memo(function (value) {
+  print("Executing NULL function with allow.null")
+  NULL
+}, allow.null = TRUE)
+null.cached(1)
+null.cached(1)
+
+# --- Function hash override ------------------------------------------------
+
+# use persistent storage to demonstrate cache reuse across separate memo instances
+base.dir <- file.path(tempdir(), "memofunc-example-function-hash")
+unlink(base.dir, recursive = TRUE, force = TRUE)
+
+old.options <- options(memofunc.storage.provider = list(name = "file", base.dir = base.dir))
+
+counter <- new.env(parent = emptyenv())
+counter$executed <- 0
+
+f.v1 <- function (value) {
+  counter$executed <- counter$executed + 1
+  value
+}
+
+f.v2 <- function (value) {
+  counter$executed <- counter$executed + 1
+  value + 1
+}
+
+# default behavior: changed body creates a new function hash component
+memo(f.v1, id = "shared-id")(100)
+counter$executed <- 0
+memo(f.v2, id = "shared-id")(100)
+counter$executed
+
+# override: both implementations share function hash component intentionally
+memo(f.v1, id = "shared-id", function_hash_override = "stable-token")(200)
+counter$executed <- 0
+memo(f.v2, id = "shared-id", function_hash_override = "stable-token")(200)
+counter$executed
+
+# this reuse only works because both memos share the same file-backed store above
+# with separate in-memory memo instances, matching keys still would not share values
+
+options(old.options)
+unlink(base.dir, recursive = TRUE, force = TRUE)
+
+# --- Performance example ---------------------------------------------------
+
 slow.function <- (function (value) Sys.sleep(value)) \%>\% memo(allow.null = TRUE)
-
-# the first time we call the slow function it takes some time
-system.time(slow.function(3))
-
-# subsequent calls make use of the cache and are much faster
-system.time(slow.function(3))
+system.time(slow.function(2))
+system.time(slow.function(2))
 }

@@ -243,5 +243,6 @@ pkgdown is now CI-driven:
 
 This means local `pkgdown::build_site()` is optional for contributors. Update source docs
 (`README.md`, roxygen comments, `.Rd` inputs, `_pkgdown.yml`) and let CI build/publish the site.
+Generated `docs/` output is published by CI and should not be committed from local builds.
 
 

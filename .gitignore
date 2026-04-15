@@ -26,3 +26,6 @@ vignettes/*.pdf
 rsconnect/
 .Rproj.user
 memofunc.Rproj
+
+# pkgdown output (published by CI)
+docs/

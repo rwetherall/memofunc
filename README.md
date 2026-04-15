@@ -234,4 +234,15 @@ if (requireNamespace("AzureStor", quietly = TRUE)) {
 }
 ```
 
+## Documentation Site Workflow
+
+pkgdown is now CI-driven:
+
+- Pull requests run a `pkgdown-preview` workflow and upload a `pkgdown-site-preview` artifact.
+- Pushes to `master`/`main` run `pkgdown-deploy` and publish the site via GitHub Pages.
+
+This means local `pkgdown::build_site()` is optional for contributors. Update source docs
+(`README.md`, roxygen comments, `.Rd` inputs, `_pkgdown.yml`) and let CI build/publish the site.
+Generated `docs/` output is published by CI and should not be committed from local builds.
+
 

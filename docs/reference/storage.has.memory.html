@@ -124,6 +124,52 @@
 <span class="r-in"><span><span class="co"># .. and everything is gone</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="storage.has.html">storage.has</a></span><span class="op">(</span><span class="va">my.storage</span>, <span class="st">"name"</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="storage.has.html">storage.has</a></span><span class="op">(</span><span class="va">my.storage</span>, <span class="st">"age"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"I know nothing!"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "I know nothing!"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># initialize file storage (direct backend; simplest local-only path)</span></span></span>
+<span class="r-in"><span><span class="va">base.dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"memofunc-storage"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">file.storage</span> <span class="op">&lt;-</span> <span class="fu"><a href="storage.init.html">storage.init</a></span><span class="op">(</span><span class="st">"file"</span>, base.dir <span class="op">=</span> <span class="va">base.dir</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># set and retrieve a value from file storage (direct backend)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="storage.set.html">storage.set</a></span><span class="op">(</span><span class="va">file.storage</span>, <span class="st">"name"</span>, <span class="st">"Roy Wetherall"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="storage.get.html">storage.get</a></span><span class="op">(</span><span class="va">file.storage</span>, <span class="st">"name"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Roy Wetherall"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># initialize object storage using a provider name (provider-backed interface)</span></span></span>
+<span class="r-in"><span><span class="co"># this uses the same local file backend now, but lets you swap to azure.blob/s3 later</span></span></span>
+<span class="r-in"><span><span class="va">object.storage</span> <span class="op">&lt;-</span> <span class="fu"><a href="storage.init.html">storage.init</a></span><span class="op">(</span><span class="st">"object"</span>, provider <span class="op">=</span> <span class="st">"file"</span>, base.dir <span class="op">=</span> <span class="va">base.dir</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="storage.set.html">storage.set</a></span><span class="op">(</span><span class="va">object.storage</span>, <span class="st">"name"</span>, <span class="st">"Roy Wetherall"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="storage.get.html">storage.get</a></span><span class="op">(</span><span class="va">object.storage</span>, <span class="st">"name"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Roy Wetherall"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># set a default provider via options</span></span></span>
+<span class="r-in"><span><span class="va">old.options</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>memofunc.storage.provider <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"file"</span>, base.dir <span class="op">=</span> <span class="va">base.dir</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">on.exit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="va">old.options</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">default.storage</span> <span class="op">&lt;-</span> <span class="fu"><a href="storage.init.html">storage.init</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="storage.get.html">storage.get</a></span><span class="op">(</span><span class="va">default.storage</span>, <span class="st">"name"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Azure Blob provider example (requires AzureStor + credentials)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"AzureStor"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">account</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"AZURE_STORAGE_ACCOUNT"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">container</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"AZURE_STORAGE_CONTAINER"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">key</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"AZURE_STORAGE_KEY"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">token</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"AZURE_STORAGE_TOKEN"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="va">account</span> <span class="op">!=</span> <span class="st">""</span> <span class="op">&amp;&amp;</span> <span class="va">container</span> <span class="op">!=</span> <span class="st">""</span> <span class="op">&amp;&amp;</span> <span class="op">(</span><span class="va">key</span> <span class="op">!=</span> <span class="st">""</span> <span class="op">||</span> <span class="va">token</span> <span class="op">!=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">azure.storage</span> <span class="op">&lt;-</span> <span class="fu"><a href="storage.init.html">storage.init</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="st">"object"</span>,</span></span>
+<span class="r-in"><span>      provider <span class="op">=</span> <span class="st">"azure.blob"</span>,</span></span>
+<span class="r-in"><span>      account <span class="op">=</span> <span class="va">account</span>,</span></span>
+<span class="r-in"><span>      container <span class="op">=</span> <span class="va">container</span>,</span></span>
+<span class="r-in"><span>      key <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="va">key</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span> <span class="cn">NULL</span> <span class="kw">else</span> <span class="va">key</span>,</span></span>
+<span class="r-in"><span>      token <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="va">token</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span> <span class="cn">NULL</span> <span class="kw">else</span> <span class="va">token</span>,</span></span>
+<span class="r-in"><span>      prefix <span class="op">=</span> <span class="st">"memofunc-example"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="storage.set.html">storage.set</a></span><span class="op">(</span><span class="va">azure.storage</span>, <span class="st">"name"</span>, <span class="st">"Roy Wetherall"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="storage.get.html">storage.get</a></span><span class="op">(</span><span class="va">azure.storage</span>, <span class="st">"name"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>

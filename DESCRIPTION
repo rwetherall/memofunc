@@ -1,13 +1,19 @@
 Package: memofunc
 Type: Package
-Title: Function Memoization
+Title: Programmable Function Memoization for R
 Version: 1.0.3
 Authors@R:
     person(given = "Roy",
            family = "Wetherall",
            role = c("aut", "cre"),
            email = "rwetherall@gmail.com")
-Description: A simple way to memoize function results to improve performance by eliminating unnecessary computation or data retrieval activities.
+Description: Memoize R functions with explicit, predictable cache behavior.
+    Function calls become reusable memory: repeated computations return quickly,
+    while cache keys remain transparent and deterministic. Keys are derived from
+    function identity and normalized call arguments, so implementation changes
+    naturally invalidate stale values. Includes runtime controls for forced
+    recomputation and dry-run cache checks, plus pluggable storage backends for
+    in-memory, local file, and provider-backed object storage.
 Depends: R (>= 3.5.0)
 License: GPL-3 
 URL: https://github.com/rwetherall/memofunc, https://rwetherall.github.io/memofunc/

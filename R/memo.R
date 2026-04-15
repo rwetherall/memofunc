@@ -10,7 +10,15 @@ memo.default_id <- function(f, f.symbol) {
   name
 }
 
-memo.create <- function(f, allow.null = FALSE, id = NULL) {
+memo.call_hash <- function(f, args) {
+  formals(f) %>% defaultArgs() %>%
+    unset.defaultArgs(args) %>% c(args) %>%
+    orderby.name() %>%
+    lapply(force) %>% lapply(hash) %>%
+    hash()
+}
+
+memo.create <- function(f, allow.null = FALSE, id = NULL, function_hash_override = NULL) {
   # you can't memo a memo
   stopifnot(!is.memo(f))
 
@@ -19,6 +27,9 @@ memo.create <- function(f, allow.null = FALSE, id = NULL) {
 
   # get cache
   f.cache <- storage.init()
+
+  # stable function token tied to function identity unless explicitly overridden
+  f.function_hash <- if (is.null(function_hash_override)) hash(f) else hash(function_hash_override)
 
   # create the memo function
   f.memo <- function (memo.force=FALSE, memo.dryrun=FALSE) {
@@ -30,7 +41,7 @@ memo.create <- function(f, allow.null = FALSE, id = NULL) {
     fc$args %<>% removeby.name("memo.force") %>% removeby.name("memo.dryrun")
 
     # generate hash
-    hash <- if (is.null(id)) hash(fc) else hash(list(id = id, call = fc))
+    hash <- hash(list(id = id, function_hash = f.function_hash, call = memo.call_hash(f, fc$args)))
 
     # if force or cached
     if (!memo.force && storage.has(f.cache, hash)) {
@@ -61,6 +72,7 @@ memo.create <- function(f, allow.null = FALSE, id = NULL) {
   class(f.memo) <- c("memo", class(f.memo))
 
   attr(f.memo, "memo.id") <- id
+  attr(f.memo, "memo.function_hash") <- f.function_hash
 
   # return the memo function
   f.memo
@@ -69,38 +81,51 @@ memo.create <- function(f, allow.null = FALSE, id = NULL) {
 ##
 #' @title Memo
 #' @description
-#' Creates a memoized function, based on the provided named or anonymous function.  Calls to the memoized function will 
-#' be retrieved from a cache, unless it is the first time it is called.
-#' 
-#' Passing \code{memo.force = TRUE} to the memo function call will by-pass any previously cached values and execute the underlying
-#' function, storing the newly retrieved values for subsequent calls.  \code{memo.force = FALSE} by default.
-#' 
-#' Passing \code{memo.dryrun = TRUE} to the memo function call will prevent the underlying function from executing and return TRUE
-#' if call isn't caches and \code{FALSE} if it is.  These values are not cached as responses for the function.
-#' 
-#' Note that results are cached based on the argument values passed to the function.  The order is not important since all
-#' names are resolved.  So \code{fun(a=1, b=2)} will return the same cached value as \code{fun(b=2, a=1)}, for example.
-#' 
-#' Functions as arguments are supported, but only the body is compared.  So a named function parameter and an anonymouse function
-#' parameter with the same body, will be evaluated as identical and return the same cached value.
-#' 
-#' \code{...} is supported, but note that unless named then the order of the values is significant and will produce different cache values
-#' unless identical.
-#' 
-#' By default \code{NULL} values are not cached.  Setting \code{allow.null=TRUE} when creating the memo will, however, ensure that NULL values
-#' are cached.
+#' Creates a memoized function from a named or anonymous function. Calls to the
+#' memoized function are served from cache after the first execution for a given
+#' key.
+#'
+#' Runtime controls:
+#' \itemize{
+#'   \item \code{memo.force = TRUE}: ignore an existing cached value and recompute
+#'   \item \code{memo.dryrun = TRUE}: do not execute or cache; return \code{TRUE} if execution would occur, \code{FALSE} if a cache hit exists
+#' }
+#'
+#' By default, \code{NULL} results are not cached. Set \code{allow.null = TRUE} to
+#' cache \code{NULL} values as valid outcomes.
+#'
+#' Hashing strategy for stored values:
+#' \itemize{
+#'   \item \strong{id component}: explicit \code{id} when provided, otherwise an inferred function name when available
+#'   \item \strong{function component}: hash of the function formals and body (or \code{function_hash_override} when supplied)
+#'   \item \strong{call component}: hash of normalized call arguments (including defaulted arguments, ordered by argument name)
+#' }
+#'
+#' The final storage key is a hash over these three components. This means that,
+#' by default, changing a function's implementation invalidates old cache entries
+#' for future reads while leaving historical values in storage.
+#'
+#' Matching keys only share cached values when memo calls use the same underlying
+#' storage. Separate in-memory memo instances do not share values, even when keys
+#' are identical.
 #' @param f function to memoise
-#' @param id optional identifier used to scope cache keys; defaults to the function name if available
-#' @param allow.null if \code{TRUE} then the memoed function will cache \code{NULL} results, otherwise it won't.  \code{FALSE} by default.
+#' @param id optional identifier used to scope cache keys; defaults to the
+#' function name when available
+#' @param function_hash_override optional override value used in place of the
+#' default function identity hash; can be used with explicit or inferred
+#' \code{id}
+#' @param allow.null if \code{TRUE}, the memoized function caches \code{NULL}
+#' results; \code{FALSE} by default
 #' @return the memoed function
 #' @example R/examples/memo/example.memo.R
 #' @export
 ##
-memo <- function (f, id = NULL, allow.null=FALSE) {
+memo <- function (f, id = NULL, function_hash_override = NULL, allow.null=FALSE) {
   if (missing(id)) {
     id <- memo.default_id(f, substitute(f))
   }
-  memo.create(f, allow.null = allow.null, id = id)
+
+  memo.create(f, allow.null = allow.null, id = id, function_hash_override = function_hash_override)
 }
 
 ##

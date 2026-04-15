@@ -1,21 +1,23 @@
 library(magrittr)
 
-# a simple example function
+# --- Basic memoization -----------------------------------------------------
+
+# a simple function
 simple.function <- function (value) {
   print("Executing!")
   value
 }
 
-# call memo function to memoise a function
+# memoize and keep the new function separate
 simple.function.memo <- memo(simple.function)
 
 # id defaults to the function name when available
 attr(simple.function.memo, "memo.id")
 
-# or like this
+# memoize in place
 simple.function %<>% memo()
 
-# or use an anon function
+# memoize anonymous functions
 simple.function2 <- (function (value) value) %>% memo()
 
 # use an explicit id for anonymous or generated functions
@@ -29,23 +31,85 @@ renamed.function <- function (value) {
 }
 renamed.memo <- memo(renamed.function, id = "simple.function")
 
-# the first time we call the memo the function will execute
+# first call executes
 simple.function(10)
 
-# if we call the memo again with the same parameter values then
-# the cached value will be returned
+# second call with same inputs is cached
 simple.function(10)
 
-# calling the memo with a different set of parameter values will
-# cause the function to execute
+# different inputs execute once, then cache
+simple.function(20)
 simple.function(20)
 
-# consider a slow function which is memoised, note that we have used the allow.null argument
-# so that NULL is cached when returned from a function, the default is FALSE
+# --- Runtime controls ------------------------------------------------------
+
+# force recomputation even if cached
+simple.function(10, memo.force = TRUE)
+
+# dry-run does not execute or write; it reports whether execution would occur
+simple.function(30, memo.dryrun = TRUE)   # TRUE (not cached yet)
+simple.function(30)                        # executes and caches
+simple.function(30, memo.dryrun = TRUE)   # FALSE (already cached)
+
+# --- NULL handling ---------------------------------------------------------
+
+# by default NULL results are not cached
+null.default <- memo(function (value) {
+  print("Executing NULL function")
+  NULL
+})
+null.default(1)
+null.default(1)
+
+# allow.null = TRUE caches NULL values too
+null.cached <- memo(function (value) {
+  print("Executing NULL function with allow.null")
+  NULL
+}, allow.null = TRUE)
+null.cached(1)
+null.cached(1)
+
+# --- Function hash override ------------------------------------------------
+
+# use persistent storage to demonstrate cache reuse across separate memo instances
+base.dir <- file.path(tempdir(), "memofunc-example-function-hash")
+unlink(base.dir, recursive = TRUE, force = TRUE)
+
+old.options <- options(memofunc.storage.provider = list(name = "file", base.dir = base.dir))
+
+counter <- new.env(parent = emptyenv())
+counter$executed <- 0
+
+f.v1 <- function (value) {
+  counter$executed <- counter$executed + 1
+  value
+}
+
+f.v2 <- function (value) {
+  counter$executed <- counter$executed + 1
+  value + 1
+}
+
+# default behavior: changed body creates a new function hash component
+memo(f.v1, id = "shared-id")(100)
+counter$executed <- 0
+memo(f.v2, id = "shared-id")(100)
+counter$executed
+
+# override: both implementations share function hash component intentionally
+memo(f.v1, id = "shared-id", function_hash_override = "stable-token")(200)
+counter$executed <- 0
+memo(f.v2, id = "shared-id", function_hash_override = "stable-token")(200)
+counter$executed
+
+# this reuse only works because both memos share the same file-backed store above
+# with separate in-memory memo instances, matching keys still would not share values
+
+options(old.options)
+unlink(base.dir, recursive = TRUE, force = TRUE)
+
+# --- Performance example ---------------------------------------------------
+
 slow.function <- (function (value) Sys.sleep(value)) %>% memo(allow.null = TRUE)
-
-# the first time we call the slow function it takes some time
-system.time(slow.function(3))
-
-# subsequent calls make use of the cache and are much faster
-system.time(slow.function(3))
+system.time(slow.function(2))
+system.time(slow.function(2))

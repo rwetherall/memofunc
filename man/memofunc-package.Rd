@@ -6,8 +6,17 @@
 \alias{memofunc-package}
 \title{memofunc: A package for memoizing functions and caching data}
 \description{
-The \code{memofunc} package provides a simple way to memoize a function to optimise execution for process or data
-intensive actions.
+The \code{memofunc} package provides tools for function memoization with
+explicit cache key semantics and pluggable storage backends.
+}
+\section{Core Concepts}{
+
+\itemize{
+  \item \strong{Memoized functions}: cached calls still behave like normal R functions
+  \item \strong{Deterministic keys}: cache keys combine function identity and normalized call arguments
+  \item \strong{Configurable storage}: memory, file, and object provider backends
+  \item \strong{Runtime controls}: force recomputation or perform dry-run cache checks
+}
 }
 \section{Memoization Functions}{
 

@@ -195,3 +195,89 @@ test_that("
 
   expect_equal(attr(memoed, "memo.id"), "explicit-id")
 })
+
+test_that("
+  Given a persistent cache and explicit id,
+  When the underlying function body changes,
+  Then previous cache entries are ignored for the new memo function hash", {
+
+  base.dir <- file.path(tempdir(), "memofunc-test-versioned")
+  unlink(base.dir, recursive = TRUE, force = TRUE)
+
+  old.options <- options(memofunc.storage.provider = list(name = "file", base.dir = base.dir))
+  on.exit(options(old.options), add = TRUE)
+  on.exit(unlink(base.dir, recursive = TRUE, force = TRUE), add = TRUE)
+
+  counter <- new.env(parent = emptyenv())
+  counter$executed <- 0
+
+  v1 <- function (value) {
+    counter$executed <- counter$executed + 1
+    value
+  }
+
+  m1 <- memo(v1, id = "shared-id")
+  expect_equal(m1(10), 10)
+  expect_equal(counter$executed, 1)
+
+  counter$executed <- 0
+
+  v2 <- function (value) {
+    counter$executed <- counter$executed + 1
+    value + 1
+  }
+
+  m2 <- memo(v2, id = "shared-id")
+  expect_equal(m2(10), 11)
+  expect_equal(counter$executed, 1)
+  expect_equal(m2(10), 11)
+  expect_equal(counter$executed, 1)
+})
+
+test_that("
+  Given an explicit id and explicit function hash override,
+  When the function body changes,
+  Then the function hash override keeps reading existing cache entries", {
+
+  base.dir <- file.path(tempdir(), "memofunc-test-function-hash-override")
+  unlink(base.dir, recursive = TRUE, force = TRUE)
+
+  old.options <- options(memofunc.storage.provider = list(name = "file", base.dir = base.dir))
+  on.exit(options(old.options), add = TRUE)
+  on.exit(unlink(base.dir, recursive = TRUE, force = TRUE), add = TRUE)
+
+  counter <- new.env(parent = emptyenv())
+  counter$executed <- 0
+
+  v1 <- function (value) {
+    counter$executed <- counter$executed + 1
+    value
+  }
+
+  m1 <- memo(v1, id = "shared-id", function_hash_override = "stable-v1")
+  expect_equal(m1(10), 10)
+  expect_equal(counter$executed, 1)
+
+  counter$executed <- 0
+
+  v2 <- function (value) {
+    counter$executed <- counter$executed + 1
+    value + 1
+  }
+
+  m2 <- memo(v2, id = "shared-id", function_hash_override = "stable-v1")
+  expect_equal(m2(10), 10)
+  expect_equal(counter$executed, 0)
+})
+
+test_that("
+  Given no explicit id,
+  When a function hash override is provided,
+  Then it is accepted and used for memoisation", {
+
+  named.fn <- function (value) value
+  memoed <- memo(named.fn, function_hash_override = "stable-v1")
+
+  expect_equal(attr(memoed, "memo.id"), "named.fn")
+  expect_equal(attr(memoed, "memo.function_hash"), hash("stable-v1"))
+})

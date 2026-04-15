@@ -62,7 +62,10 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("rcmdcheck")
+          install.packages("rcmdcheck", repos = "https://cloud.r-project.org")
+          if (!requireNamespace("rcmdcheck", quietly = TRUE)) {
+            stop("rcmdcheck package failed to install")
+          }
         shell: Rscript {0}
 
       - name: Check
@@ -124,7 +127,10 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("rcmdcheck")
+          install.packages("rcmdcheck", repos = "https://cloud.r-project.org")
+          if (!requireNamespace("rcmdcheck", quietly = TRUE)) {
+            stop("rcmdcheck package failed to install")
+          }
         shell: Rscript {0}
 
       - name: Check

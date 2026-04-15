@@ -281,3 +281,120 @@ test_that("
   expect_equal(attr(memoed, "memo.id"), "named.fn")
   expect_equal(attr(memoed, "memo.function_hash"), hash("stable-v1"))
 })
+
+test_that("
+  Given a memoized function with shared storage,
+  When I invalidate the memo,
+  Then only that memo's cached values are removed", {
+
+  base.dir <- file.path(tempdir(), "memofunc-test-invalidate-all")
+  unlink(base.dir, recursive = TRUE, force = TRUE)
+
+  old.options <- options(memofunc.storage.provider = list(name = "file", base.dir = base.dir))
+  on.exit(options(old.options), add = TRUE)
+  on.exit(unlink(base.dir, recursive = TRUE, force = TRUE), add = TRUE)
+
+  counter.a <- new.env(parent = emptyenv())
+  counter.a$executed <- 0
+  counter.b <- new.env(parent = emptyenv())
+  counter.b$executed <- 0
+
+  memo.a <- memo(function (value) {
+    counter.a$executed <- counter.a$executed + 1
+    value
+  }, id = "memo-a")
+
+  memo.b <- memo(function (value) {
+    counter.b$executed <- counter.b$executed + 1
+    value
+  }, id = "memo-b")
+
+  memo.a(10)
+  memo.b(10)
+
+  counter.a$executed <- 0
+  counter.b$executed <- 0
+
+  invalidate(memo.a)
+
+  memo.a(10)
+  memo.b(10)
+
+  expect_equal(counter.a$executed, 1)
+  expect_equal(counter.b$executed, 0)
+})
+
+test_that("
+  Given a memoized function,
+  When I invalidate by argument list,
+  Then only that cached call is removed", {
+
+  base.dir <- file.path(tempdir(), "memofunc-test-invalidate-key")
+  unlink(base.dir, recursive = TRUE, force = TRUE)
+
+  old.options <- options(memofunc.storage.provider = list(name = "file", base.dir = base.dir))
+  on.exit(options(old.options), add = TRUE)
+  on.exit(unlink(base.dir, recursive = TRUE, force = TRUE), add = TRUE)
+
+  counter <- new.env(parent = emptyenv())
+  counter$executed <- 0
+
+  memoed <- memo(function (value) {
+    counter$executed <- counter$executed + 1
+    value
+  }, id = "memo-invalidate-key")
+
+  memoed(1)
+  memoed(2)
+
+  counter$executed <- 0
+  invalidate(memoed, list(value = 1))
+
+  memoed(1)
+  memoed(2)
+
+  expect_equal(counter$executed, 1)
+})
+
+test_that("
+  Given a memoized function,
+  When I invalidate by explicit storage key,
+  Then the selected cache entry is removed", {
+
+  base.dir <- file.path(tempdir(), "memofunc-test-invalidate-storage-key")
+  unlink(base.dir, recursive = TRUE, force = TRUE)
+
+  old.options <- options(memofunc.storage.provider = list(name = "file", base.dir = base.dir))
+  on.exit(options(old.options), add = TRUE)
+  on.exit(unlink(base.dir, recursive = TRUE, force = TRUE), add = TRUE)
+
+  counter <- new.env(parent = emptyenv())
+  counter$executed <- 0
+
+  memoed <- memo(function (value) {
+    counter$executed <- counter$executed + 1
+    value
+  }, id = "memo-invalidate-storage-key")
+
+  memoed(1)
+
+  key <- memo.storage_key(
+    id = attr(memoed, "memo.id"),
+    function_hash = attr(memoed, "memo.function_hash"),
+    call_hash = memo.call_hash(memo.function(memoed), list(value = 1))
+  )
+
+  counter$executed <- 0
+  invalidate(memoed, key)
+  memoed(1)
+
+  expect_equal(counter$executed, 1)
+})
+
+test_that("
+  Given a non-memo function,
+  When I call invalidate,
+  Then it errors", {
+
+  expect_error(invalidate(function (value) value))
+})

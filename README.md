@@ -234,17 +234,4 @@ if (requireNamespace("AzureStor", quietly = TRUE)) {
 }
 ```
 
-## Installation
-
-Install from CRAN:
-
-```r
-install.packages("memofunc")
-```
-
-Install latest release:
-
-``` r
-devtools::install_github("rwetherall/memofunc")
-```
 

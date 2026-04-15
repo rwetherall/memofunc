@@ -13,7 +13,8 @@ memo(f, id = NULL, function_hash_override = NULL, allow.null = FALSE)
 function name when available}
 
 \item{function_hash_override}{optional override value used in place of the
-default function identity hash}
+default function identity hash; can be used with explicit or inferred
+\code{id}}
 
 \item{allow.null}{if \code{TRUE}, the memoized function caches \code{NULL}
 results; \code{FALSE} by default}

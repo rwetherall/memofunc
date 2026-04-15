@@ -5,9 +5,9 @@
 #' 
 #' Available types of storage include:
 #' \itemize{
-#'    \item{\code{memory} - transient in-memory storage}
-#'    \item{\code{file} - persistent storage, using local file storage}
-#'    \item{\code{object} - provider-backed object storage}
+#'    \item \code{memory}: transient in-memory storage
+#'    \item \code{file}: persistent storage, using local file storage
+#'    \item \code{object}: provider-backed object storage
 #' }
 #'
 #' Use \code{file} when you want a simple local file store without provider configuration.
@@ -16,12 +16,12 @@
 #' path to swap between local and cloud providers.
 #' 
 #' Additional paramters may be provided when initializing different types of storage.
-#' If \\code{storage.type} is not provided and \\code{memofunc.storage.provider} is set,
+#' If \code{storage.type} is not provided and \code{memofunc.storage.provider} is set,
 #' then the provider is used to initialize storage.
 #'
-#' Providers are resolved by name (for example \\code{file} or \\code{azure.blob}), with
-#' synonyms such as \\code{local} or \\code{azure} mapping to their canonical names. The
-#' Azure provider requires the \\code{AzureStor} package.
+#' Providers are resolved by name (for example \code{file} or \code{azure.blob}), with
+#' synonyms such as \code{local} or \code{azure} mapping to their canonical names. The
+#' Azure provider requires the \code{AzureStor} package.
 #' 
 #' See specific storage types for details.
 #' @param storage.type storage type to initialize, defaults to \code{memory}
@@ -29,7 +29,7 @@
 #' @param ... additional configuration values used by storage implementations
 #' @return List containing characteristics perticular to the storage implementation, including:
 #' \itemize{
-#'    \item{\code{$type} - the storage type}
+#'    \item \code{type}: the storage type field
 #' }
 #' @example R/examples/storage/example.storage.R
 #' @export

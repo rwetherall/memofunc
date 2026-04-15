@@ -32,9 +32,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c("remotes"))
+          install.packages(c("remotes"), repos = "https://cloud.r-project.org")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("covr")
+          if (!requireNamespace("covr", quietly = TRUE)) {
+            stop("covr package failed to install")
+          }
         shell: Rscript {0}
 
       - name: Test coverage

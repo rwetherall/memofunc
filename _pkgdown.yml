@@ -37,6 +37,7 @@ reference:
       Functions to create and manage function memoization.
     contents:
       - '`memo`'
+      - '`invalidate`'
       - '`is.memo`'
       - '`memo.function`'
       - '`memo.cache`'

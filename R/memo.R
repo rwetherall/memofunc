@@ -18,6 +18,44 @@ memo.call_hash <- function(f, args) {
     hash()
 }
 
+memo.storage_key <- function(id, function_hash, call_hash) {
+  hash(list(id = id, function_hash = function_hash, call = call_hash))
+}
+
+memo.index_storage_key <- function(id, function_hash) {
+  hash(list(memo_index = list(id = id, function_hash = function_hash)))
+}
+
+memo.index_get <- function(storage, id, function_hash) {
+  index.key <- memo.index_storage_key(id, function_hash)
+  if (!storage.has(storage, index.key)) {
+    return(character())
+  }
+
+  keys <- storage.get(storage, index.key)
+  if (is.null(keys)) character() else as.character(keys)
+}
+
+memo.index_set <- function(storage, id, function_hash, keys) {
+  index.key <- memo.index_storage_key(id, function_hash)
+
+  if (length(keys) == 0) {
+    storage.unset(storage, index.key)
+  } else {
+    storage.set(storage, index.key, unique(as.character(keys)))
+  }
+}
+
+memo.index_add <- function(storage, id, function_hash, key) {
+  keys <- memo.index_get(storage, id, function_hash)
+  memo.index_set(storage, id, function_hash, c(keys, key))
+}
+
+memo.index_remove <- function(storage, id, function_hash, key) {
+  keys <- memo.index_get(storage, id, function_hash)
+  memo.index_set(storage, id, function_hash, keys[keys != key])
+}
+
 memo.create <- function(f, allow.null = FALSE, id = NULL, function_hash_override = NULL) {
   # you can't memo a memo
   stopifnot(!is.memo(f))
@@ -41,7 +79,7 @@ memo.create <- function(f, allow.null = FALSE, id = NULL, function_hash_override
     fc$args %<>% removeby.name("memo.force") %>% removeby.name("memo.dryrun")
 
     # generate hash
-    hash <- hash(list(id = id, function_hash = f.function_hash, call = memo.call_hash(f, fc$args)))
+    hash <- memo.storage_key(id = id, function_hash = f.function_hash, call_hash = memo.call_hash(f, fc$args))
 
     # if force or cached
     if (!memo.force && storage.has(f.cache, hash)) {
@@ -58,7 +96,10 @@ memo.create <- function(f, allow.null = FALSE, id = NULL, function_hash_override
       if (!is.null(result) || allow.null) {
 
         # cache the result
-        if (!memo.dryrun) storage.set(f.cache, hash, result)
+        if (!memo.dryrun) {
+          storage.set(f.cache, hash, result)
+          memo.index_add(f.cache, id = id, function_hash = f.function_hash, key = hash)
+        }
       }
 
       result
@@ -168,4 +209,64 @@ memo.function <- function(f) {
   stopifnot(is.memo(f))
 
   "f" %>% get(envir=environment(f))
+}
+
+memo.resolve_storage_key <- function(f, key) {
+  if (is.character(key) && length(key) == 1) {
+    return(key)
+  }
+
+  if (is.list(key)) {
+    id <- attr(f, "memo.id")
+    function_hash <- attr(f, "memo.function_hash")
+    args <- key %>% removeby.name("memo.force") %>% removeby.name("memo.dryrun")
+
+    return(memo.storage_key(
+      id = id,
+      function_hash = function_hash,
+      call_hash = memo.call_hash(memo.function(f), args)
+    ))
+  }
+
+  stop("key must be a single character cache key or a list of function arguments")
+}
+
+##
+#' @title Invalidate Memo
+#' @description
+#' Invalidates cached values for a memoized function without affecting unrelated
+#' memo entries in shared storage.
+#'
+#' Call without \code{key} to invalidate all cached values for that memo only.
+#' Pass \code{key} to invalidate a single cached call:
+#' \itemize{
+#'   \item a named/unnamed \code{list} of function arguments
+#'   \item a single character cache key hash
+#' }
+#' @param f memo function
+#' @param key optional cache key selector for single-entry invalidation
+#' @return Invisibly returns the memo function
+#' @example R/examples/memo/example.invalidate.R
+#' @export
+##
+invalidate <- function(f, key = NULL) {
+  stopifnot(is.memo(f))
+
+  storage <- memo.cache(f)
+  id <- attr(f, "memo.id")
+  function_hash <- attr(f, "memo.function_hash")
+
+  if (missing(key) || is.null(key)) {
+    keys <- memo.index_get(storage, id = id, function_hash = function_hash)
+    lapply(keys, function(k) storage.unset(storage, k))
+    memo.index_set(storage, id = id, function_hash = function_hash, keys = character())
+
+    return(invisible(f))
+  }
+
+  storage.key <- memo.resolve_storage_key(f, key)
+  storage.unset(storage, storage.key)
+  memo.index_remove(storage, id = id, function_hash = function_hash, key = storage.key)
+
+  invisible(f)
 }

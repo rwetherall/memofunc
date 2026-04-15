@@ -61,6 +61,7 @@ system.time(memo_add(10, 2))
 - `allow.null = TRUE`: use when `NULL` is a valid return value and should be cached.
 - `memo.force = TRUE` (call-time): use when you need to refresh a value now.
 - `memo.dryrun = TRUE` (call-time): use to check whether execution would occur, without executing.
+- `invalidate(memo)` / `invalidate(memo, key)`: clear one memo's cache without clearing all storage.
 - `function_hash_override`: use only when you intentionally want function-identity changes to share the same key space.
 
 ## Practical Examples
@@ -154,6 +155,21 @@ counter$n                                                                    # 0
 
 # note: this reuse works because both calls share the same file-backed storage.
 # with separate in-memory memo instances, keys may match but values are not shared.
+```
+
+### 7) Per-function invalidation
+
+```r
+expensive <- memo(function(value) value * 10, id = "expensive")
+
+expensive(1)
+expensive(2)
+
+# invalidate a single cached call by function arguments
+invalidate(expensive, list(value = 1))
+
+# invalidate all cached entries for this memo only
+invalidate(expensive)
 ```
 
 ## Hashing Strategy (How Values Are Stored)

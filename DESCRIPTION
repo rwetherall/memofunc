@@ -2,8 +2,11 @@ Package: memofunc
 Type: Package
 Title: Function Memoization
 Version: 1.0.3
-Author: Roy Wetherall <rwetherall@gmail.com>
-Maintainer: Roy Wetherall <rwetherall@gmail.com>
+Authors@R:
+    person(given = "Roy",
+           family = "Wetherall",
+           role = c("aut", "cre"),
+           email = "rwetherall@gmail.com")
 Description: A simple way to memoize function results to improve performance by eliminating unnecessary computation or data retrieval activities.
 Depends: R (>= 3.5.0)
 License: GPL-3 
